@@ -5,15 +5,18 @@ import fetchRoute from './fetchRoute';
 import { RoutesResponse } from './types';
 
 const app = express();
-const port = 4000;
+const port = process.env.PORT || 4000;
 
 app.use(cors({
   origin: /^http:\/\/localhost/
 }));
 
-app.get('/route', async (req, res) => {
-  const response: RoutesResponse = await fetchRoute();
-  res.json(response);
+app.get('/route', (req, res) => {
+  const distance = (req.query.distance as string) || '0';
+  const routeType = (req.query.routeType as string) || '0';
+  fetchRoute(parseFloat(distance), parseInt(routeType))
+    .then((route) => res.json(route))
+    .catch((err) => res.end(err.message));
 });
 
 app.listen(port, () => console.log(`Server listening at http://localhost:${port}`));

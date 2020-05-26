@@ -40,15 +40,13 @@ function fetchExternalOrCached(params: RouteParams): Promise<ExternalRoutesRespo
     });
 }
 
-function fetchRoute(): Promise<RoutesResponse> {
+function fetchRoute(distance: number, routetype: number): Promise<RoutesResponse> {
   const locations = 20611963;
   const speed = 12;
-  const distance = 18000;
-  const routetype = 69;
   const preferences = 63;
 
   return fetchExternalOrCached({
-    distance,
+    distance: distance * 1000,
     locations,
     preferences,
     routetype,

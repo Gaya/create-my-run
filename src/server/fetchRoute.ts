@@ -1,6 +1,11 @@
 import fetch from 'node-fetch';
 import querystring from 'querystring';
-import { ExternalRoutesResponse, GeometryLineString, RoutesResponse } from './types';
+import {
+  ExternalRoutesResponse,
+  LatLong,
+  RouteSegment,
+  RoutesResponse
+} from './types';
 
 interface ResponseCache {
   [qs: string]: ExternalRoutesResponse;
@@ -53,10 +58,20 @@ function fetchRoute(): Promise<RoutesResponse> {
       const route = result._embedded.routes[0];
       const routeSegments = route.routesegments;
 
-      const segments = routeSegments.reduce((acc: GeometryLineString[], segments) => {
+      let index = 0;
+
+      const segments = routeSegments.reduce((acc: RouteSegment[], segments) => {
         return [
           ...acc,
-          ...segments.segmentsections.map((s) => s.geometry),
+          ...segments.segmentsections.map((s) => {
+            index++;
+
+            return {
+              ...s.geometry,
+              index,
+              coordinates: s.geometry.coordinates.map(([long, lat]): LatLong => [lat, long]),
+            };
+          }),
         ];
       }, []);
 

@@ -1,7 +1,7 @@
-type LatLong = [number, number];
+export type LatLong = [number, number];
 
 export interface GeometryLineString {
-  type: 'LineString',
+  type: 'LineString';
   coordinates: LatLong[];
 }
 
@@ -25,8 +25,10 @@ export interface ExternalRoutesResponse {
   }
 }
 
+export type RouteSegment = ({ index: number } & GeometryLineString);
+
 export interface RoutesResponse {
   time: number;
   length: number;
-  segments: GeometryLineString[];
+  segments: RouteSegment[];
 }

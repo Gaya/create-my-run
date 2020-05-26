@@ -20,12 +20,14 @@ function App() {
         setFetching(false);
         setRouteData(result.default as RoutesResponse);
       });
-    // const url = 'http://localhost:4000';
-    //
-    // fetch(`${url}/route`)
-    //   .then((res) => res.json() as Promise<RoutesResponse>)
-    //   .then(console.log)
-    //   .catch(console.error);
+
+    return;
+    const url = 'http://localhost:4000';
+
+    fetch(`${url}/route`)
+      .then((res) => res.json() as Promise<RoutesResponse>)
+      .then(console.log)
+      .catch(console.error);
   }, []);
 
   return (

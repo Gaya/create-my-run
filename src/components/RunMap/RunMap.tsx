@@ -21,12 +21,12 @@ interface RunMapProps {
 }
 
 const RunMap: React.FC<RunMapProps> = ({ route }) => {
-  if (!route) {
-    return <div>Loading route...</div>;
-  }
 
-  const center = route.segments[0].coordinates[0];
-  const bounds = route.segments.reduce((acc: LatLong[], s) => [...acc, ...s.coordinates], []);
+  const defaultCenter: LatLong = [51.455820, 5.785390];
+  const segments = route?.segments || [];
+
+  const center = segments.length > 0 ? segments[0].coordinates[0] : defaultCenter;
+  const bounds = segments.length > 0 ? segments.reduce((acc: LatLong[], s) => [...acc, ...s.coordinates], []) : undefined;
 
   return (
     <Map center={center} bounds={bounds} zoom={13} useFlyTo>
@@ -34,7 +34,7 @@ const RunMap: React.FC<RunMapProps> = ({ route }) => {
         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {route.segments.map((s) => (
+      {segments.map((s) => (
         <Polyline color="blue" key={s.index} positions={s.coordinates} />
       ))}
     </Map>

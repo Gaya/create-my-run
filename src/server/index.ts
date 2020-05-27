@@ -2,7 +2,6 @@ import express from 'express';
 import cors from 'cors';
 
 import fetchRoute from './fetchRoute';
-import { RoutesResponse } from './types';
 
 const app = express();
 const port = process.env.PORT || 4000;

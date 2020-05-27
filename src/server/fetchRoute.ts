@@ -3,7 +3,6 @@ import querystring from 'querystring';
 import {
   ExternalRoutesResponse,
   LatLong,
-  RouteSegment,
   RoutesResponse
 } from './types';
 
@@ -56,27 +55,18 @@ function fetchRoute(distance: number, routetype: number): Promise<RoutesResponse
       const route = result._embedded.routes[0];
       const routeSegments = route.routesegments;
 
-      let index = 0;
-
-      const segments = routeSegments.reduce((acc: RouteSegment[], segments) => {
-        return [
+      const coordinates = routeSegments.reduce((acc: LatLong[], segments) => [
+        ...acc,
+        ...segments.segmentsections.reduce((acc: LatLong[], segment) => [
           ...acc,
-          ...segments.segmentsections.map((s) => {
-            index++;
-
-            return {
-              ...s.geometry,
-              index,
-              coordinates: s.geometry.coordinates.map(([long, lat]): LatLong => [lat, long]),
-            };
-          }),
-        ];
-      }, []);
+          ...segment.geometry.coordinates.map(([long, lat]): LatLong => [lat, long]),
+        ], []),
+      ], []);
 
       return {
         time: route.routetime,
         length: route.routelength,
-        segments,
+        coordinates,
       }
     });
 }

@@ -7,14 +7,14 @@ import RunMap from '../RunMap/RunMap';
 import './App.css';
 import {
   AppBar,
-  Box, Button,
+  Box, Button, CircularProgress,
   Drawer,
   InputLabel,
   MenuItem,
   Select,
   Slider, Toolbar, Typography,
 } from '@material-ui/core';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
 
 function valuetext(value: number): string {
   return `${value} km`;
@@ -23,7 +23,7 @@ function valuetext(value: number): string {
 const routeTypes = [
   {
     id: 69,
-    name: 'Entertaining',
+    name: 'Recreative',
   },
   {
     id: 65,
@@ -31,26 +31,38 @@ const routeTypes = [
   },
   {
     id: 66,
-    name: 'Avoid cars',
+    name: 'Car-free',
   }
 ];
 
-function App() {
+const theme = createMuiTheme({
+  palette: {
+    type: 'dark',
+  },
+});
+
+
+const useStyles = makeStyles(() => ({
+  wrapper: {
+    position: 'relative',
+  },
+  buttonProgress: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
+  },
+}));
+
+const App: React.FC = () => {
   const [routeData, setRouteData] = useState<RoutesResponse>();
   const [fetching, setFetching] = useState<boolean>(false);
   const [drawerOpen, setDrawerOpen] = useState<boolean>(true);
   const [distance, setDistance] = useState<number>(10);
   const [routeType, setRouteType] = useState<number>(routeTypes[0].id);
 
-  const theme = React.useMemo(
-    () =>
-      createMuiTheme({
-        palette: {
-          type: 'dark',
-        },
-      }),
-    [],
-  );
+  const classes = useStyles();
 
   const openDrawer = () => setDrawerOpen(true);
   const closeDrawer = () => setDrawerOpen(false);
@@ -127,8 +139,11 @@ function App() {
             </Box>
           </Box>
 
-          <Box margin={3}>
-            <Button variant="contained" disabled={fetching} onClick={generateRun}>Generate Run</Button>
+          <Box margin={3} display="flex">
+            <div className={classes.wrapper}>
+              <Button variant="contained" disabled={fetching} onClick={generateRun}>Generate Run</Button>
+              {fetching && <CircularProgress color="secondary" size={24} className={classes.buttonProgress} />}
+            </div>
           </Box>
         </Drawer>
         <RunMap route={routeData} />

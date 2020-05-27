@@ -25,10 +25,8 @@ export interface ExternalRoutesResponse {
   }
 }
 
-export type RouteSegment = ({ index: number } & GeometryLineString);
-
 export interface RoutesResponse {
   time: number;
   length: number;
-  segments: RouteSegment[];
+  coordinates: LatLong[];
 }

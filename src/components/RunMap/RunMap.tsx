@@ -1,12 +1,7 @@
 import React from 'react';
 import {
-  Circle,
-  CircleMarker,
   Map,
-  Polygon,
   Polyline,
-  Popup,
-  Rectangle,
   TileLayer,
 } from 'react-leaflet';
 
@@ -23,10 +18,10 @@ interface RunMapProps {
 const RunMap: React.FC<RunMapProps> = ({ route }) => {
 
   const defaultCenter: LatLong = [51.455820, 5.785390];
-  const segments = route?.segments || [];
+  const coordinates = route?.coordinates || [];
 
-  const center = segments.length > 0 ? segments[0].coordinates[0] : defaultCenter;
-  const bounds = segments.length > 0 ? segments.reduce((acc: LatLong[], s) => [...acc, ...s.coordinates], []) : undefined;
+  const center = coordinates.length > 0 ? coordinates[0] : defaultCenter;
+  const bounds = coordinates.length > 0 ? coordinates : undefined;
 
   return (
     <Map center={center} bounds={bounds} zoom={13} useFlyTo>
@@ -34,9 +29,7 @@ const RunMap: React.FC<RunMapProps> = ({ route }) => {
         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {segments.map((s) => (
-        <Polyline color="blue" key={s.index} positions={s.coordinates} />
-      ))}
+      <Polyline color="blue" positions={coordinates} />
     </Map>
   );
 };

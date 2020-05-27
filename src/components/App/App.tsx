@@ -15,6 +15,7 @@ import {
   Slider, Toolbar, Typography,
 } from '@material-ui/core';
 import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
+import ToolBar from './ToolBar';
 
 function valuetext(value: number): string {
   return `${value} km`;
@@ -31,7 +32,7 @@ const routeTypes = [
   },
   {
     id: 66,
-    name: 'Car-free',
+    name: 'Avoid cars',
   }
 ];
 
@@ -70,7 +71,7 @@ const App: React.FC = () => {
   const generateRun = () => {
     if (fetching) return;
 
-    const url = 'http://localhost:4000';
+    const url = process.env.REACT_APP_API;
 
     setFetching(true);
 
@@ -87,21 +88,7 @@ const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
-        <AppBar position="static">
-          <Toolbar>
-            <Box marginRight={2}>
-              <Button onClick={openDrawer} color="inherit">Change Run</Button>
-            </Box>
-            <Typography variant="h6" style={{ flexGrow: 1 }}>
-              Generate a Run
-            </Typography>
-            {routeData && (
-              <Typography variant="h6">
-                {(routeData.length / 1000).toFixed(2)} km
-              </Typography>
-            )}
-          </Toolbar>
-        </AppBar>
+        <ToolBar openDrawer={openDrawer} routeLength={routeData?.length} />
         <Drawer anchor="left" open={drawerOpen} onClose={closeDrawer}>
           <Box width={300}>
             <Box margin={3}>

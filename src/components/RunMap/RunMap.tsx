@@ -29,7 +29,7 @@ const RunMap: React.FC<RunMapProps> = ({ route }) => {
         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <Polyline color="blue" positions={coordinates} />
+      {route && <Polyline color="blue" positions={coordinates} />}
     </Map>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { RecoilRoot } from 'recoil';
 
@@ -17,8 +17,8 @@ const theme = createMuiTheme({
 const App: React.FC = () => {
   const [drawerOpen, setDrawerOpen] = useState<boolean>(true);
 
-  const openDrawer = () => setDrawerOpen(true);
-  const closeDrawer = () => setDrawerOpen(false);
+  const openDrawer = useCallback(() => setDrawerOpen(true), []);
+  const closeDrawer = useCallback(() => setDrawerOpen(false), []);
 
   return (
     <ThemeProvider theme={theme}>

@@ -29,7 +29,7 @@ const HeaderBar: React.FC<ToolBarProps> = ({ openDrawer }) => {
           </Button>
         </Box>
         <Typography variant="h6" style={{ flexGrow: 1 }}>
-          Create my Run
+          Create My Run
         </Typography>
         {routeLength.state === 'hasValue' && routeLength.contents && (
           <Typography variant="h6">

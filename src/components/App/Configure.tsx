@@ -19,6 +19,8 @@ function distanceValueText(value: number): string {
   return `${value} km`;
 }
 
+const marks = [10, 20, 30, 40, 50].map(v => ({ value: v, label: v }));
+
 const useStyles = makeStyles(() => ({
   wrapper: {
     position: 'relative',
@@ -103,7 +105,7 @@ const Configure: React.FC<ConfigureProps> = ({
                 getAriaValueText={distanceValueText}
                 aria-labelledby="distance-slider"
                 step={0.5}
-                marks={[10, 20, 30, 40, 50].map(v => ({ value: v, label: v }))}
+                marks={marks}
                 valueLabelDisplay="auto"
               />
             </Grid>
@@ -138,8 +140,8 @@ const Configure: React.FC<ConfigureProps> = ({
             value={routeType}
             onChange={(event) => setRouteType(event.target.value as number)}
           >
-            {routeTypes.map((rt) => (
-              <MenuItem key={rt.id} value={rt.id}>{rt.name}</MenuItem>
+            {routeTypes.map((type) => (
+              <MenuItem key={type.id} value={type.id}>{type.name}</MenuItem>
             ))}
           </Select>
         </Box>

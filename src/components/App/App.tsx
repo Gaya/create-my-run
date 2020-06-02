@@ -6,13 +6,14 @@ import RunMap from '../RunMap/RunMap';
 
 import './App.css';
 import {
-  AppBar,
-  Box, Button, CircularProgress,
+  Box,
+  Button,
+  CircularProgress,
   Drawer,
   InputLabel,
   MenuItem,
   Select,
-  Slider, Toolbar, Typography,
+  Slider,
 } from '@material-ui/core';
 import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import ToolBar from './ToolBar';
@@ -128,7 +129,14 @@ const App: React.FC = () => {
 
           <Box margin={3} display="flex">
             <div className={classes.wrapper}>
-              <Button variant="contained" disabled={fetching} onClick={generateRun}>Generate Run</Button>
+              <Button
+                color="secondary"
+                variant="contained"
+                disabled={fetching}
+                onClick={generateRun}
+              >
+                Create my Run
+              </Button>
               {fetching && <CircularProgress color="secondary" size={24} className={classes.buttonProgress} />}
             </div>
           </Box>

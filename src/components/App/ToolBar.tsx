@@ -11,10 +11,16 @@ const ToolBar: React.FC<ToolBarProps> = ({ openDrawer, routeLength }) => {
     <AppBar position="static">
       <Toolbar>
         <Box marginRight={2}>
-          <Button onClick={openDrawer} color="inherit">Change Run</Button>
+          <Button
+            variant="outlined"
+            onClick={openDrawer}
+            color="inherit"
+          >
+            Change Route
+          </Button>
         </Box>
         <Typography variant="h6" style={{ flexGrow: 1 }}>
-          Generate a Run
+          Create my Run
         </Typography>
         {routeLength && (
           <Typography variant="h6">

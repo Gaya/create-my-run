@@ -1,11 +1,7 @@
 import React from 'react';
 import { useRecoilValueLoadable } from 'recoil';
 
-import AppBar from '@material-ui/core/AppBar';
-import Button from '@material-ui/core/Button';
-import Box from '@material-ui/core/Box';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
+import { AppBar, Box, Button, Toolbar, Typography } from '@material-ui/core';
 
 import { routeLengthState } from '../../atoms/route';
 

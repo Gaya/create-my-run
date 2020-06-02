@@ -1,6 +1,9 @@
 import React, { useCallback, useState } from 'react';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { RecoilRoot } from 'recoil';
+
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import teal from '@material-ui/core/colors/teal';
+import deepOrange from '@material-ui/core/colors/deepOrange';
 
 import RunMap from '../RunMap/RunMap';
 import HeaderBar from '../HeaderBar/HeaderBar';
@@ -11,6 +14,8 @@ import './App.css';
 const theme = createMuiTheme({
   palette: {
     type: 'dark',
+    primary: teal,
+    secondary: deepOrange,
   },
 });
 

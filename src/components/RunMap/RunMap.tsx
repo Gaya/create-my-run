@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useRecoilValueLoadable } from 'recoil';
 import {
   Map,
   Polyline,
@@ -7,11 +8,10 @@ import {
 
 import 'leaflet/dist/leaflet.css';
 
+import { routeDataQuery } from '../../atoms/route';
 import { LatLong } from '../../server/types';
 
 import './RunMap.css';
-import { useRecoilValueLoadable } from 'recoil';
-import { routeDataQuery } from '../../atoms/route';
 
 const RunMap: React.FC = () => {
   const route = useRecoilValueLoadable(routeDataQuery);

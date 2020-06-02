@@ -1,19 +1,18 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useRecoilValueLoadable, useSetRecoilState } from 'recoil';
 
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Drawer from '@material-ui/core/Drawer';
-import Grid from '@material-ui/core/Grid';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import InputLabel from '@material-ui/core/InputLabel';
-import Input from '@material-ui/core/Input';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import Slider from '@material-ui/core/Slider';
-import Typography from '@material-ui/core/Typography';
-
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Drawer,
+  Grid,
+  Input,
+  InputLabel, MenuItem,
+  Select,
+  Slider,
+  Typography
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { routeDataQuery, routeDistanceState, routeTypeState } from '../../atoms/route';
@@ -51,7 +50,7 @@ const useStyles = makeStyles(() => ({
     marginLeft: -12,
   },
   distanceIput: {
-    width: 75,
+    width: 48,
   },
 }));
 
@@ -124,7 +123,7 @@ const Configure: React.FC<ConfigureProps> = ({
               <Slider
                 min={min}
                 max={max}
-                color="secondary"
+                color="primary"
                 value={distance}
                 onChange={(event, value) => setDistance(Array.isArray(value) ? value[0] : value)}
                 getAriaValueText={distanceValueText}
@@ -148,7 +147,6 @@ const Configure: React.FC<ConfigureProps> = ({
                   type: 'number',
                   'aria-labelledby': 'distance-slider',
                 }}
-                endAdornment={<InputAdornment position="end">km</InputAdornment>}
               />
             </Grid>
           </Grid>

@@ -21,8 +21,6 @@ interface RouteParams {
 }
 
 function fetchExternalOrCached(params: RouteParams): Promise<ExternalRoutesResponse> {
-  const url = 'https://planner1.fietsersbond.nl/planner/v1/routes';
-
   const randomseed = 800; // Math.floor(Math.random() * 1000);
 
   const qs = querystring.stringify({ ...params, randomseed });
@@ -31,7 +29,7 @@ function fetchExternalOrCached(params: RouteParams): Promise<ExternalRoutesRespo
     return Promise.resolve(responseCache[qs]);
   }
 
-  return fetch(`${url}?${qs}`)
+  return fetch(`${process.env.ROUTE_API}?${qs}`)
     .then((res) => res.json() as Promise<ExternalRoutesResponse>)
     .then((routes) => {
       responseCache[qs] = routes;

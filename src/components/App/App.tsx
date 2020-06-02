@@ -16,7 +16,7 @@ import {
   Slider,
 } from '@material-ui/core';
 import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
-import ToolBar from './ToolBar';
+import HeaderBar from './HeaderBar';
 
 function valuetext(value: number): string {
   return `${value} km`;
@@ -89,8 +89,12 @@ const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
-        <ToolBar openDrawer={openDrawer} routeLength={routeData?.length} />
-        <Drawer anchor="left" open={drawerOpen} onClose={closeDrawer}>
+        <HeaderBar openDrawer={openDrawer} routeLength={routeData?.length} />
+        <Drawer
+          anchor="left"
+          open={drawerOpen}
+          onClose={closeDrawer}
+        >
           <Box width={300}>
             <Box margin={3}>
               <InputLabel id="distance-slider" shrink>

@@ -6,7 +6,7 @@ interface ToolBarProps {
   routeLength?: number;
 }
 
-const ToolBar: React.FC<ToolBarProps> = ({ openDrawer, routeLength }) => {
+const HeaderBar: React.FC<ToolBarProps> = ({ openDrawer, routeLength }) => {
   return (
     <AppBar position="static">
       <Toolbar>
@@ -32,4 +32,4 @@ const ToolBar: React.FC<ToolBarProps> = ({ openDrawer, routeLength }) => {
   );
 };
 
-export default ToolBar;
+export default HeaderBar;

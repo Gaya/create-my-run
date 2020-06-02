@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRecoilValueLoadable } from 'recoil';
 
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
@@ -6,12 +7,15 @@ import Box from '@material-ui/core/Box';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
+import { routeLengthState } from '../../atoms/route';
+
 interface ToolBarProps {
   openDrawer(): void;
-  routeLength?: number;
 }
 
-const HeaderBar: React.FC<ToolBarProps> = ({ openDrawer, routeLength }) => {
+const HeaderBar: React.FC<ToolBarProps> = ({ openDrawer }) => {
+  const routeLength = useRecoilValueLoadable(routeLengthState);
+
   return (
     <AppBar position="static">
       <Toolbar>
@@ -27,9 +31,9 @@ const HeaderBar: React.FC<ToolBarProps> = ({ openDrawer, routeLength }) => {
         <Typography variant="h6" style={{ flexGrow: 1 }}>
           Create my Run
         </Typography>
-        {routeLength && (
+        {routeLength.state === 'hasValue' && routeLength.contents && (
           <Typography variant="h6">
-            {(routeLength / 1000).toFixed(2)} km
+            {(routeLength.contents / 1000).toFixed(2)} km
           </Typography>
         )}
       </Toolbar>

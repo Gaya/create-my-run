@@ -7,18 +7,17 @@ import {
 
 import 'leaflet/dist/leaflet.css';
 
-import { LatLong, RoutesResponse } from '../../server/types';
+import { LatLong } from '../../server/types';
 
 import './RunMap.css';
+import { useRecoilValueLoadable } from 'recoil';
+import { routeDataQuery } from '../../atoms/route';
 
-interface RunMapProps {
-  route?: RoutesResponse;
-}
-
-const RunMap: React.FC<RunMapProps> = ({ route }) => {
+const RunMap: React.FC = () => {
+  const route = useRecoilValueLoadable(routeDataQuery);
 
   const defaultCenter: LatLong = [51.455820, 5.785390];
-  const coordinates = route?.coordinates || [];
+  const coordinates = (route.state === 'hasValue' && route.contents) ? route.contents.coordinates : [];
 
   const center = coordinates.length > 0 ? coordinates[0] : defaultCenter;
   const bounds = coordinates.length > 0 ? coordinates : undefined;

@@ -1,4 +1,5 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
+import { useRecoilValueLoadable, useSetRecoilState } from 'recoil';
 
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -14,6 +15,23 @@ import Slider from '@material-ui/core/Slider';
 import Typography from '@material-ui/core/Typography';
 
 import { makeStyles } from '@material-ui/core/styles';
+
+import { routeDataQuery, routeDistanceState, routeTypeState } from '../../atoms/route';
+
+const routeTypes: RouteType[] = [
+  {
+    id: 69,
+    name: 'Recreative',
+  },
+  {
+    id: 65,
+    name: 'Nature',
+  },
+  {
+    id: 66,
+    name: 'Avoid cars',
+  }
+];
 
 function distanceValueText(value: number): string {
   return `${value} km`;
@@ -40,31 +58,38 @@ const useStyles = makeStyles(() => ({
 interface ConfigureProps {
   isDrawerOpen: boolean;
   onCloseDrawer(): void;
-  distance: number;
-  setDistance(distance: number): void;
-  routeTypes: RouteType[];
-  routeType: RouteType['id'];
-  setRouteType(type: RouteType['id']): void;
-  isGenerating: boolean;
-  onGenerateRun(): void;
 }
 
 const Configure: React.FC<ConfigureProps> = ({
   isDrawerOpen,
   onCloseDrawer,
-  distance,
-  setDistance,
-  routeTypes,
-  routeType,
-  setRouteType,
-  isGenerating,
-  onGenerateRun,
 }) => {
+  const route = useRecoilValueLoadable(routeDataQuery);
+  const setDistanceState = useSetRecoilState(routeDistanceState);
+  const setRouteTypeState = useSetRecoilState(routeTypeState);
+  const [distance, setDistance] = useState<number>(10);
+  const [routeType, setRouteType] = useState<RouteType['id']>(routeTypes[0].id);
+
   const classes = useStyles();
+
+  const isGenerating = route.state === 'loading';
 
   const min = 1;
   const max = 50;
   const defaultDistance = 10;
+
+  const onGenerateRun = () => {
+    if (isGenerating) return;
+
+    setDistanceState(distance);
+    setRouteTypeState(routeType);
+  };
+
+  useEffect(() => {
+    if (!isGenerating && route.contents) {
+      onCloseDrawer();
+    }
+  }, [isGenerating, route.contents, onCloseDrawer]);
 
   const handleDistanceInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setDistance(event.target.value === '' ? defaultDistance : Number(event.target.value));

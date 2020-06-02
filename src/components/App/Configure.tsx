@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Drawer from '@material-ui/core/Drawer';
+import Grid from '@material-ui/core/Grid';
+import InputAdornment from '@material-ui/core/InputAdornment';
 import InputLabel from '@material-ui/core/InputLabel';
+import Input from '@material-ui/core/Input';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Slider from '@material-ui/core/Slider';
@@ -26,6 +29,9 @@ const useStyles = makeStyles(() => ({
     left: '50%',
     marginTop: -12,
     marginLeft: -12,
+  },
+  distanceIput: {
+    width: 75,
   },
 }));
 
@@ -54,13 +60,29 @@ const Configure: React.FC<ConfigureProps> = ({
 }) => {
   const classes = useStyles();
 
+  const min = 1;
+  const max = 50;
+  const defaultDistance = 10;
+
+  const handleDistanceInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setDistance(event.target.value === '' ? defaultDistance : Number(event.target.value));
+  };
+
+  const handleDistanceBlur = () => {
+    if (distance < min) {
+      setDistance(min);
+    } else if (distance > max) {
+      setDistance(max);
+    }
+  };
+
   return (
     <Drawer
       anchor="left"
       open={isDrawerOpen}
       onClose={onCloseDrawer}
     >
-      <Box width={300}>
+      <Box width={400}>
         <Box margin={3}>
           <Typography variant="h6" style={{ flexGrow: 1 }}>
             Configure Run
@@ -68,19 +90,41 @@ const Configure: React.FC<ConfigureProps> = ({
         </Box>
         <Box margin={3}>
           <InputLabel id="distance-slider" shrink>
-            Distance
+            Distance (KM)
           </InputLabel>
-          <Slider
-            min={0}
-            max={50}
-            value={distance}
-            onChange={(event, value) => setDistance(Array.isArray(value) ? value[0] : value)}
-            getAriaValueText={distanceValueText}
-            aria-labelledby="distance-slider"
-            step={0.5}
-            marks={[5, 10, 15, 21.1, 42.2, 50].map(v => ({ value: v, label: v }))}
-            valueLabelDisplay="auto"
-          />
+          <Grid container alignItems="flex-start" spacing={3}>
+            <Grid item xs>
+              <Slider
+                min={min}
+                max={max}
+                color="secondary"
+                value={distance}
+                onChange={(event, value) => setDistance(Array.isArray(value) ? value[0] : value)}
+                getAriaValueText={distanceValueText}
+                aria-labelledby="distance-slider"
+                step={0.5}
+                marks={[10, 20, 30, 40, 50].map(v => ({ value: v, label: v }))}
+                valueLabelDisplay="auto"
+              />
+            </Grid>
+            <Grid item>
+              <Input
+                value={distance}
+                margin="dense"
+                className={classes.distanceIput}
+                onChange={handleDistanceInputChange}
+                onBlur={handleDistanceBlur}
+                inputProps={{
+                  step: 0.5,
+                  min: 0,
+                  max: 50,
+                  type: 'number',
+                  'aria-labelledby': 'distance-slider',
+                }}
+                endAdornment={<InputAdornment position="end">km</InputAdornment>}
+              />
+            </Grid>
+          </Grid>
         </Box>
 
         <Box margin={3}>
@@ -104,7 +148,7 @@ const Configure: React.FC<ConfigureProps> = ({
       <Box margin={3} display="flex">
         <div className={classes.wrapper}>
           <Button
-            color="secondary"
+            color="primary"
             variant="contained"
             disabled={isGenerating}
             onClick={onGenerateRun}

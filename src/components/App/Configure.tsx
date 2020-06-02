@@ -1,15 +1,15 @@
 import React from 'react';
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Drawer,
-  InputLabel,
-  MenuItem,
-  Select,
-  Slider,
-  Typography
-} from '@material-ui/core';
+
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Drawer from '@material-ui/core/Drawer';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import Slider from '@material-ui/core/Slider';
+import Typography from '@material-ui/core/Typography';
+
 import { makeStyles } from '@material-ui/core/styles';
 
 function distanceValueText(value: number): string {

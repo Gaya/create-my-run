@@ -1,5 +1,10 @@
 import React from 'react';
-import { AppBar, Box, Button, Toolbar, Typography } from '@material-ui/core';
+
+import AppBar from '@material-ui/core/AppBar';
+import Button from '@material-ui/core/Button';
+import Box from '@material-ui/core/Box';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
 
 interface ToolBarProps {
   openDrawer(): void;

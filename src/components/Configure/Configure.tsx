@@ -14,6 +14,7 @@ import { routeDataQuery, routeDistanceState, routeTypeState } from '../../atoms/
 import Distance from './Distance';
 import { isLoading } from '../../atoms/utils';
 import RouteType from './RouteType';
+import StartingPoint from './StartingPoint';
 
 const routeTypes: RouteType[] = [
   {
@@ -95,12 +96,17 @@ const Configure: React.FC<ConfigureProps> = ({
         </Box>
 
         <Box margin={3}>
+          <StartingPoint />
+        </Box>
+
+        <Box margin={3}>
           <RouteType
             routeType={routeType}
             routeTypes={routeTypes}
             setRouteType={setRouteType}
           />
         </Box>
+
       </Box>
 
       <Box margin={3} display="flex">

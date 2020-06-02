@@ -14,13 +14,13 @@ const RouteType: React.FC<RouteTypeProps> = ({
 }) => {
   return (
     <>
-      <InputLabel shrink id="demo-simple-select-placeholder-label-label">
+      <InputLabel shrink id="route-type-label">
         Route type
       </InputLabel>
       <Select
         fullWidth
-        labelId="demo-simple-select-placeholder-label-label"
-        id="demo-simple-select-placeholder-label"
+        labelId="route-type-label"
+        id="route-type"
         value={routeType}
         onChange={(event) => setRouteType(event.target.value as number)}
       >

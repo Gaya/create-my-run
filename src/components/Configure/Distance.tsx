@@ -12,7 +12,7 @@ const marks = [10, 20, 30, 40, 50].map(v => ({ value: v, label: v }));
 
 const useStyles = makeStyles(() => ({
   distanceIput: {
-    width: 48,
+    width: 40,
   },
 }));
 
@@ -60,7 +60,7 @@ const Distance: React.FC<DistanceProps> = ({
             onChange={(event, value) => setDistance(Array.isArray(value) ? value[0] : value)}
             getAriaValueText={distanceValueText}
             aria-labelledby="distance-slider"
-            step={0.5}
+            step={1}
             marks={marks}
             valueLabelDisplay="auto"
           />
@@ -73,7 +73,7 @@ const Distance: React.FC<DistanceProps> = ({
             onChange={handleDistanceInputChange}
             onBlur={handleDistanceBlur}
             inputProps={{
-              step: 0.5,
+              step: 1,
               min: 0,
               max: 50,
               type: 'number',

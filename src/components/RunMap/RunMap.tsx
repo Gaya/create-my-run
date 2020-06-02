@@ -19,7 +19,6 @@ const RunMap: React.FC = () => {
 
   const defaultCenter: LatLong = [51.455820, 5.785390];
 
-
   useEffect(() => {
     if (route.state === 'hasValue' && route.contents) {
       setCoordinates(route.contents.coordinates);

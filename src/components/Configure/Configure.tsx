@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRecoilValueLoadable, useSetRecoilState } from 'recoil';
 
 import {
@@ -6,11 +6,17 @@ import {
   Button,
   CircularProgress,
   Drawer,
+  Grid,
   Typography
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { routeDataQuery, routeDistanceState, routeTypeState } from '../../atoms/route';
+import {
+  routeDataQuery,
+  routeDistanceState,
+  routeLocationState,
+  routeTypeState
+} from '../../atoms/route';
 import Distance from './Distance';
 import { isLoading } from '../../atoms/utils';
 import RouteType from './RouteType';
@@ -34,6 +40,7 @@ const routeTypes: RouteType[] = [
 const useStyles = makeStyles(() => ({
   wrapper: {
     position: 'relative',
+    display: 'inline-block',
   },
   buttonProgress: {
     position: 'absolute',
@@ -61,6 +68,8 @@ const Configure: React.FC<ConfigureProps> = ({
   const setRouteTypeState = useSetRecoilState(routeTypeState);
   const [routeType, setRouteType] = useState<RouteType['id']>(routeTypes[0].id);
 
+  const setRouteLocationState = useSetRecoilState(routeLocationState);
+
   const classes = useStyles();
 
   const isGenerating = isLoading(route);
@@ -84,50 +93,52 @@ const Configure: React.FC<ConfigureProps> = ({
       open={isDrawerOpen}
       onClose={onCloseDrawer}
     >
-      <Box width={400}>
-        <Box margin={3}>
-          <Typography variant="h6" style={{ flexGrow: 1 }}>
-            Configure Run
-          </Typography>
-        </Box>
+      <Box width={380} padding={2}>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Typography variant="h6">
+              Configure Run
+            </Typography>
+          </Grid>
 
-        <Box margin={3}>
-          <Distance distance={distance} setDistance={setDistance} />
-        </Box>
+          <Grid item xs={12}>
+            <Distance distance={distance} setDistance={setDistance} />
+          </Grid>
 
-        <Box margin={3}>
-          <StartingPoint />
-        </Box>
+          <Grid item xs={12}>
+            <StartingPoint />
+          </Grid>
 
-        <Box margin={3}>
-          <RouteType
-            routeType={routeType}
-            routeTypes={routeTypes}
-            setRouteType={setRouteType}
-          />
-        </Box>
-
-      </Box>
-
-      <Box margin={3} display="flex">
-        <div className={classes.wrapper}>
-          <Button
-            color="primary"
-            variant="contained"
-            disabled={isGenerating}
-            onClick={onGenerateRun}
-          >
-            Create my Run
-          </Button>
-          {isGenerating && (
-            <CircularProgress
-              color="secondary"
-              size={24}
-              className={classes.buttonProgress}
+          <Grid item xs={12}>
+            <RouteType
+              routeType={routeType}
+              routeTypes={routeTypes}
+              setRouteType={setRouteType}
             />
-          )}
-        </div>
+          </Grid>
+
+          <Grid item xs={12}>
+            <div className={classes.wrapper}>
+              <Button
+                color="primary"
+                variant="contained"
+                disabled={isGenerating}
+                onClick={onGenerateRun}
+              >
+                Create my Run
+              </Button>
+              {isGenerating && (
+                <CircularProgress
+                  color="primary"
+                  size={24}
+                  className={classes.buttonProgress}
+                />
+              )}
+            </div>
+          </Grid>
+        </Grid>
       </Box>
+
     </Drawer>
   );
 }

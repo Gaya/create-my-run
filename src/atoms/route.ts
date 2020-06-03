@@ -12,6 +12,11 @@ export const routeTypeState = atom<RouteType['id'] | undefined>({
   default: undefined,
 });
 
+export const routeLocationState = atom<number | undefined>({
+  key: 'RouteLocation',
+  default: undefined,
+});
+
 export const routeDataQuery = selector<RoutesResponse | null>({
   key: 'RouteData',
   get: ({ get }) => {

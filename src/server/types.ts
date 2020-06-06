@@ -1,5 +1,10 @@
 export type LatLong = [number, number];
 
+export interface GeometryPoint {
+  type: 'Point';
+  coordinates: LatLong;
+}
+
 export interface GeometryLineString {
   type: 'LineString';
   coordinates: LatLong[];
@@ -29,4 +34,27 @@ export interface RoutesResponse {
   time: number;
   length: number;
   coordinates: LatLong[];
+}
+
+interface ExternalLocationResponse {
+  geometry: GeometryPoint;
+  key: string;
+  name: string;
+  province: string;
+}
+
+export interface ExternalLocationsResponse {
+  _embedded: {
+    locations: ExternalLocationResponse[];
+  }
+}
+
+interface LocationResponse {
+  name: string;
+  key: string;
+  coordinates: LatLong;
+}
+
+export interface LocationsResponse {
+  locations: LocationResponse[];
 }

@@ -69,6 +69,7 @@ const Configure: React.FC<ConfigureProps> = ({
   const [routeType, setRouteType] = useState<RouteType['id']>(routeTypes[0].id);
 
   const setRouteLocationState = useSetRecoilState(routeLocationState);
+  const [location, setLocation] = useState<number>();
 
   const classes = useStyles();
 
@@ -106,7 +107,7 @@ const Configure: React.FC<ConfigureProps> = ({
           </Grid>
 
           <Grid item xs={12}>
-            <StartingPoint />
+            <StartingPoint location={location} setLocation={setLocation} />
           </Grid>
 
           <Grid item xs={12}>

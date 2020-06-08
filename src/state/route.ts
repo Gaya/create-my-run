@@ -2,6 +2,7 @@ import { atom, selector } from 'recoil';
 
 import { RoutesResponse } from '../server/types';
 import { RouteTypeValue } from '../types';
+import { safeStoredLocation } from './utils';
 
 export const routeDistanceState = atom<number | undefined>({
   key: 'RouteDistance',
@@ -15,7 +16,7 @@ export const routeTypeState = atom<RouteTypeValue['id'] | undefined>({
 
 export const routeLocationState = atom<string | undefined>({
   key: 'RouteLocation',
-  default: undefined,
+  default: safeStoredLocation()?.key,
 });
 
 export const routeDataQuery = selector<RoutesResponse | null>({

@@ -4,7 +4,9 @@ import { useRecoilValueLoadable, useSetRecoilState } from 'recoil';
 
 import { CircularProgress, TextField } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+
 import { locationsDataQuery, locationSearchState } from '../../state/location';
+import { safeStoredLocation } from '../../state/utils';
 
 interface StartingPointProps {
   location: string | null;
@@ -12,7 +14,7 @@ interface StartingPointProps {
 }
 
 const StartingPoint: React.FC<StartingPointProps> = ({ location, setLocation }) => {
-  const [locationInput, setLocationInput] = useState<string>('');
+  const [locationInput, setLocationInput] = useState<string>(safeStoredLocation()?.name || '');
   const [debouncedLocation] = useDebounce(locationInput, 500);
 
   const setLocationSearchState = useSetRecoilState(locationSearchState);
@@ -22,6 +24,11 @@ const StartingPoint: React.FC<StartingPointProps> = ({ location, setLocation }) 
 
   const locationOptions = locations.state === 'hasValue' ? Object.values(locations.contents || {}) : [];
   const options = locationOptions.map(o => o.key);
+
+  useEffect(() => {
+    const name = safeStoredLocation()?.name || '';
+    setLocationInput(name);
+  }, []);
 
   useEffect(() => {
     setLocationSearchState(debouncedLocation);

@@ -3,6 +3,7 @@ import { atom, selector } from 'recoil';
 import { LocationResponse, LocationsResponse } from '../server/types';
 import { Locations } from '../types';
 import { routeLocationState } from './route';
+import { getStoredLocation, hasStoredLocation, safeStoredLocation } from './utils';
 
 export const locationSearchState = atom<string>({
   key: 'LocationSearch',
@@ -16,6 +17,11 @@ export const locationsDataQuery = selector<Locations | null>({
     const q = get(locationSearchState);
 
     if (q === '') {
+      const location = safeStoredLocation();
+      if (location) {
+        return Promise.resolve({ [location.key]: location });
+      }
+
       return Promise.resolve(null);
     }
 

@@ -16,6 +16,7 @@ import { locationByRouteLocation } from '../../state/location';
 import { LatLong } from '../../server/types';
 
 import './RunMap.css';
+import { storeLocation } from '../../state/utils';
 
 const MarkerIcon = new Icon({
   iconUrl,
@@ -38,7 +39,7 @@ const RunMap: React.FC = () => {
 
   useEffect(() => {
     if (startLocation.state === 'hasValue' && startLocation.contents) {
-      console.log('Save', startLocation.contents);
+      storeLocation(startLocation.contents);
     }
   }, [startLocation.contents, startLocation.state]);
 

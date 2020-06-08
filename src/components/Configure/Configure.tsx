@@ -17,7 +17,10 @@ import {
   routeLocationState,
   routeTypeState
 } from '../../state/route';
-import { isLoading } from '../../state/utils';
+import {
+  isLoading,
+  safeStoredLocation
+} from '../../state/utils';
 import { RouteTypeValue } from '../../types';
 
 import Distance from './Distance';
@@ -71,7 +74,7 @@ const Configure: React.FC<ConfigureProps> = ({
   const [routeType, setRouteType] = useState<RouteTypeValue['id']>(routeTypes[0].id);
 
   const setRouteLocationState = useSetRecoilState(routeLocationState);
-  const [location, setLocation] = useState<string | null>(null);
+  const [location, setLocation] = useState<string | null>(safeStoredLocation()?.key || null);
 
   const classes = useStyles();
 

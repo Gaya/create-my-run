@@ -1,7 +1,13 @@
 {
   "name": "create-my-run",
   "version": "0.1.0",
+  "author": "Gaya Kessler (https://theclevernode.com)",
   "private": true,
+  "homepage": "https://createmy.run",
+  "engines": {
+    "node": "12.11.1",
+    "npm": "6.11.3"
+  },
   "dependencies": {
     "@material-ui/core": "^4.10.0",
     "@material-ui/lab": "^4.0.0-alpha.55",
@@ -26,6 +32,7 @@
     "react-leaflet": "^2.7.0",
     "react-scripts": "3.4.1",
     "recoil": "0.0.8",
+    "serve-static": "^1.14.1",
     "ts-node": "^8.10.1",
     "typescript": "~3.7.2",
     "use-debounce": "^3.4.2"
@@ -35,6 +42,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "postinstall": "ENV=production npm run build",
     "server": "ts-node -r dotenv/config --project ./src/server/tsconfig.json ./src/server/index.ts"
   },
   "eslintConfig": {

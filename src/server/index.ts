@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import serve from 'serve-static';
 
 import fetchRoute from './fetchRoute';
 import { fetchLocations } from './fetchLocations';
@@ -8,8 +9,10 @@ const app = express();
 const port = process.env.API_PORT || 4000;
 
 app.use(cors({
-  origin: /^http:\/\/localhost/
+  origin: /^https?:\/\/(localhost|createmy\.run)/
 }));
+
+app.use(serve(`${__dirname}/../../build`));
 
 app.get('/route', (req, res) => {
   const distance = (req.query.distance as string) || '0';

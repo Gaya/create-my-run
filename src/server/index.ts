@@ -20,7 +20,8 @@ app.get('/route', (req, res) => {
 });
 
 app.get('/locations', (req, res) => {
-  const q = (req.query.q as string) || '0';
+  const q = (req.query.q as string) || '';
+
   fetchLocations(q)
     .then((location) => res.json(location))
     .catch((err) => res.end(err.message));

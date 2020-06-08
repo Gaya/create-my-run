@@ -14,15 +14,16 @@ import { makeStyles } from '@material-ui/core/styles';
 import {
   routeDataQuery,
   routeDistanceState,
-  routeLocationState,
   routeTypeState
 } from '../../atoms/route';
-import Distance from './Distance';
 import { isLoading } from '../../atoms/utils';
-import RouteType from './RouteType';
-import StartingPoint from './StartingPoint';
+import { RouteTypeValue } from '../../types';
 
-const routeTypes: RouteType[] = [
+import Distance from './Distance';
+import StartingPoint from './StartingPoint';
+import RouteType from './RouteType';
+
+const routeTypes: RouteTypeValue[] = [
   {
     id: 69,
     name: 'Recreative',
@@ -66,10 +67,9 @@ const Configure: React.FC<ConfigureProps> = ({
   const [distance, setDistance] = useState<number>(10);
 
   const setRouteTypeState = useSetRecoilState(routeTypeState);
-  const [routeType, setRouteType] = useState<RouteType['id']>(routeTypes[0].id);
+  const [routeType, setRouteType] = useState<RouteTypeValue['id']>(routeTypes[0].id);
 
-  const setRouteLocationState = useSetRecoilState(routeLocationState);
-  const [location, setLocation] = useState<number>();
+  const [location, setLocation] = useState<string>();
 
   const classes = useStyles();
 
@@ -103,11 +103,11 @@ const Configure: React.FC<ConfigureProps> = ({
           </Grid>
 
           <Grid item xs={12}>
-            <Distance distance={distance} setDistance={setDistance} />
+            <StartingPoint location={location} setLocation={setLocation} />
           </Grid>
 
           <Grid item xs={12}>
-            <StartingPoint location={location} setLocation={setLocation} />
+            <Distance distance={distance} setDistance={setDistance} />
           </Grid>
 
           <Grid item xs={12}>

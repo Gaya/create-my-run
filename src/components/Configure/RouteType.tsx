@@ -1,10 +1,12 @@
 import React from 'react';
 import { InputLabel, MenuItem, Select } from '@material-ui/core';
 
+import { RouteTypeValue } from '../../types';
+
 interface RouteTypeProps {
-  routeType: RouteType['id'];
-  setRouteType(newRouteType: RouteType['id']): void;
-  routeTypes: RouteType[];
+  routeType: RouteTypeValue['id'];
+  setRouteType(newRouteType: RouteTypeValue['id']): void;
+  routeTypes: RouteTypeValue[];
 }
 
 const RouteType: React.FC<RouteTypeProps> = ({

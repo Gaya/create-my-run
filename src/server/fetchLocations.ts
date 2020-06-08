@@ -25,6 +25,10 @@ function fetchExternalOrCached(q: string): Promise<ExternalLocationsResponse> {
 }
 
 export function fetchLocations(search: string): Promise<LocationsResponse> {
+  if (search.trim() === '') {
+    return Promise.resolve({ locations: [] });
+  }
+
   return fetchExternalOrCached(search)
     .then((result) => {
       return {

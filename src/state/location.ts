@@ -3,7 +3,7 @@ import { atom, selector } from 'recoil';
 import { LocationResponse, LocationsResponse } from '../server/types';
 import { Locations } from '../types';
 import { routeLocationState } from './route';
-import { getStoredLocation, hasStoredLocation, safeStoredLocation } from './utils';
+import { safeStoredLocation } from './utils';
 
 export const locationSearchState = atom<string>({
   key: 'LocationSearch',

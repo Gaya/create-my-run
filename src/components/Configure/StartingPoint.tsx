@@ -7,11 +7,11 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import { locationsDataQuery, locationSearchState } from '../../atoms/location';
 
 interface StartingPointProps {
-  location?: string;
-  setLocation(newLocation: string): void;
+  location: string | null;
+  setLocation(newLocation: string | null): void;
 }
 
-const StartingPoint: React.FC<StartingPointProps> = ({ location }) => {
+const StartingPoint: React.FC<StartingPointProps> = ({ location, setLocation }) => {
   const [locationInput, setLocationInput] = useState<string>('');
   const [debouncedLocation] = useDebounce(locationInput, 500);
 
@@ -37,8 +37,10 @@ const StartingPoint: React.FC<StartingPointProps> = ({ location }) => {
       getOptionLabel={locationByKey}
       value={location}
       inputValue={locationInput}
+      freeSolo
       filterOptions={(options) => options}
       placeholder="Start typing to search"
+      onChange={(_, newLocation) => setLocation(newLocation)}
       onInputChange={(event, newInputValue) => {
         setLocationInput(newInputValue);
       }}

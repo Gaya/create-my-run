@@ -9,7 +9,7 @@ export const locationSearchState = atom<string>({
 });
 
 export const locationsDataQuery = selector<Locations | null>({
-  key: 'LocationsData',
+  key: 'LocationsFound',
   get: ({ get }) => {
     const url = process.env.REACT_APP_API;
     const q = get(locationSearchState);

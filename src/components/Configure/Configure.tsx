@@ -13,7 +13,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import {
   routeDataQuery,
-  routeDistanceState,
+  routeDistanceState, routeLocationState,
   routeTypeState
 } from '../../atoms/route';
 import { isLoading } from '../../atoms/utils';
@@ -69,17 +69,20 @@ const Configure: React.FC<ConfigureProps> = ({
   const setRouteTypeState = useSetRecoilState(routeTypeState);
   const [routeType, setRouteType] = useState<RouteTypeValue['id']>(routeTypes[0].id);
 
-  const [location, setLocation] = useState<string>();
+  const setRouteLocationState = useSetRecoilState(routeLocationState);
+  const [location, setLocation] = useState<string | null>(null);
 
   const classes = useStyles();
 
   const isGenerating = isLoading(route);
+  const canGenerate = distance && routeType && location;
 
   const onGenerateRun = () => {
-    if (isGenerating) return;
+    if (isGenerating || !location) return;
 
     setDistanceState(distance);
     setRouteTypeState(routeType);
+    setRouteLocationState(location);
   };
 
   useEffect(() => {
@@ -123,7 +126,7 @@ const Configure: React.FC<ConfigureProps> = ({
               <Button
                 color="primary"
                 variant="contained"
-                disabled={isGenerating}
+                disabled={!canGenerate || isGenerating}
                 onClick={onGenerateRun}
               >
                 Create my Run

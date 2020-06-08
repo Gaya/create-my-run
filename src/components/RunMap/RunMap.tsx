@@ -16,7 +16,7 @@ import { locationByRouteLocation } from '../../state/location';
 import { LatLong } from '../../server/types';
 
 import './RunMap.css';
-import { storeLocation } from '../../state/utils';
+import { safeStoredLocation, storeLocation } from '../../state/utils';
 
 const MarkerIcon = new Icon({
   iconUrl,
@@ -29,7 +29,7 @@ const RunMap: React.FC = () => {
   const startLocation = useRecoilValueLoadable(locationByRouteLocation);
   const [coordinates, setCoordinates] = useState<LatLong[]>([]);
 
-  const defaultCenter: LatLong = [52.132633, 5.291266];
+  const defaultCenter: LatLong = safeStoredLocation()?.coordinates || [52.132633, 5.291266];
 
   useEffect(() => {
     if (route.state === 'hasValue' && route.contents) {

@@ -6,6 +6,8 @@ import {
   Polyline,
   TileLayer,
 } from 'react-leaflet';
+import { Icon } from 'leaflet';
+import iconUrl from './Icon.png';
 
 import 'leaflet/dist/leaflet.css';
 
@@ -14,6 +16,12 @@ import { locationByRouteLocation } from '../../atoms/location';
 import { LatLong } from '../../server/types';
 
 import './RunMap.css';
+
+const MarkerIcon = new Icon({
+  iconUrl,
+  iconSize: [30, 45],
+  iconAnchor: [15, 45]
+});
 
 const RunMap: React.FC = () => {
   const route = useRecoilValueLoadable(routeDataQuery);
@@ -32,15 +40,20 @@ const RunMap: React.FC = () => {
   const bounds = coordinates.length > 0 ? coordinates : undefined;
 
   return (
-    <Map center={center} bounds={bounds} zoom={9} useFlyTo>
+    <Map center={center} bounds={bounds} zoom={13} useFlyTo>
       <TileLayer
         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       {startLocation.state === 'hasValue'
         && startLocation.contents?.coordinates
-        && <Marker position={startLocation.contents?.coordinates} />}
-      {route && <Polyline color="blue" positions={coordinates} />}
+        && (
+          <Marker
+            position={startLocation.contents?.coordinates}
+            icon={MarkerIcon}
+          />
+        )}
+      {route && <Polyline color="blue" opacity={0.5} positions={coordinates} />}
     </Map>
   );
 };

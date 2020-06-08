@@ -11,8 +11,8 @@ import iconUrl from './Icon.png';
 
 import 'leaflet/dist/leaflet.css';
 
-import { routeDataQuery } from '../../atoms/route';
-import { locationByRouteLocation } from '../../atoms/location';
+import { routeDataQuery } from '../../state/route';
+import { locationByRouteLocation } from '../../state/location';
 import { LatLong } from '../../server/types';
 
 import './RunMap.css';
@@ -35,6 +35,12 @@ const RunMap: React.FC = () => {
       setCoordinates(route.contents.coordinates);
     }
   }, [route.state, route.contents]);
+
+  useEffect(() => {
+    if (startLocation.state === 'hasValue' && startLocation.contents) {
+      console.log('Save', startLocation.contents);
+    }
+  }, [startLocation.contents, startLocation.state]);
 
   const center = coordinates.length > 0 ? coordinates[0] : defaultCenter;
   const bounds = coordinates.length > 0 ? coordinates : undefined;

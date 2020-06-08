@@ -3,7 +3,7 @@ import { useRecoilValueLoadable } from 'recoil';
 
 import { AppBar, Box, Button, Toolbar, Typography } from '@material-ui/core';
 
-import { routeLengthState } from '../../atoms/route';
+import { routeLengthState } from '../../state/route';
 
 interface ToolBarProps {
   openDrawer(): void;

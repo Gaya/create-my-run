@@ -16,8 +16,8 @@ import {
   routeDistanceState,
   routeLocationState,
   routeTypeState
-} from '../../atoms/route';
-import { isLoading } from '../../atoms/utils';
+} from '../../state/route';
+import { isLoading } from '../../state/utils';
 import { RouteTypeValue } from '../../types';
 
 import Distance from './Distance';

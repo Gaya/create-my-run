@@ -4,7 +4,7 @@ import { useRecoilValueLoadable, useSetRecoilState } from 'recoil';
 
 import { CircularProgress, TextField } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { locationsDataQuery, locationSearchState } from '../../atoms/location';
+import { locationsDataQuery, locationSearchState } from '../../state/location';
 
 interface StartingPointProps {
   location: string | null;

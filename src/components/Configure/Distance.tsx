@@ -2,7 +2,7 @@ import React, { ChangeEvent, useState } from 'react';
 import { Box, Grid, Input, InputLabel, Slider } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSetRecoilState } from 'recoil';
-import { routeDistanceState } from '../../atoms/route';
+import { routeDistanceState } from '../../state/route';
 
 function distanceValueText(value: number): string {
   return `${value} km`;

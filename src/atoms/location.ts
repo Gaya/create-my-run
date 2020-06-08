@@ -1,7 +1,8 @@
 import { atom, selector } from 'recoil';
 
-import { LocationsResponse } from '../server/types';
+import { LocationResponse, LocationsResponse } from '../server/types';
 import { Locations } from '../types';
+import { routeLocationState } from './route';
 
 export const locationSearchState = atom<string>({
   key: 'LocationSearch',
@@ -25,4 +26,14 @@ export const locationsDataQuery = selector<Locations | null>({
         {},
       ));
   }
+});
+
+export const locationByRouteLocation = selector<LocationResponse | null>({
+  key: 'LocationByRouteLocaction',
+  get: ({ get }) => {
+    const selectedLocation = get(routeLocationState);
+    const locations = get(locationsDataQuery);
+
+    return locations && selectedLocation ? locations[selectedLocation] : null;
+  },
 });

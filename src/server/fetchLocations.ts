@@ -35,7 +35,7 @@ export function fetchLocations(search: string): Promise<LocationsResponse> {
         locations: result._embedded.locations.map((location) => ({
           name: location.name,
           key: location.key,
-          coordinates: location.geometry.coordinates,
+          coordinates: [location.geometry.coordinates[1], location.geometry.coordinates[0]],
         })),
       }
     });

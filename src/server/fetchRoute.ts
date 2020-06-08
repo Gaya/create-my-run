@@ -14,7 +14,7 @@ const responseCache: ResponseCache = {};
 
 interface RouteParams {
   distance: number;
-  locations: number | number[];
+  locations: string | string[];
   preferences: number | number[];
   routetype: number;
   speed: number;
@@ -37,14 +37,13 @@ function fetchExternalOrCached(params: RouteParams): Promise<ExternalRoutesRespo
     });
 }
 
-function fetchRoute(distance: number, routetype: number): Promise<RoutesResponse> {
-  const locations = 20611963;
+function fetchRoute(distance: number, routetype: number, location: string): Promise<RoutesResponse> {
   const speed = 12;
   const preferences = 63;
 
   return fetchExternalOrCached({
     distance: distance * 1000,
-    locations,
+    locations: location,
     preferences,
     routetype,
     speed,

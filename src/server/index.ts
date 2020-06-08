@@ -14,7 +14,8 @@ app.use(cors({
 app.get('/route', (req, res) => {
   const distance = (req.query.distance as string) || '0';
   const routeType = (req.query.routeType as string) || '0';
-  fetchRoute(parseFloat(distance), parseInt(routeType))
+  const location = (req.query.location as string) || '0';
+  fetchRoute(parseFloat(distance), parseInt(routeType), location)
     .then((route) => res.json(route))
     .catch((err) => res.end(err.message));
 });

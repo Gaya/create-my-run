@@ -24,12 +24,13 @@ export const routeDataQuery = selector<RoutesResponse | null>({
     const url = process.env.REACT_APP_API;
     const distance = get(routeDistanceState);
     const routeType = get(routeTypeState);
+    const location = get(routeLocationState);
 
     if (!distance || !routeType) {
       return Promise.resolve(null);
     }
 
-    return fetch(`${url}/route?distance=${distance}&routeType=${routeType}`)
+    return fetch(`${url}/route?distance=${distance}&routeType=${routeType}&location=${location}`)
       .then((res) => res.json() as Promise<RoutesResponse>);
   }
 });

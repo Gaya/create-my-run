@@ -13,7 +13,8 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import {
   routeDataQuery,
-  routeDistanceState, routeLocationState,
+  routeDistanceState,
+  routeLocationState,
   routeTypeState
 } from '../../atoms/route';
 import { isLoading } from '../../atoms/utils';

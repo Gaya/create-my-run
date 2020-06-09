@@ -27,14 +27,13 @@ interface DistanceProps {
 const Distance: React.FC<DistanceProps> = ({
   distance,
   setDistance,
-  defaultDistance = 10,
   min = 1,
   max = 50,
 }) => {
   const classes = useStyles();
 
   const handleDistanceInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setDistance(event.target.value === '' ? defaultDistance : Number(event.target.value));
+    setDistance(parseInt(event.target.value, 10));
   };
 
   const handleDistanceBlur = (): void => {
@@ -74,8 +73,8 @@ const Distance: React.FC<DistanceProps> = ({
             onBlur={handleDistanceBlur}
             inputProps={{
               step: 1,
-              min: 0,
-              max: 50,
+              min,
+              max,
               type: 'number',
               'aria-labelledby': 'distance-slider',
             }}

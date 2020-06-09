@@ -8,6 +8,7 @@ import {
   Drawer,
   Grid,
   IconButton,
+  Link,
   Typography,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -102,7 +103,14 @@ const Configure: React.FC<ConfigureProps> = ({
       open={isDrawerOpen}
       onClose={onCloseDrawer}
     >
-      <Box maxWidth={380} padding={2}>
+      <Box
+        display="flex"
+        flexGrow={1}
+        justifyContent="space-between"
+        flexDirection="column"
+        maxWidth={380}
+        padding={2}
+      >
         <Grid container spacing={3}>
           <Grid item container justify="space-between" xs={12}>
             <Typography variant="h6">
@@ -150,8 +158,19 @@ const Configure: React.FC<ConfigureProps> = ({
             </div>
           </Grid>
         </Grid>
-      </Box>
 
+        <Grid container>
+          <Typography variant="body2" color="textSecondary">
+            Create My Run is a project by
+            {' '}
+            <Link href="https://theclevernode.com">Gaya Kessler</Link>
+            {' '}
+            and is
+            {' '}
+            <Link href="https://github.com/Gaya/create-my-run">Open Source</Link>
+          </Typography>
+        </Grid>
+      </Box>
     </Drawer>
   );
 };

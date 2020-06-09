@@ -15,15 +15,6 @@ const HeaderBar: React.FC<ToolBarProps> = ({ openDrawer }) => {
   return (
     <AppBar position="static">
       <Toolbar>
-        <Box marginRight={2}>
-          <Button
-            variant="outlined"
-            onClick={openDrawer}
-            color="inherit"
-          >
-            Change Route
-          </Button>
-        </Box>
         <Typography variant="h6" style={{ flexGrow: 1 }}>
           Create My Run
         </Typography>
@@ -32,6 +23,15 @@ const HeaderBar: React.FC<ToolBarProps> = ({ openDrawer }) => {
             {(routeLength.contents / 1000).toFixed(2)} km
           </Typography>
         )}
+        <Box marginLeft={2}>
+          <Button
+            variant="outlined"
+            onClick={openDrawer}
+            color="inherit"
+          >
+            Change
+          </Button>
+        </Box>
       </Toolbar>
     </AppBar>
   );

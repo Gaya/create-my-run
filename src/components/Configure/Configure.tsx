@@ -7,9 +7,11 @@ import {
   CircularProgress,
   Drawer,
   Grid,
+  IconButton,
   Typography
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import CloseIcon from '@material-ui/icons/Close';
 
 import {
   routeDataQuery,
@@ -45,7 +47,6 @@ const routeTypes: RouteTypeValue[] = [
 const useStyles = makeStyles(() => ({
   wrapper: {
     position: 'relative',
-    display: 'inline-block',
   },
   buttonProgress: {
     position: 'absolute',
@@ -101,12 +102,15 @@ const Configure: React.FC<ConfigureProps> = ({
       open={isDrawerOpen}
       onClose={onCloseDrawer}
     >
-      <Box width={380} padding={2}>
+      <Box maxWidth={380} padding={2}>
         <Grid container spacing={3}>
-          <Grid item xs={12}>
+          <Grid item container justify="space-between" xs={12}>
             <Typography variant="h6">
-              Configure Run
+              Create My Run
             </Typography>
+            <IconButton size="small" onClick={onCloseDrawer}>
+              <CloseIcon />
+            </IconButton>
           </Grid>
 
           <Grid item xs={12}>
@@ -130,10 +134,11 @@ const Configure: React.FC<ConfigureProps> = ({
               <Button
                 color="primary"
                 variant="contained"
+                fullWidth
                 disabled={!canGenerate || isGenerating}
                 onClick={onGenerateRun}
               >
-                Create my Run
+                Generate!
               </Button>
               {isGenerating && (
                 <CircularProgress

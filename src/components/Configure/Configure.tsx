@@ -16,7 +16,8 @@ import CloseIcon from '@material-ui/icons/Close';
 
 import { routeDataQuery } from '../../state/route';
 import {
-  isLoading, randomSeed,
+  isLoading,
+  randomSeed,
   safeStoredLocation,
 } from '../../state/utils';
 import { RouteTypeValue } from '../../types';

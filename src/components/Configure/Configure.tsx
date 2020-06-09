@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useRecoilValueLoadable, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
 
 import {
   Box,
@@ -69,6 +69,9 @@ const Configure: React.FC<ConfigureProps> = ({
   onCloseDrawer,
 }) => {
   const route = useRecoilValueLoadable(routeDataQuery);
+  const stateDistance = useRecoilValue(routeDistanceState);
+  const stateRouteType = useRecoilValue(routeTypeState);
+  const stateRouteLocation = useRecoilValue(routeLocationState);
 
   const [distance, setDistance] = useState<number>(10);
   const [routeType, setRouteType] = useState<RouteTypeValue['id']>(routeTypes[0].id);
@@ -77,7 +80,14 @@ const Configure: React.FC<ConfigureProps> = ({
   const classes = useStyles();
 
   const isGenerating = isLoading(route);
-  const canGenerate = distance && routeType && location;
+  const canGenerate = distance
+    && routeType
+    && location
+    && (
+      stateDistance !== distance
+      || stateRouteType !== routeType
+      || stateRouteLocation !== location
+    );
 
   const onGenerateRun = (): void => {
     if (isGenerating || !location) return;
@@ -87,9 +97,6 @@ const Configure: React.FC<ConfigureProps> = ({
       routeType,
       location,
     });
-    // setDistanceState(distance);
-    // setRouteTypeState(routeType);
-    // setRouteLocationState(location);
   };
 
   useEffect(() => {

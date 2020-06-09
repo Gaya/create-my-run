@@ -29,6 +29,7 @@ import { RouteTypeValue } from '../../types';
 import Distance from './Distance';
 import StartingPoint from './StartingPoint';
 import RouteType from './RouteType';
+import { setQueryParameters } from '../../utils/history';
 
 const routeTypes: RouteTypeValue[] = [
   {
@@ -69,13 +70,8 @@ const Configure: React.FC<ConfigureProps> = ({
 }) => {
   const route = useRecoilValueLoadable(routeDataQuery);
 
-  const setDistanceState = useSetRecoilState(routeDistanceState);
   const [distance, setDistance] = useState<number>(10);
-
-  const setRouteTypeState = useSetRecoilState(routeTypeState);
   const [routeType, setRouteType] = useState<RouteTypeValue['id']>(routeTypes[0].id);
-
-  const setRouteLocationState = useSetRecoilState(routeLocationState);
   const [location, setLocation] = useState<string | null>(safeStoredLocation()?.key || null);
 
   const classes = useStyles();
@@ -86,9 +82,14 @@ const Configure: React.FC<ConfigureProps> = ({
   const onGenerateRun = (): void => {
     if (isGenerating || !location) return;
 
-    setDistanceState(distance);
-    setRouteTypeState(routeType);
-    setRouteLocationState(location);
+    setQueryParameters({
+      distance,
+      routeType,
+      location,
+    });
+    // setDistanceState(distance);
+    // setRouteTypeState(routeType);
+    // setRouteLocationState(location);
   };
 
   useEffect(() => {
@@ -146,7 +147,7 @@ const Configure: React.FC<ConfigureProps> = ({
                 disabled={!canGenerate || isGenerating}
                 onClick={onGenerateRun}
               >
-                Generate!
+                Generate Route!
               </Button>
               {isGenerating && (
                 <CircularProgress

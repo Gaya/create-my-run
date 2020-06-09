@@ -2,9 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './components/App/App';
+import AppWrapper from './components/App/AppWrapper';
 
 ReactDOM.render(
-  <App />,
+  <AppWrapper>
+    <App />
+  </AppWrapper>,
   document.getElementById('root'),
 );
 

@@ -21,7 +21,7 @@ import {
   routeTypeState,
 } from '../../state/route';
 import {
-  isLoading,
+  isLoading, randomSeed,
   safeStoredLocation,
 } from '../../state/utils';
 import { RouteTypeValue } from '../../types';
@@ -69,9 +69,6 @@ const Configure: React.FC<ConfigureProps> = ({
   onCloseDrawer,
 }) => {
   const route = useRecoilValueLoadable(routeDataQuery);
-  const stateDistance = useRecoilValue(routeDistanceState);
-  const stateRouteType = useRecoilValue(routeTypeState);
-  const stateRouteLocation = useRecoilValue(routeLocationState);
 
   const [distance, setDistance] = useState<number>(10);
   const [routeType, setRouteType] = useState<RouteTypeValue['id']>(routeTypes[0].id);
@@ -82,20 +79,16 @@ const Configure: React.FC<ConfigureProps> = ({
   const isGenerating = isLoading(route);
   const canGenerate = distance
     && routeType
-    && location
-    && (
-      stateDistance !== distance
-      || stateRouteType !== routeType
-      || stateRouteLocation !== location
-    );
+    && location;
 
   const onGenerateRun = (): void => {
     if (isGenerating || !location) return;
 
     setQueryParameters({
       distance,
-      routeType,
       location,
+      r: randomSeed(),
+      routeType,
     });
   };
 

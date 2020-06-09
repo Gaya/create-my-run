@@ -4,6 +4,11 @@ import { RoutesResponse } from '../server/types';
 import { RouteTypeValue } from '../types';
 import { safeStoredLocation } from './utils';
 
+export const routeRandomSeedState = atom<number | undefined>({
+  key: 'RouteRandomSeed',
+  default: undefined,
+});
+
 export const routeDistanceState = atom<number | undefined>({
   key: 'RouteDistance',
   default: undefined,
@@ -26,12 +31,13 @@ export const routeDataQuery = selector<RoutesResponse | null>({
     const distance = get(routeDistanceState);
     const routeType = get(routeTypeState);
     const location = get(routeLocationState);
+    const r = get(routeRandomSeedState);
 
     if (!distance || !routeType) {
       return Promise.resolve(null);
     }
 
-    return fetch(`${url}/route?distance=${distance}&routeType=${routeType}&location=${location}`)
+    return fetch(`${url}/route?distance=${distance}&routeType=${routeType}&r=${r}&location=${location}`)
       .then((res) => res.json() as Promise<RoutesResponse>);
   },
 });

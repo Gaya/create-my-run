@@ -37,3 +37,7 @@ export function safeStoredLocation(): LocationResponse | undefined {
 
   return undefined;
 }
+
+export function randomSeed(): number {
+  return Math.floor(Math.random() * 1000);
+}

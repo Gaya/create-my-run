@@ -8,7 +8,7 @@ import {
   Drawer,
   Grid,
   IconButton,
-  Typography
+  Typography,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
@@ -17,11 +17,11 @@ import {
   routeDataQuery,
   routeDistanceState,
   routeLocationState,
-  routeTypeState
+  routeTypeState,
 } from '../../state/route';
 import {
   isLoading,
-  safeStoredLocation
+  safeStoredLocation,
 } from '../../state/utils';
 import { RouteTypeValue } from '../../types';
 
@@ -41,7 +41,7 @@ const routeTypes: RouteTypeValue[] = [
   {
     id: 66,
     name: 'Avoid cars',
-  }
+  },
 ];
 
 const useStyles = makeStyles(() => ({
@@ -82,7 +82,7 @@ const Configure: React.FC<ConfigureProps> = ({
   const isGenerating = isLoading(route);
   const canGenerate = distance && routeType && location;
 
-  const onGenerateRun = () => {
+  const onGenerateRun = (): void => {
     if (isGenerating || !location) return;
 
     setDistanceState(distance);
@@ -154,6 +154,6 @@ const Configure: React.FC<ConfigureProps> = ({
 
     </Drawer>
   );
-}
+};
 
 export default Configure;

@@ -45,10 +45,48 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "postinstall": "ENV=production npm run build",
-    "server": "ts-node -r dotenv/config --project ./src/server/tsconfig.json ./src/server/index.ts"
+    "server": "ts-node -r dotenv/config --project ./src/server/tsconfig.json ./src/server/index.ts",
+    "lint": "eslint . --ext .ts,.tsx"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "react-app",
+      "airbnb",
+      "plugin:@typescript-eslint/eslint-recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "overrides": [
+      {
+        "files": ["**/*.ts?(x)"],
+        "rules": {
+          "react/prop-types": 0,
+          "react/jsx-props-no-spreading": 0,
+          "react/jsx-filename-extension": [
+            1,
+            { "extensions": [".tsx"] }
+          ],
+          "import/prefer-default-export": 0,
+          "import/extensions": [
+            "error",
+            "ignorePackages",
+            {
+              "ts": "never",
+              "tsx": "never"
+            }
+          ]
+        }
+      }
+    ],
+    "settings": {
+      "import/parsers": {
+        "@typescript-eslint/parser": [".ts", ".tsx"]
+      },
+      "import/resolver": {
+        "typescript": {
+          "alwaysTryTypes": true
+        }
+      }
+    }
   },
   "browserslist": {
     "production": [
@@ -63,6 +101,8 @@
     ]
   },
   "devDependencies": {
+    "eslint-config-airbnb": "^18.1.0",
+    "eslint-import-resolver-typescript": "^2.0.0",
     "source-map-explorer": "^2.4.2"
   }
 }

@@ -27,7 +27,7 @@ interface ExternalRouteResponse {
 export interface ExternalRoutesResponse {
   _embedded: {
     routes: ExternalRouteResponse[];
-  }
+  };
 }
 
 export interface RoutesResponse {
@@ -46,7 +46,7 @@ interface ExternalLocationResponse {
 export interface ExternalLocationsResponse {
   _embedded: {
     locations: ExternalLocationResponse[];
-  }
+  };
 }
 
 export interface LocationResponse {

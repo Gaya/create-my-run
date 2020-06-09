@@ -39,6 +39,6 @@ const App: React.FC = () => {
       </RecoilRoot>
     </ThemeProvider>
   );
-}
+};
 
 export default App;

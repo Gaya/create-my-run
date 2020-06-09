@@ -21,7 +21,7 @@ import { safeStoredLocation, storeLocation } from '../../state/utils';
 const MarkerIcon = new Icon({
   iconUrl,
   iconSize: [30, 45],
-  iconAnchor: [15, 45]
+  iconAnchor: [15, 45],
 });
 
 const RunMap: React.FC = () => {

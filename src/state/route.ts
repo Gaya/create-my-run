@@ -33,7 +33,7 @@ export const routeDataQuery = selector<RoutesResponse | null>({
 
     return fetch(`${url}/route?distance=${distance}&routeType=${routeType}&location=${location}`)
       .then((res) => res.json() as Promise<RoutesResponse>);
-  }
+  },
 });
 
 export const routeLengthState = selector<number | undefined>({

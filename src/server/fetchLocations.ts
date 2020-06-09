@@ -1,7 +1,7 @@
-import querystring from "querystring";
+import querystring from 'querystring';
 import fetch from 'node-fetch';
 
-import { ExternalLocationsResponse, LatLong, LocationsResponse } from './types';
+import { ExternalLocationsResponse, LocationsResponse } from './types';
 
 interface ResponseCache {
   [qs: string]: ExternalLocationsResponse;
@@ -24,19 +24,20 @@ function fetchExternalOrCached(q: string): Promise<ExternalLocationsResponse> {
     });
 }
 
-export function fetchLocations(search: string): Promise<LocationsResponse> {
+function fetchLocations(search: string): Promise<LocationsResponse> {
   if (search.trim() === '') {
     return Promise.resolve({ locations: [] });
   }
 
   return fetchExternalOrCached(search)
-    .then((result) => {
-      return {
-        locations: result._embedded.locations.map((location) => ({
-          name: location.name,
-          key: location.key,
-          coordinates: [location.geometry.coordinates[1], location.geometry.coordinates[0]],
-        })),
-      }
-    });
+    .then((result) => ({
+      // eslint-disable-next-line no-underscore-dangle
+      locations: result._embedded.locations.map((location) => ({
+        name: location.name,
+        key: location.key,
+        coordinates: [location.geometry.coordinates[1], location.geometry.coordinates[0]],
+      })),
+    }));
 }
+
+export default fetchLocations;

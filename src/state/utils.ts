@@ -31,5 +31,9 @@ export function safeStoredLocation(): LocationResponse | undefined {
     if (hasStoredLocation()) {
       return getStoredLocation();
     }
-  } catch (e) {}
+  } catch (e) {
+    // fail silently
+  }
+
+  return undefined;
 }

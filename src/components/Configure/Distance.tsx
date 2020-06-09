@@ -1,12 +1,14 @@
 import React, { ChangeEvent } from 'react';
-import { Grid, Input, InputLabel, Slider } from '@material-ui/core';
+import {
+  Grid, Input, InputLabel, Slider,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 function distanceValueText(value: number): string {
   return `${value} km`;
 }
 
-const marks = [10, 20, 30, 40, 50].map(v => ({ value: v, label: v }));
+const marks = [10, 20, 30, 40, 50].map((v) => ({ value: v, label: v }));
 
 const useStyles = makeStyles(() => ({
   distanceIput: {
@@ -31,11 +33,11 @@ const Distance: React.FC<DistanceProps> = ({
 }) => {
   const classes = useStyles();
 
-  const handleDistanceInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleDistanceInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setDistance(event.target.value === '' ? defaultDistance : Number(event.target.value));
   };
 
-  const handleDistanceBlur = () => {
+  const handleDistanceBlur = (): void => {
     if (distance < min) {
       setDistance(min);
     } else if (distance > max) {
@@ -55,7 +57,7 @@ const Distance: React.FC<DistanceProps> = ({
             max={max}
             color="primary"
             value={distance}
-            onChange={(event, value) => setDistance(Array.isArray(value) ? value[0] : value)}
+            onChange={(event, value): void => setDistance(Array.isArray(value) ? value[0] : value)}
             getAriaValueText={distanceValueText}
             aria-labelledby="distance-slider"
             step={1}

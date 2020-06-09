@@ -23,7 +23,7 @@ const StartingPoint: React.FC<StartingPointProps> = ({ location, setLocation }) 
   const isLoading = locations.state === 'loading';
 
   const locationOptions = locations.state === 'hasValue' ? Object.values(locations.contents || {}) : [];
-  const options = locationOptions.map(o => o.key);
+  const options = locationOptions.map((o) => o.key);
 
   useEffect(() => {
     const name = safeStoredLocation()?.name || '';
@@ -36,25 +36,25 @@ const StartingPoint: React.FC<StartingPointProps> = ({ location, setLocation }) 
 
   const noOptionsText = locationInput === '' ? 'Start typing to search...' : undefined;
 
-  const locationByKey = (l: string) => locations.state === 'hasValue' && locations.contents && locations.contents[l] ? locations.contents[l].name : '';
+  const locationLabelByKey = (l: string): string => (locations.state === 'hasValue' && locations.contents && locations.contents[l] ? locations.contents[l].name : '');
 
   return (
     <Autocomplete
       options={options}
-      getOptionLabel={locationByKey}
+      getOptionLabel={locationLabelByKey}
       value={location}
       inputValue={locationInput}
       freeSolo
-      filterOptions={(options) => options}
+      filterOptions={(opts): string[] => opts}
       placeholder="Start typing to search"
-      onChange={(_, newLocation) => setLocation(newLocation)}
-      onInputChange={(event, newInputValue) => {
+      onChange={(_, newLocation): void => setLocation(newLocation)}
+      onInputChange={(event, newInputValue): void => {
         setLocationInput(newInputValue);
       }}
       loading={isLoading}
       loadingText="Loading locations..."
       noOptionsText={noOptionsText}
-      renderInput={(params) => (
+      renderInput={(params): React.ReactElement => (
         <TextField
           {...params}
           InputLabelProps={{
@@ -64,10 +64,10 @@ const StartingPoint: React.FC<StartingPointProps> = ({ location, setLocation }) 
           InputProps={{
             ...params.InputProps,
             endAdornment: (
-              <React.Fragment>
+              <>
                 {isLoading ? <CircularProgress color="inherit" size={20} /> : null}
                 {params.InputProps.endAdornment}
-              </React.Fragment>
+              </>
             ),
           }}
           margin="normal"

@@ -1,7 +1,13 @@
 import React from 'react';
 import { useRecoilValueLoadable } from 'recoil';
 
-import { AppBar, Box, Button, Toolbar, Typography } from '@material-ui/core';
+import {
+  AppBar,
+  Box,
+  Button,
+  Toolbar,
+  Typography,
+} from '@material-ui/core';
 
 import { routeLengthState } from '../../state/route';
 
@@ -20,7 +26,9 @@ const HeaderBar: React.FC<ToolBarProps> = ({ openDrawer }) => {
         </Typography>
         {routeLength.state === 'hasValue' && routeLength.contents && (
           <Typography variant="h6">
-            {(routeLength.contents / 1000).toFixed(2)} km
+            {(routeLength.contents / 1000).toFixed(2)}
+            {' '}
+            km
           </Typography>
         )}
         <Box marginLeft={2}>

@@ -3,7 +3,7 @@ import querystring from 'querystring';
 import {
   ExternalRoutesResponse,
   LatLong,
-  RoutesResponse
+  RoutesResponse,
 } from './types';
 
 interface ResponseCache {
@@ -37,7 +37,11 @@ function fetchExternalOrCached(params: RouteParams): Promise<ExternalRoutesRespo
     });
 }
 
-function fetchRoute(distance: number, routetype: number, location: string): Promise<RoutesResponse> {
+function fetchRoute(
+  distance: number,
+  routetype: number,
+  location: string,
+): Promise<RoutesResponse> {
   const speed = 12;
   const preferences = 63;
 
@@ -49,13 +53,14 @@ function fetchRoute(distance: number, routetype: number, location: string): Prom
     speed,
   })
     .then((result) => {
+      // eslint-disable-next-line no-underscore-dangle
       const route = result._embedded.routes[0];
       const routeSegments = route.routesegments;
 
       const coordinates = routeSegments.reduce((acc: LatLong[], segments) => [
         ...acc,
-        ...segments.segmentsections.reduce((acc: LatLong[], segment) => [
-          ...acc,
+        ...segments.segmentsections.reduce((accSegments: LatLong[], segment) => [
+          ...accSegments,
           ...segment.geometry.coordinates.map(([long, lat]): LatLong => [lat, long]),
         ], []),
       ], []);
@@ -64,7 +69,7 @@ function fetchRoute(distance: number, routetype: number, location: string): Prom
         time: route.routetime,
         length: route.routelength,
         coordinates,
-      }
+      };
     });
 }
 

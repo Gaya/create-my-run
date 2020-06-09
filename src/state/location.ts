@@ -31,7 +31,7 @@ export const locationsDataQuery = selector<Locations | null>({
         (acc: Locations, location) => ({ ...acc, [location.key]: location }),
         {},
       ));
-  }
+  },
 });
 
 export const locationByRouteLocation = selector<LocationResponse | null>({

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
+import { useRecoilValueLoadable } from 'recoil';
 
 import {
   Box,
@@ -14,12 +14,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 
-import {
-  routeDataQuery,
-  routeDistanceState,
-  routeLocationState,
-  routeTypeState,
-} from '../../state/route';
+import { routeDataQuery } from '../../state/route';
 import {
   isLoading, randomSeed,
   safeStoredLocation,

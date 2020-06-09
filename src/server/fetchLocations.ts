@@ -8,18 +8,22 @@ interface ResponseCache {
 }
 
 const responseCache: ResponseCache = {};
+const cacheEnabled = Boolean(process.env.ENABLE_CACHE);
 
 function fetchExternalOrCached(q: string): Promise<ExternalLocationsResponse> {
   const qs = querystring.stringify({ q });
 
-  if (responseCache[qs]) {
+  if (responseCache[qs] && cacheEnabled) {
     return Promise.resolve(responseCache[qs]);
   }
 
   return fetch(`${process.env.LOCATIONS_API}?${qs}`)
     .then((res) => res.json() as Promise<ExternalLocationsResponse>)
     .then((locations) => {
-      responseCache[qs] = locations;
+      if (cacheEnabled) {
+        responseCache[qs] = locations;
+      }
+
       return locations;
     });
 }

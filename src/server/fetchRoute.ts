@@ -11,6 +11,7 @@ interface ResponseCache {
 }
 
 const responseCache: ResponseCache = {};
+const cacheEnabled = Boolean(process.env.ENABLE_CACHE);
 
 interface RouteParams {
   distance: number;
@@ -25,14 +26,17 @@ function fetchExternalOrCached(params: RouteParams): Promise<ExternalRoutesRespo
 
   const qs = querystring.stringify({ ...params, randomseed });
 
-  if (responseCache[qs]) {
+  if (responseCache[qs] && cacheEnabled) {
     return Promise.resolve(responseCache[qs]);
   }
 
   return fetch(`${process.env.ROUTE_API}?${qs}`)
     .then((res) => res.json() as Promise<ExternalRoutesResponse>)
     .then((routes) => {
-      responseCache[qs] = routes;
+      if (cacheEnabled) {
+        responseCache[qs] = routes;
+      }
+
       return routes;
     });
 }

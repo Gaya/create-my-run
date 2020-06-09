@@ -10,14 +10,14 @@ import {
 import { history } from '../../utils/history';
 import { randomSeed } from '../../state/utils';
 
-function useRouteNavigation(): void {
+function useRouteNavigation(closeDrawer: () => void): void {
   const setDistanceState = useSetRecoilState(routeDistanceState);
   const setRouteTypeState = useSetRecoilState(routeTypeState);
   const setRouteLocationState = useSetRecoilState(routeLocationState);
   const setRouteRandomSeedState = useSetRecoilState(routeRandomSeedState);
 
   // handle route loading on route change
-  const loadRouteFromQueryParameters = useCallback((search: string) => {
+  const loadRouteFromQueryParameters = useCallback((search: string): boolean => {
     const params = new URLSearchParams(search);
     const distance = params.get('distance');
     const routeType = params.get('routeType');
@@ -29,7 +29,11 @@ function useRouteNavigation(): void {
       setRouteTypeState(parseInt(routeType, 10));
       setRouteLocationState(location);
       setRouteRandomSeedState(r ? parseInt(r, 10) : randomSeed());
+
+      return true;
     }
+
+    return false;
   }, [setDistanceState, setRouteLocationState, setRouteRandomSeedState, setRouteTypeState]);
 
   // listen to route changes
@@ -39,8 +43,11 @@ function useRouteNavigation(): void {
 
   // initial load
   useEffect(() => {
-    loadRouteFromQueryParameters(window.location.search);
-  }, [loadRouteFromQueryParameters]);
+    if (loadRouteFromQueryParameters(window.location.search)) {
+      // if has route, close drawer
+      closeDrawer();
+    }
+  }, [closeDrawer, loadRouteFromQueryParameters]);
 }
 
 export default useRouteNavigation;

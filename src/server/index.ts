@@ -18,7 +18,9 @@ app.get('/route', (req, res) => {
   const distance = (req.query.distance as string) || '0';
   const routeType = (req.query.routeType as string) || '0';
   const location = (req.query.location as string) || '0';
-  fetchRoute(parseFloat(distance), parseInt(routeType, 10), location)
+  const randomSeed = (req.query.r as string) || '0';
+
+  fetchRoute(parseFloat(distance), parseInt(routeType, 10), location, parseInt(randomSeed, 10))
     .then((route) => res.json(route))
     .catch((err) => res.end(err.message));
 });

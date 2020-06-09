@@ -19,12 +19,11 @@ interface RouteParams {
   preferences: number | number[];
   routetype: number;
   speed: number;
+  randomseed: number;
 }
 
 function fetchExternalOrCached(params: RouteParams): Promise<ExternalRoutesResponse> {
-  const randomseed = 800; // Math.floor(Math.random() * 1000);
-
-  const qs = querystring.stringify({ ...params, randomseed });
+  const qs = querystring.stringify({ ...params });
 
   if (responseCache[qs] && cacheEnabled) {
     return Promise.resolve(responseCache[qs]);
@@ -45,6 +44,7 @@ function fetchRoute(
   distance: number,
   routetype: number,
   location: string,
+  randomseed = 800,
 ): Promise<RoutesResponse> {
   const speed = 12;
   const preferences = 63;
@@ -55,6 +55,7 @@ function fetchRoute(
     preferences,
     routetype,
     speed,
+    randomseed,
   })
     .then((result) => {
       // eslint-disable-next-line no-underscore-dangle

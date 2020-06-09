@@ -9,10 +9,11 @@ import useRouteNavigation from './useRouteNavigation';
 
 const App: React.FC = () => {
   const [drawerOpen, setDrawerOpen] = useState<boolean>(true);
-  useRouteNavigation();
 
   const openDrawer = useCallback(() => setDrawerOpen(true), []);
   const closeDrawer = useCallback(() => setDrawerOpen(false), []);
+
+  useRouteNavigation(closeDrawer);
 
   return (
     <div className="App">

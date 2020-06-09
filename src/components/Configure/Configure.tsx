@@ -158,7 +158,7 @@ const Configure: React.FC<ConfigureProps> = ({
 
         <Grid container>
           <Typography variant="body2" color="textSecondary">
-            Create My Run is a project by
+            Create My Run is a just for fun project by
             {' '}
             <Link href="https://theclevernode.com">Gaya Kessler</Link>
             {' '}

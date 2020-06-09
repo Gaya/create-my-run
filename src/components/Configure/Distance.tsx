@@ -77,6 +77,8 @@ const Distance: React.FC<DistanceProps> = ({
               max,
               type: 'number',
               'aria-labelledby': 'distance-slider',
+              inputmode: 'numeric',
+              pattern: '[0-9]*',
             }}
           />
         </Grid>

@@ -53,7 +53,7 @@ export function convertCoordinatesToGPX(coordinates: LatLong[]): string {
 
 export function downloadGPX(gpxData: string): void {
   const anchor = window.document.createElement('a');
-  anchor.href = `data:text/plain;charset=utf-8,${encodeURIComponent(gpxData)}`;
+  anchor.href = `data:application/gpx+xml;charset=utf-8,${encodeURIComponent(gpxData)}`;
   anchor.download = 'route.gpx';
 
   document.body.appendChild(anchor);

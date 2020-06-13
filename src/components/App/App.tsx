@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import RunMap from '../RunMap/RunMap';
 import HeaderBar from '../HeaderBar/HeaderBar';
 import Configure from '../Configure/Configure';
+import ExportButton from '../ExportButton/ExportButton';
 
 import './App.css';
 import useRouteNavigation from './useRouteNavigation';
@@ -29,6 +30,7 @@ const App: React.FC = () => {
         onCloseDrawer={closeDrawer}
       />
       <RunMap />
+      <ExportButton />
     </div>
   );
 };

@@ -7,7 +7,7 @@ import {
 import GetAppIcon from '@material-ui/icons/GetApp';
 
 import { routeDataQuery } from '../../state/route';
-import { LatLong } from '../../server/types';
+import { LatLng } from '../../server/types';
 
 import {
   convertCoordinatesToGPX,
@@ -16,7 +16,7 @@ import {
 
 const ExportButton: React.FC = () => {
   const route = useRecoilValueLoadable(routeDataQuery);
-  const [coordinates, setCoordinates] = useState<LatLong[]>();
+  const [coordinates, setCoordinates] = useState<LatLng[]>();
 
   const onExportButtonClick = (): void => {
     if (!coordinates) return;

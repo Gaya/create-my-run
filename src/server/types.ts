@@ -1,13 +1,13 @@
-export type LatLong = [number, number];
+export type LatLng = [number, number];
 
 export interface GeometryPoint {
   type: 'Point';
-  coordinates: LatLong;
+  coordinates: LatLng;
 }
 
 export interface GeometryLineString {
   type: 'LineString';
-  coordinates: LatLong[];
+  coordinates: LatLng[];
 }
 
 interface ExternalRouteSegmentSectionResponse {
@@ -33,7 +33,7 @@ export interface ExternalRoutesResponse {
 export interface RoutesResponse {
   time: number;
   length: number;
-  coordinates: LatLong[];
+  coordinates: LatLng[];
 }
 
 interface ExternalLocationResponse {
@@ -52,7 +52,7 @@ export interface ExternalLocationsResponse {
 export interface LocationResponse {
   name: string;
   key: string;
-  coordinates: LatLong;
+  coordinates: LatLng;
 }
 
 export interface LocationsResponse {

@@ -1,7 +1,7 @@
 import { Loadable } from 'recoil';
 import { BaseBuilder, buildGPX } from 'gpx-builder';
 
-import { LocationResponse, LatLong } from '../server/types';
+import { LocationResponse, LatLng } from '../server/types';
 
 export function isLoading<T>(i: Loadable<T>): boolean {
   return i.state === 'loading';
@@ -44,7 +44,7 @@ export function randomSeed(): number {
 }
 
 const { Point } = BaseBuilder.MODELS;
-export function convertCoordinatesToGPX(coordinates: LatLong[]): string {
+export function convertCoordinatesToGPX(coordinates: LatLng[]): string {
   const pointArray = coordinates.map((value) => new Point(value[0], value[1]));
   const gpxData = new BaseBuilder();
   gpxData.setSegmentPoints(pointArray);

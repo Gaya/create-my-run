@@ -3,7 +3,7 @@ import querystring from 'querystring';
 
 import {
   ExternalRoutesResponse,
-  LatLng, RouteFormat,
+  LatLng,
   RoutesResponse,
 } from './types';
 import createResponseCache from './responseCache';

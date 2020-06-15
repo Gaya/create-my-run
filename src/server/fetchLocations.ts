@@ -2,27 +2,21 @@ import querystring from 'querystring';
 import fetch from 'node-fetch';
 
 import { ExternalLocationsResponse, LocationsResponse } from './types';
+import createResponseCache from './responseCache';
 
-interface ResponseCache {
-  [qs: string]: ExternalLocationsResponse;
-}
-
-const responseCache: ResponseCache = {};
-const cacheEnabled = Boolean(process.env.ENABLE_CACHE);
+const responseCache = createResponseCache<ExternalLocationsResponse>();
 
 function fetchExternalOrCached(q: string): Promise<ExternalLocationsResponse> {
   const qs = querystring.stringify({ q });
 
-  if (responseCache[qs] && cacheEnabled) {
-    return Promise.resolve(responseCache[qs]);
+  if (responseCache.has(qs)) {
+    return Promise.resolve(responseCache.get(qs));
   }
 
   return fetch(`${process.env.LOCATIONS_API}?${qs}`)
     .then((res) => res.json() as Promise<ExternalLocationsResponse>)
     .then((locations) => {
-      if (cacheEnabled) {
-        responseCache[qs] = locations;
-      }
+      responseCache.set(qs, locations);
 
       return locations;
     });

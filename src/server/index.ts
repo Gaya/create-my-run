@@ -8,9 +8,11 @@ import fetchLocations from './fetchLocations';
 const app = express();
 const port = process.env.API_PORT || 4000;
 
-app.use(cors({
-  origin: /^https?:\/\/(localhost|createmy\.run)/,
-}));
+if (!process.env.ALLOW_EXTERNAL) {
+  app.use(cors({
+    origin: /^https:\/\/createmy\.run/,
+  }));
+}
 
 app.use(serve(`${__dirname}/../../build`));
 

@@ -1,51 +1,42 @@
-import React, { useState, useEffect } from 'react';
-import { useRecoilValueLoadable } from 'recoil';
-import {
-  Box,
-  Fab,
-} from '@material-ui/core';
+import React from 'react';
+import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
+import { Fab } from '@material-ui/core';
 import GetAppIcon from '@material-ui/icons/GetApp';
 
-import { routeDataQuery } from '../../state/route';
-import { LatLng } from '../../server/types';
-
 import {
-  convertCoordinatesToGPX,
-  downloadGPX,
-} from '../../state/utils';
+  createRouteUrl, routeDataQuery,
+  routeDistanceState,
+  routeLocationState,
+  routeRandomSeedState,
+  routeTypeState,
+} from '../../state/route';
+import { RouteFormat } from '../../server/types';
 
 const ExportButton: React.FC = () => {
   const route = useRecoilValueLoadable(routeDataQuery);
-  const [coordinates, setCoordinates] = useState<LatLng[]>();
 
-  const onExportButtonClick = (): void => {
-    if (!coordinates) return;
+  const distance = useRecoilValue(routeDistanceState);
+  const routeType = useRecoilValue(routeTypeState);
+  const r = useRecoilValue(routeRandomSeedState);
+  const location = useRecoilValue(routeLocationState);
 
-    const gpx = convertCoordinatesToGPX(coordinates);
-    downloadGPX(gpx);
-  };
-
-  useEffect(() => {
-    if (route.state === 'hasValue' && route.contents) {
-      setCoordinates(route.contents.coordinates);
-    }
-  }, [route.state, route.contents]);
+  if (route.state !== 'hasValue' || !distance || !routeType || !location || !r) {
+    return null;
+  }
 
   return (
-    <Box
-      position="absolute"
-      bottom={20}
-      right={20}
-      zIndex={2}
+    <Fab
+      style={{
+        position: 'absolute',
+        bottom: 24,
+        right: 14,
+        zIndex: 2,
+      }}
+      color="primary"
+      href={createRouteUrl(distance, routeType, r, location, RouteFormat.GPX)}
     >
-      <Fab
-        color="primary"
-        onClick={onExportButtonClick}
-        disabled={!coordinates}
-      >
-        <GetAppIcon />
-      </Fab>
-    </Box>
+      <GetAppIcon />
+    </Fab>
   );
 };
 

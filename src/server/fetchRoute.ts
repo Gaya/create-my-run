@@ -3,7 +3,7 @@ import querystring from 'querystring';
 
 import {
   ExternalRoutesResponse,
-  LatLong,
+  LatLng,
   RoutesResponse,
 } from './types';
 import createResponseCache from './responseCache';
@@ -57,11 +57,11 @@ function fetchRoute(
       const route = result._embedded.routes[0];
       const routeSegments = route.routesegments;
 
-      const coordinates = routeSegments.reduce((acc: LatLong[], segments) => [
+      const coordinates = routeSegments.reduce((acc: LatLng[], segments) => [
         ...acc,
-        ...segments.segmentsections.reduce((accSegments: LatLong[], segment) => [
+        ...segments.segmentsections.reduce((accSegments: LatLng[], segment) => [
           ...accSegments,
-          ...segment.geometry.coordinates.map(([long, lat]): LatLong => [lat, long]),
+          ...segment.geometry.coordinates.map(([lng, lat]): LatLng => [lat, lng]),
         ], []),
       ], []);
 

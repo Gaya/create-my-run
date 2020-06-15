@@ -1,6 +1,6 @@
 import { atom, selector } from 'recoil';
 
-import { RoutesResponse } from '../server/types';
+import { RouteFormat, RoutesResponse } from '../server/types';
 import { RouteTypeValue } from '../types';
 import { safeStoredLocation } from './utils';
 
@@ -24,20 +24,37 @@ export const routeLocationState = atom<string | undefined>({
   default: safeStoredLocation()?.key,
 });
 
+export function createRouteUrl(
+  distance: number,
+  routeType: number,
+  r: number,
+  location: string,
+  format?: RouteFormat,
+): string {
+  const url = process.env.REACT_APP_API;
+  return [
+    `${url}/route?&&`,
+    `distance=${distance}`,
+    `routeType=${routeType}`,
+    `r=${r}`,
+    `location=${location}`,
+    format ? `format=${format}` : undefined,
+  ].join('&');
+}
+
 export const routeDataQuery = selector<RoutesResponse | null>({
   key: 'RouteData',
   get: ({ get }) => {
-    const url = process.env.REACT_APP_API;
     const distance = get(routeDistanceState);
     const routeType = get(routeTypeState);
     const location = get(routeLocationState);
     const r = get(routeRandomSeedState);
 
-    if (!distance || !routeType) {
+    if (!distance || !routeType || !r || !location) {
       return Promise.resolve(null);
     }
 
-    return fetch(`${url}/route?distance=${distance}&routeType=${routeType}&r=${r}&location=${location}`)
+    return fetch(createRouteUrl(distance, routeType, r, location))
       .then((res) => res.json() as Promise<RoutesResponse>);
   },
 });

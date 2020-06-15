@@ -4,19 +4,19 @@ import fetch from 'node-fetch';
 import { ExternalLocationsResponse, LocationsResponse } from './types';
 import createResponseCache from './responseCache';
 
-const responseCache = createResponseCache<ExternalLocationsResponse>();
+const locationsCache = createResponseCache<ExternalLocationsResponse>();
 
 function fetchExternalOrCached(q: string): Promise<ExternalLocationsResponse> {
   const qs = querystring.stringify({ q });
 
-  if (responseCache.has(qs)) {
-    return Promise.resolve(responseCache.get(qs));
+  if (locationsCache.has(qs)) {
+    return Promise.resolve(locationsCache.get(qs));
   }
 
   return fetch(`${process.env.LOCATIONS_API}?${qs}`)
     .then((res) => res.json() as Promise<ExternalLocationsResponse>)
     .then((locations) => {
-      responseCache.set(qs, locations);
+      locationsCache.set(qs, locations);
 
       return locations;
     });

@@ -15,8 +15,8 @@ interface Cache<T> {
 
 const cacheEnabled = Boolean(process.env.ENABLE_CACHE);
 
-function isValid<T>(cacheValue: CacheValue<T>): boolean {
-  return cacheValue.validUntil > +new Date();
+function isValid<T>(cacheValue: CacheValue<T>, compareDate = +new Date()): boolean {
+  return cacheValue.validUntil > compareDate;
 }
 
 function createResponseCache<T>(

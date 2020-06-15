@@ -1,17 +1,14 @@
 import fetch from 'node-fetch';
 import querystring from 'querystring';
+
 import {
   ExternalRoutesResponse,
   LatLong,
   RoutesResponse,
 } from './types';
+import createResponseCache from './responseCache';
 
-interface ResponseCache {
-  [qs: string]: ExternalRoutesResponse;
-}
-
-const responseCache: ResponseCache = {};
-const cacheEnabled = Boolean(process.env.ENABLE_CACHE);
+const routesCache = createResponseCache<ExternalRoutesResponse>();
 
 interface RouteParams {
   distance: number;
@@ -25,16 +22,14 @@ interface RouteParams {
 function fetchExternalOrCached(params: RouteParams): Promise<ExternalRoutesResponse> {
   const qs = querystring.stringify({ ...params });
 
-  if (responseCache[qs] && cacheEnabled) {
-    return Promise.resolve(responseCache[qs]);
+  if (routesCache.has(qs)) {
+    return Promise.resolve(routesCache.get(qs));
   }
 
   return fetch(`${process.env.ROUTE_API}?${qs}`)
     .then((res) => res.json() as Promise<ExternalRoutesResponse>)
     .then((routes) => {
-      if (cacheEnabled) {
-        responseCache[qs] = routes;
-      }
+      routesCache.set(qs, routes);
 
       return routes;
     });

@@ -58,3 +58,8 @@ export interface LocationResponse {
 export interface LocationsResponse {
   locations: LocationResponse[];
 }
+
+export enum RouteFormat {
+  JSON = 'json',
+  GPX = 'gpx',
+}

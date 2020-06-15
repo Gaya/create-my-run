@@ -13,7 +13,7 @@ import 'leaflet/dist/leaflet.css';
 
 import { routeDataQuery } from '../../state/route';
 import { locationByRouteLocation } from '../../state/location';
-import { LatLong } from '../../server/types';
+import { LatLng } from '../../server/types';
 
 import './RunMap.css';
 import { safeStoredLocation, storeLocation } from '../../state/utils';
@@ -27,9 +27,9 @@ const MarkerIcon = new Icon({
 const RunMap: React.FC = () => {
   const route = useRecoilValueLoadable(routeDataQuery);
   const startLocation = useRecoilValueLoadable(locationByRouteLocation);
-  const [coordinates, setCoordinates] = useState<LatLong[]>([]);
+  const [coordinates, setCoordinates] = useState<LatLng[]>([]);
 
-  const defaultCenter: LatLong = safeStoredLocation()?.coordinates || [52.132633, 5.291266];
+  const defaultCenter: LatLng = safeStoredLocation()?.coordinates || [52.132633, 5.291266];
 
   useEffect(() => {
     if (route.state === 'hasValue' && route.contents) {

@@ -12,7 +12,7 @@ import ExploreIcon from '@material-ui/icons/Explore';
 import SettingsIcon from '@material-ui/icons/Settings';
 import InfoIcon from '@material-ui/icons/Info';
 
-import Configure from '../Configure/Configure';
+import ConfigureRun from '../ConfigureRun/ConfigureRun';
 import About from '../About/About';
 import SideBarPage from './SideBarPage';
 
@@ -57,7 +57,7 @@ const SideBar: React.FC<SideBarProps> = ({ isDrawerOpen, onCloseDrawer }) => {
               title="Create My Run"
               onClose={onCloseDrawer}
             >
-              <Configure onRouteLoaded={onCloseDrawer} />
+              <ConfigureRun onRouteLoaded={onCloseDrawer} />
             </SideBarPage>
           )}
           {navigationValue === 1 && (

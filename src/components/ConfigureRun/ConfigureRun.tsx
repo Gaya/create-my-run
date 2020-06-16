@@ -62,7 +62,7 @@ interface ConfigureProps {
   onRouteLoaded(): void;
 }
 
-const Configure: React.FC<ConfigureProps> = ({ onRouteLoaded }) => {
+const ConfigureRun: React.FC<ConfigureProps> = ({ onRouteLoaded }) => {
   const route = useRecoilValueLoadable(routeDataQuery);
 
   const [distance, setDistance] = useState<number>(10);
@@ -135,4 +135,4 @@ const Configure: React.FC<ConfigureProps> = ({ onRouteLoaded }) => {
   );
 };
 
-export default Configure;
+export default ConfigureRun;

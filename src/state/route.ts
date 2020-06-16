@@ -42,6 +42,12 @@ export function createRouteUrl(
   ].join('&');
 }
 
+let onCompleteRoute = (): void => undefined;
+
+export function setOnCompleteRoute(newOnCompleteRoute: () => void): void {
+  onCompleteRoute = newOnCompleteRoute;
+}
+
 export const routeDataQuery = selector<RoutesResponse | null>({
   key: 'RouteData',
   get: ({ get }) => {
@@ -55,7 +61,11 @@ export const routeDataQuery = selector<RoutesResponse | null>({
     }
 
     return fetch(createRouteUrl(distance, routeType, r, location))
-      .then((res) => res.json() as Promise<RoutesResponse>);
+      .then((res) => res.json() as Promise<RoutesResponse>)
+      .then((res) => {
+        onCompleteRoute();
+        return res;
+      });
   },
 });
 

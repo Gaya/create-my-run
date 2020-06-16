@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useState } from 'react';
 import {
-  Grid, Input, InputLabel, TextField,
+  Divider,
+  Grid, Input, InputLabel, TextField, Typography,
 } from '@material-ui/core';
 
 const Settings: React.FC = () => {
@@ -17,8 +18,13 @@ const Settings: React.FC = () => {
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
-        <InputLabel id="distance" shrink>
-          Default distance
+        <Typography>
+          Distance Settings
+        </Typography>
+      </Grid>
+      <Grid item xs={4}>
+        <InputLabel id="default-distance" shrink>
+          Default
         </InputLabel>
         <Input
           value={defaultDistance}
@@ -35,11 +41,42 @@ const Settings: React.FC = () => {
           }}
         />
       </Grid>
-      <Grid item xs={12}>
-        Minimal distance
+      <Grid item xs={4}>
+        <InputLabel id="min-distance" shrink>
+          Minimum
+        </InputLabel>
+        <Input
+          value={minDistance}
+          margin="dense"
+          onChange={createHandleInputChange(setMinDistance)}
+          endAdornment="km"
+          fullWidth
+          inputProps={{
+            step: 1,
+            min: 1,
+            max: maxDistance - 1,
+            inputMode: 'numeric',
+            pattern: '[0-9]*',
+          }}
+        />
       </Grid>
-      <Grid item xs={12}>
-        Maximum distance
+      <Grid item xs={4}>
+        <InputLabel id="max-distance" shrink>
+          Maximum
+        </InputLabel>
+        <Input
+          value={maxDistance}
+          margin="dense"
+          onChange={createHandleInputChange(setMaxDistance)}
+          endAdornment="km"
+          fullWidth
+          inputProps={{
+            step: 1,
+            min: minDistance + 1,
+            inputMode: 'numeric',
+            pattern: '[0-9]*',
+          }}
+        />
       </Grid>
     </Grid>
   );

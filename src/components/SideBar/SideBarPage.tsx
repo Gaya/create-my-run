@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Container,
+  Container, Divider,
   Grid,
   IconButton,
   Theme, Typography,
@@ -22,7 +22,10 @@ const useStyles = makeStyles((theme: Theme) => ({
   closeWrapper: {
     flexGrow: 0,
     flexBasis: 0,
-    marginBottom: theme.spacing(3),
+    marginBottom: theme.spacing(2),
+  },
+  divider: {
+    marginBottom: theme.spacing(2),
   },
 }));
 
@@ -31,7 +34,7 @@ const SideBarPage: React.FC<SideBarPageProps> = ({ title, onClose, children }) =
 
   return (
     <Container className={classes.sidebarWrapper} maxWidth="xs">
-      <Grid className={classes.closeWrapper} container item justify="space-between" xs={12}>
+      <Grid className={classes.closeWrapper} container item justify="space-between">
         <Grid item>
           <Typography variant="h6">
             {title}
@@ -42,6 +45,9 @@ const SideBarPage: React.FC<SideBarPageProps> = ({ title, onClose, children }) =
             <CloseIcon />
           </IconButton>
         </Grid>
+      </Grid>
+      <Grid item className={classes.divider}>
+        <Divider />
       </Grid>
       {children}
     </Container>

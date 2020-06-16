@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useRecoilValueLoadable } from 'recoil';
 
 import {
-  Box,
   Button,
   CircularProgress,
   Drawer,
   Grid,
   IconButton,
   Link,
+  Theme,
   Typography,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -42,8 +42,16 @@ const routeTypes: RouteTypeValue[] = [
   },
 ];
 
-const useStyles = makeStyles(() => ({
-  wrapper: {
+const useStyles = makeStyles((theme: Theme) => ({
+  sidebarWrapper: {
+    display: 'flex',
+    flexGrow: 1,
+    justifyContent: 'space-between',
+    flexDirection: 'column',
+    maxWidth: 380,
+    padding: theme.spacing(2),
+  },
+  submitWrapper: {
     position: 'relative',
   },
   buttonProgress: {
@@ -100,14 +108,7 @@ const Configure: React.FC<ConfigureProps> = ({
       open={isDrawerOpen}
       onClose={onCloseDrawer}
     >
-      <Box
-        display="flex"
-        flexGrow={1}
-        justifyContent="space-between"
-        flexDirection="column"
-        maxWidth={380}
-        padding={2}
-      >
+      <div className={classes.sidebarWrapper}>
         <Grid container spacing={3}>
           <Grid item container justify="space-between" xs={12}>
             <Typography variant="h6">
@@ -135,7 +136,7 @@ const Configure: React.FC<ConfigureProps> = ({
           </Grid>
 
           <Grid item xs={12}>
-            <div className={classes.wrapper}>
+            <div className={classes.submitWrapper}>
               <Button
                 color="primary"
                 variant="contained"
@@ -167,7 +168,7 @@ const Configure: React.FC<ConfigureProps> = ({
             <Link href="https://github.com/Gaya/create-my-run">Open Source</Link>
           </Typography>
         </Grid>
-      </Box>
+      </div>
     </Drawer>
   );
 };

@@ -7,7 +7,7 @@ import {
   TileLayer,
 } from 'react-leaflet';
 import { Icon } from 'leaflet';
-import iconUrl from './Icon.png';
+import iconUrl from './Marker.png';
 
 import 'leaflet/dist/leaflet.css';
 
@@ -20,8 +20,8 @@ import { safeStoredLocation, storeLocation } from '../../state/utils';
 
 const MarkerIcon = new Icon({
   iconUrl,
-  iconSize: [30, 45],
-  iconAnchor: [15, 45],
+  iconSize: [30, 42],
+  iconAnchor: [15, 42],
 });
 
 const RunMap: React.FC = () => {
@@ -58,6 +58,8 @@ const RunMap: React.FC = () => {
           <Marker
             position={startLocation.contents?.coordinates}
             icon={MarkerIcon}
+            title="Starting Point"
+            alt="Starting Point"
           />
         )}
       {route && <Polyline color="blue" opacity={0.5} positions={coordinates} />}

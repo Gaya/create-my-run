@@ -39,7 +39,7 @@ interface SideBarProps {
 
 const SideBar: React.FC<SideBarProps> = ({ isDrawerOpen, onCloseDrawer }) => {
   const classes = useStyles();
-  const [navigationValue, setNavigationValue] = React.useState(0);
+  const [navigationValue, setNavigationValue] = React.useState(1);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number): void => {
     setNavigationValue(newValue);

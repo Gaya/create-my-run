@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from 'react';
 import {
-  Grid, Input, InputLabel, Slider,
+  Grid, Input, InputAdornment, InputLabel, Slider, useTheme,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -12,7 +12,7 @@ const marks = [10, 20, 30, 40, 50].map((v) => ({ value: v, label: v }));
 
 const useStyles = makeStyles(() => ({
   distanceIput: {
-    width: 40,
+    width: 60,
   },
 }));
 
@@ -31,6 +31,7 @@ const Distance: React.FC<DistanceProps> = ({
   max = 50,
 }) => {
   const classes = useStyles();
+  const theme = useTheme();
 
   const handleDistanceInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setDistance(parseInt(event.target.value, 10));
@@ -46,8 +47,8 @@ const Distance: React.FC<DistanceProps> = ({
 
   return (
     <>
-      <InputLabel id="distance-slider" shrink>
-        Distance (KM)
+      <InputLabel id="distance" shrink>
+        Distance
       </InputLabel>
       <Grid container alignItems="flex-start" spacing={3}>
         <Grid item xs>
@@ -58,7 +59,7 @@ const Distance: React.FC<DistanceProps> = ({
             value={distance}
             onChange={(event, value): void => setDistance(Array.isArray(value) ? value[0] : value)}
             getAriaValueText={distanceValueText}
-            aria-labelledby="distance-slider"
+            aria-labelledby="distance"
             step={1}
             marks={marks}
             valueLabelDisplay="auto"
@@ -71,14 +72,15 @@ const Distance: React.FC<DistanceProps> = ({
             className={classes.distanceIput}
             onChange={handleDistanceInputChange}
             onBlur={handleDistanceBlur}
+            endAdornment={<InputAdornment style={{ paddingBottom: theme.spacing(0.5) }} position="end">km</InputAdornment>}
             inputProps={{
               step: 1,
               min,
               max,
-              type: 'number',
-              'aria-labelledby': 'distance-slider',
+              'aria-labelledby': 'distance',
               inputMode: 'numeric',
               pattern: '[0-9]*',
+              style: { textAlign: 'right' },
             }}
           />
         </Grid>

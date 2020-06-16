@@ -5,9 +5,7 @@ import {
   Button,
   CircularProgress,
   Grid,
-  Link,
   Theme,
-  Typography,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -96,64 +94,44 @@ const Configure: React.FC<ConfigureProps> = ({ onRouteLoaded }) => {
   }, [isGenerating, route.contents, onRouteLoaded]);
 
   return (
-    <>
-      <Grid container spacing={3}>
-        <Grid item container justify="space-between" xs={12}>
-          <Typography variant="h6">
-            Create My Run
-          </Typography>
-        </Grid>
+    <Grid container spacing={3}>
+      <Grid item xs={12}>
+        <StartingPoint location={location} setLocation={setLocation} />
+      </Grid>
 
-        <Grid item xs={12}>
-          <StartingPoint location={location} setLocation={setLocation} />
-        </Grid>
+      <Grid item xs={12}>
+        <Distance distance={distance} setDistance={setDistance} />
+      </Grid>
 
-        <Grid item xs={12}>
-          <Distance distance={distance} setDistance={setDistance} />
-        </Grid>
+      <Grid item xs={12}>
+        <RouteType
+          routeType={routeType}
+          routeTypes={routeTypes}
+          setRouteType={setRouteType}
+        />
+      </Grid>
 
-        <Grid item xs={12}>
-          <RouteType
-            routeType={routeType}
-            routeTypes={routeTypes}
-            setRouteType={setRouteType}
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <div className={classes.submitWrapper}>
-            <Button
-              color="primary"
-              variant="contained"
-              fullWidth
-              disabled={!canGenerate || isGenerating}
-              onClick={onGenerateRun}
-            >
-              Generate Route!
-            </Button>
-            {isGenerating && (
+      <Grid item xs={12}>
+        <div className={classes.submitWrapper}>
+          <Button
+            color="primary"
+            variant="contained"
+            fullWidth
+            disabled={!canGenerate || isGenerating}
+            onClick={onGenerateRun}
+          >
+            Generate Route!
+          </Button>
+          {isGenerating && (
             <CircularProgress
               color="primary"
               size={24}
               className={classes.buttonProgress}
             />
-            )}
-          </div>
-        </Grid>
+          )}
+        </div>
       </Grid>
-
-      <Grid container>
-        <Typography variant="body2" color="textSecondary">
-          Create My Run is a just for fun project by
-          {' '}
-          <Link href="https://theclevernode.com">Gaya Kessler</Link>
-          {' '}
-          and is
-          {' '}
-          <Link href="https://github.com/Gaya/create-my-run">Open Source</Link>
-        </Typography>
-      </Grid>
-    </>
+    </Grid>
   );
 };
 

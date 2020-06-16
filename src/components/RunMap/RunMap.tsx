@@ -7,6 +7,7 @@ import {
   TileLayer,
 } from 'react-leaflet';
 import { Icon } from 'leaflet';
+import { useTheme } from '@material-ui/core';
 import iconUrl from './Marker.png';
 
 import 'leaflet/dist/leaflet.css';
@@ -25,6 +26,7 @@ const MarkerIcon = new Icon({
 });
 
 const RunMap: React.FC = () => {
+  const theme = useTheme();
   const route = useRecoilValueLoadable(routeDataQuery);
   const startLocation = useRecoilValueLoadable(locationByRouteLocation);
   const [coordinates, setCoordinates] = useState<LatLng[]>([]);
@@ -62,7 +64,13 @@ const RunMap: React.FC = () => {
             alt="Starting Point"
           />
         )}
-      {route && <Polyline color="blue" opacity={0.5} positions={coordinates} />}
+      {route && (
+        <Polyline
+          color={theme.palette.secondary.main}
+          opacity={0.7}
+          positions={coordinates}
+        />
+      )}
     </Map>
   );
 };

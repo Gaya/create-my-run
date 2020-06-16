@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { useRecoilValueLoadable } from 'recoil';
 
 import {
@@ -58,11 +58,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-interface ConfigureProps {
-  onRouteLoaded(): void;
-}
-
-const ConfigureRun: React.FC<ConfigureProps> = ({ onRouteLoaded }) => {
+const ConfigureRun: React.FC = () => {
   const route = useRecoilValueLoadable(routeDataQuery);
 
   const [distance, setDistance] = useState<number>(10);
@@ -77,7 +73,7 @@ const ConfigureRun: React.FC<ConfigureProps> = ({ onRouteLoaded }) => {
     && location;
 
   const onGenerateRun = (): void => {
-    if (isGenerating || !location) return;
+    if (isGenerating || !location || !canGenerate) return;
 
     setQueryParameters({
       distance,
@@ -87,51 +83,52 @@ const ConfigureRun: React.FC<ConfigureProps> = ({ onRouteLoaded }) => {
     });
   };
 
-  useEffect(() => {
-    if (!isGenerating && route.contents) {
-      onRouteLoaded();
-    }
-  }, [isGenerating, route.contents, onRouteLoaded]);
+  const handleSubmit = (event: FormEvent): void => {
+    event.preventDefault();
+    onGenerateRun();
+  };
 
   return (
-    <Grid container spacing={3}>
-      <Grid item xs={12}>
-        <StartingPoint location={location} setLocation={setLocation} />
-      </Grid>
+    <form onSubmit={handleSubmit}>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <StartingPoint location={location} setLocation={setLocation} />
+        </Grid>
 
-      <Grid item xs={12}>
-        <Distance distance={distance} setDistance={setDistance} />
-      </Grid>
+        <Grid item xs={12}>
+          <Distance distance={distance} setDistance={setDistance} />
+        </Grid>
 
-      <Grid item xs={12}>
-        <RouteType
-          routeType={routeType}
-          routeTypes={routeTypes}
-          setRouteType={setRouteType}
-        />
-      </Grid>
+        <Grid item xs={12}>
+          <RouteType
+            routeType={routeType}
+            routeTypes={routeTypes}
+            setRouteType={setRouteType}
+          />
+        </Grid>
 
-      <Grid item xs={12}>
-        <div className={classes.submitWrapper}>
-          <Button
-            color="primary"
-            variant="contained"
-            fullWidth
-            disabled={!canGenerate || isGenerating}
-            onClick={onGenerateRun}
-          >
-            Generate Route!
-          </Button>
-          {isGenerating && (
-            <CircularProgress
+        <Grid item xs={12}>
+          <div className={classes.submitWrapper}>
+            <Button
               color="primary"
-              size={24}
-              className={classes.buttonProgress}
-            />
-          )}
-        </div>
+              variant="contained"
+              fullWidth
+              disabled={!canGenerate || isGenerating}
+              type="submit"
+            >
+              Generate Route!
+            </Button>
+            {isGenerating && (
+              <CircularProgress
+                color="primary"
+                size={24}
+                className={classes.buttonProgress}
+              />
+            )}
+          </div>
+        </Grid>
       </Grid>
-    </Grid>
+    </form>
   );
 };
 

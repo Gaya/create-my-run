@@ -15,6 +15,7 @@ import InfoIcon from '@material-ui/icons/Info';
 import ConfigureRun from '../ConfigureRun/ConfigureRun';
 import About from '../About/About';
 import SideBarPage from './SideBarPage';
+import Settings from '../Settings/Settings';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -57,7 +58,7 @@ const SideBar: React.FC<SideBarProps> = ({ isDrawerOpen, onCloseDrawer }) => {
               title="Create My Run"
               onClose={onCloseDrawer}
             >
-              <ConfigureRun onRouteLoaded={onCloseDrawer} />
+              <ConfigureRun />
             </SideBarPage>
           )}
           {navigationValue === 1 && (
@@ -65,7 +66,7 @@ const SideBar: React.FC<SideBarProps> = ({ isDrawerOpen, onCloseDrawer }) => {
               title="Settings"
               onClose={onCloseDrawer}
             >
-              Content of settings
+              <Settings />
             </SideBarPage>
           )}
           {navigationValue === 2 && (

@@ -31,7 +31,7 @@ const SideBarPage: React.FC<SideBarPageProps> = ({ title, onClose, children }) =
 
   return (
     <Container className={classes.sidebarWrapper} maxWidth="xs">
-      <Grid className={classes.closeWrapper} container justify="space-between" xs={12}>
+      <Grid className={classes.closeWrapper} container item justify="space-between" xs={12}>
         <Grid item>
           <Typography variant="h6">
             {title}

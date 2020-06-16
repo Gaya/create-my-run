@@ -1,18 +1,22 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
+import { useRecoilState } from 'recoil';
 
 import RunMap from '../RunMap/RunMap';
 import HeaderBar from '../HeaderBar/HeaderBar';
 import ExportButton from '../ExportButton/ExportButton';
-
-import './App.css';
-import useRouteNavigation from './useRouteNavigation';
 import SideBar from '../SideBar/SideBar';
 
-const App: React.FC = () => {
-  const [drawerOpen, setDrawerOpen] = useState<boolean>(true);
+import { drawerOpenState } from '../../state/app';
 
-  const openDrawer = useCallback(() => setDrawerOpen(true), []);
-  const closeDrawer = useCallback(() => setDrawerOpen(false), []);
+import useRouteNavigation from './useRouteNavigation';
+
+import './App.css';
+
+const App: React.FC = () => {
+  const [drawerOpen, setDrawerOpen] = useRecoilState(drawerOpenState);
+
+  const openDrawer = useCallback(() => setDrawerOpen(true), [setDrawerOpen]);
+  const closeDrawer = useCallback(() => setDrawerOpen(false), [setDrawerOpen]);
 
   useRouteNavigation(closeDrawer);
 

@@ -41,13 +41,15 @@ function useRouteNavigation(closeDrawer: () => void): void {
     loadRouteFromQueryParameters(location.search);
   }), [loadRouteFromQueryParameters]);
 
+  const hasRoute = loadRouteFromQueryParameters(window.location.search);
+
   // initial load
   useEffect(() => {
-    if (loadRouteFromQueryParameters(window.location.search)) {
+    if (hasRoute) {
       // if has route, close drawer
       closeDrawer();
     }
-  }, [closeDrawer, loadRouteFromQueryParameters]);
+  }, [closeDrawer, hasRoute]);
 }
 
 export default useRouteNavigation;

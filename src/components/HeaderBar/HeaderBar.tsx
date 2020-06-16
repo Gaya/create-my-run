@@ -8,7 +8,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import EditLocationIcon from '@material-ui/icons/EditLocation';
+import ExploreIcon from '@material-ui/icons/Explore';
 
 import { routeLengthState } from '../../state/route';
 
@@ -44,7 +44,7 @@ const HeaderBar: React.FC<ToolBarProps> = ({ openDrawer }) => {
           variant="outlined"
           onClick={openDrawer}
           color="inherit"
-          startIcon={<EditLocationIcon />}
+          startIcon={<ExploreIcon />}
         >
           Change
         </Button>

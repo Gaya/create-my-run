@@ -2,11 +2,11 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import RunMap from '../RunMap/RunMap';
 import HeaderBar from '../HeaderBar/HeaderBar';
-import Configure from '../Configure/Configure';
 import ExportButton from '../ExportButton/ExportButton';
 
 import './App.css';
 import useRouteNavigation from './useRouteNavigation';
+import SideBar from '../SideBar/SideBar';
 
 const App: React.FC = () => {
   const [drawerOpen, setDrawerOpen] = useState<boolean>(true);
@@ -25,10 +25,7 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <HeaderBar openDrawer={openDrawer} />
-      <Configure
-        isDrawerOpen={drawerOpen}
-        onCloseDrawer={closeDrawer}
-      />
+      <SideBar isDrawerOpen={drawerOpen} onCloseDrawer={closeDrawer} />
       <RunMap />
       <ExportButton />
     </div>

@@ -4,15 +4,12 @@ import { useRecoilValueLoadable } from 'recoil';
 import {
   Button,
   CircularProgress,
-  Drawer,
   Grid,
-  IconButton,
   Link,
   Theme,
   Typography,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import CloseIcon from '@material-ui/icons/Close';
 
 import { routeDataQuery } from '../../state/route';
 import {
@@ -64,14 +61,10 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 interface ConfigureProps {
-  isDrawerOpen: boolean;
-  onCloseDrawer(): void;
+  onRouteLoaded(): void;
 }
 
-const Configure: React.FC<ConfigureProps> = ({
-  isDrawerOpen,
-  onCloseDrawer,
-}) => {
+const Configure: React.FC<ConfigureProps> = ({ onRouteLoaded }) => {
   const route = useRecoilValueLoadable(routeDataQuery);
 
   const [distance, setDistance] = useState<number>(10);
@@ -98,78 +91,69 @@ const Configure: React.FC<ConfigureProps> = ({
 
   useEffect(() => {
     if (!isGenerating && route.contents) {
-      onCloseDrawer();
+      onRouteLoaded();
     }
-  }, [isGenerating, route.contents, onCloseDrawer]);
+  }, [isGenerating, route.contents, onRouteLoaded]);
 
   return (
-    <Drawer
-      anchor="left"
-      open={isDrawerOpen}
-      onClose={onCloseDrawer}
-    >
-      <div className={classes.sidebarWrapper}>
-        <Grid container spacing={3}>
-          <Grid item container justify="space-between" xs={12}>
-            <Typography variant="h6">
-              Create My Run
-            </Typography>
-            <IconButton size="small" onClick={onCloseDrawer}>
-              <CloseIcon />
-            </IconButton>
-          </Grid>
-
-          <Grid item xs={12}>
-            <StartingPoint location={location} setLocation={setLocation} />
-          </Grid>
-
-          <Grid item xs={12}>
-            <Distance distance={distance} setDistance={setDistance} />
-          </Grid>
-
-          <Grid item xs={12}>
-            <RouteType
-              routeType={routeType}
-              routeTypes={routeTypes}
-              setRouteType={setRouteType}
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <div className={classes.submitWrapper}>
-              <Button
-                color="primary"
-                variant="contained"
-                fullWidth
-                disabled={!canGenerate || isGenerating}
-                onClick={onGenerateRun}
-              >
-                Generate Route!
-              </Button>
-              {isGenerating && (
-                <CircularProgress
-                  color="primary"
-                  size={24}
-                  className={classes.buttonProgress}
-                />
-              )}
-            </div>
-          </Grid>
-        </Grid>
-
-        <Grid container>
-          <Typography variant="body2" color="textSecondary">
-            Create My Run is a just for fun project by
-            {' '}
-            <Link href="https://theclevernode.com">Gaya Kessler</Link>
-            {' '}
-            and is
-            {' '}
-            <Link href="https://github.com/Gaya/create-my-run">Open Source</Link>
+    <>
+      <Grid container spacing={3}>
+        <Grid item container justify="space-between" xs={12}>
+          <Typography variant="h6">
+            Create My Run
           </Typography>
         </Grid>
-      </div>
-    </Drawer>
+
+        <Grid item xs={12}>
+          <StartingPoint location={location} setLocation={setLocation} />
+        </Grid>
+
+        <Grid item xs={12}>
+          <Distance distance={distance} setDistance={setDistance} />
+        </Grid>
+
+        <Grid item xs={12}>
+          <RouteType
+            routeType={routeType}
+            routeTypes={routeTypes}
+            setRouteType={setRouteType}
+          />
+        </Grid>
+
+        <Grid item xs={12}>
+          <div className={classes.submitWrapper}>
+            <Button
+              color="primary"
+              variant="contained"
+              fullWidth
+              disabled={!canGenerate || isGenerating}
+              onClick={onGenerateRun}
+            >
+              Generate Route!
+            </Button>
+            {isGenerating && (
+            <CircularProgress
+              color="primary"
+              size={24}
+              className={classes.buttonProgress}
+            />
+            )}
+          </div>
+        </Grid>
+      </Grid>
+
+      <Grid container>
+        <Typography variant="body2" color="textSecondary">
+          Create My Run is a just for fun project by
+          {' '}
+          <Link href="https://theclevernode.com">Gaya Kessler</Link>
+          {' '}
+          and is
+          {' '}
+          <Link href="https://github.com/Gaya/create-my-run">Open Source</Link>
+        </Typography>
+      </Grid>
+    </>
   );
 };
 

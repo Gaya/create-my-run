@@ -31,8 +31,12 @@ app.get('/route', (req, res) => {
   )
     .then((route) => {
       switch (format) {
+        case RouteFormat.GARMIN:
         case RouteFormat.GPX: {
-          const gpx = Buffer.from(convertCoordinatesToGPX(route.coordinates), 'utf8');
+          const converter = format === RouteFormat.GPX
+            ? convertCoordinatesToGPX
+            : convertCoordinatesToGarmin;
+          const gpx = Buffer.from(converter(route.coordinates), 'utf8');
 
           res.setHeader(
             'Content-disposition',
@@ -40,12 +44,6 @@ app.get('/route', (req, res) => {
           );
           res.setHeader('Content-Type', 'application/gpx+xml');
           res.setHeader('Content-Length', gpx.length);
-
-          res.end(gpx);
-          break;
-        }
-        case RouteFormat.GARMIN: {
-          const gpx = Buffer.from(convertCoordinatesToGarmin(route.coordinates), 'utf8');
 
           res.end(gpx);
           break;

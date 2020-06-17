@@ -1,41 +1,59 @@
 import { Loadable } from 'recoil';
 
 import { LocationResponse } from '../server/types';
+import { DistanceSettings } from '../types';
 
 export function isLoading<T>(i: Loadable<T>): boolean {
   return i.state === 'loading';
 }
 
-const LOCATION_STORAGE_KEY = 'CMRLOCATION';
-
-export function hasStoredLocation(): boolean {
-  return localStorage.getItem(LOCATION_STORAGE_KEY) !== null;
-}
-
-export function getStoredLocation(): LocationResponse {
-  return JSON.parse(localStorage.getItem(LOCATION_STORAGE_KEY) || '');
+enum LOCALSTORAGE {
+  LOCATION = 'CMRLOCATION',
+  DISTANCE = 'CMRDISTANCE',
 }
 
 export function storeLocation(location: LocationResponse): void {
-  if (hasStoredLocation()) {
-    const currentLocation = getStoredLocation();
+  const currentLocation = getStoreValueSafe<LocationResponse>(LOCALSTORAGE.LOCATION);
 
-    if (currentLocation.key === location.key) return;
-  }
+  if (currentLocation?.key === location.key) return;
 
-  localStorage.setItem(LOCATION_STORAGE_KEY, JSON.stringify(location));
+  setStoreValue(LOCALSTORAGE.LOCATION, location);
 }
 
 export function safeStoredLocation(): LocationResponse | undefined {
+  return getStoreValueSafe(LOCALSTORAGE.LOCATION);
+}
+
+export function storeDistanceSettings(settings: DistanceSettings): void {
+  setStoreValue(LOCALSTORAGE.DISTANCE, settings);
+}
+
+export function safeStoredDistance(): DistanceSettings | undefined {
+  return getStoreValueSafe(LOCALSTORAGE.DISTANCE);
+}
+
+export function getStoreValueSafe<T>(key: LOCALSTORAGE): T | undefined {
   try {
-    if (hasStoredLocation()) {
-      return getStoredLocation();
+    if (hasStoreValue(key)) {
+      return getStoreValue(key);
     }
   } catch (e) {
     // fail silently
   }
 
   return undefined;
+}
+
+export function hasStoreValue(key: LOCALSTORAGE): boolean {
+  return localStorage.getItem(key) !== null;
+}
+
+export function getStoreValue<T>(key: LOCALSTORAGE): T {
+  return JSON.parse(localStorage.getItem(key) || '');
+}
+
+export function setStoreValue<T>(key: LOCALSTORAGE, value: T): void {
+  localStorage.setItem(key, JSON.stringify(value));
 }
 
 export function randomSeed(): number {

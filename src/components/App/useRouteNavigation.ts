@@ -6,6 +6,7 @@ import {
   routeLocationState,
   routeRandomSeedState,
   routeTypeState,
+  setOnCompleteRoute,
 } from '../../state/route';
 import { history } from '../../utils/history';
 import { randomSeed } from '../../state/utils';
@@ -41,13 +42,20 @@ function useRouteNavigation(closeDrawer: () => void): void {
     loadRouteFromQueryParameters(location.search);
   }), [loadRouteFromQueryParameters]);
 
+  const hasRoute = loadRouteFromQueryParameters(window.location.search);
+
   // initial load
   useEffect(() => {
-    if (loadRouteFromQueryParameters(window.location.search)) {
+    if (hasRoute) {
       // if has route, close drawer
       closeDrawer();
     }
-  }, [closeDrawer, loadRouteFromQueryParameters]);
+  }, [closeDrawer, hasRoute]);
+
+  // register closing drawer after route is loaded
+  useEffect(() => {
+    setOnCompleteRoute(closeDrawer);
+  }, [closeDrawer]);
 }
 
 export default useRouteNavigation;

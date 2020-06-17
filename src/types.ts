@@ -8,3 +8,9 @@ export interface RouteTypeValue {
 export interface Locations {
   [key: string]: LocationResponse;
 }
+
+export interface DistanceSettings {
+  defaultDistance: number;
+  min: number;
+  max: number;
+}

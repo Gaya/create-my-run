@@ -3,11 +3,12 @@ import { useRecoilValueLoadable } from 'recoil';
 
 import {
   AppBar,
-  Box,
-  Button,
+  Button, Theme,
   Toolbar,
   Typography,
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import ExploreIcon from '@material-ui/icons/Explore';
 
 import { routeLengthState } from '../../state/route';
 
@@ -15,7 +16,14 @@ interface ToolBarProps {
   openDrawer(): void;
 }
 
+const useStyles = makeStyles((theme: Theme) => ({
+  changeButton: {
+    marginLeft: theme.spacing(2),
+  },
+}));
+
 const HeaderBar: React.FC<ToolBarProps> = ({ openDrawer }) => {
+  const classes = useStyles();
   const routeLength = useRecoilValueLoadable(routeLengthState);
 
   return (
@@ -31,15 +39,15 @@ const HeaderBar: React.FC<ToolBarProps> = ({ openDrawer }) => {
             km
           </Typography>
         )}
-        <Box marginLeft={2}>
-          <Button
-            variant="outlined"
-            onClick={openDrawer}
-            color="inherit"
-          >
-            Change
-          </Button>
-        </Box>
+        <Button
+          className={classes.changeButton}
+          variant="outlined"
+          onClick={openDrawer}
+          color="inherit"
+          startIcon={<ExploreIcon />}
+        >
+          Change
+        </Button>
       </Toolbar>
     </AppBar>
   );

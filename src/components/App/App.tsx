@@ -1,18 +1,22 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
+import { useRecoilState } from 'recoil';
 
 import RunMap from '../RunMap/RunMap';
 import HeaderBar from '../HeaderBar/HeaderBar';
-import Configure from '../Configure/Configure';
 import ExportButton from '../ExportButton/ExportButton';
+import SideBar from '../SideBar/SideBar';
 
-import './App.css';
+import { drawerOpenState } from '../../state/app';
+
 import useRouteNavigation from './useRouteNavigation';
 
-const App: React.FC = () => {
-  const [drawerOpen, setDrawerOpen] = useState<boolean>(true);
+import './App.css';
 
-  const openDrawer = useCallback(() => setDrawerOpen(true), []);
-  const closeDrawer = useCallback(() => setDrawerOpen(false), []);
+const App: React.FC = () => {
+  const [drawerOpen, setDrawerOpen] = useRecoilState(drawerOpenState);
+
+  const openDrawer = useCallback(() => setDrawerOpen(true), [setDrawerOpen]);
+  const closeDrawer = useCallback(() => setDrawerOpen(false), [setDrawerOpen]);
 
   useRouteNavigation(closeDrawer);
 
@@ -25,10 +29,7 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <HeaderBar openDrawer={openDrawer} />
-      <Configure
-        isDrawerOpen={drawerOpen}
-        onCloseDrawer={closeDrawer}
-      />
+      <SideBar isDrawerOpen={drawerOpen} onCloseDrawer={closeDrawer} />
       <RunMap />
       <ExportButton />
     </div>

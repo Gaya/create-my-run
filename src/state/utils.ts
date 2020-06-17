@@ -24,12 +24,20 @@ export function safeStoredLocation(): LocationResponse | undefined {
   return getStoreValueSafe(LOCALSTORAGE.LOCATION);
 }
 
+export function removeStoredLocation(): void {
+  localStorage.removeItem(LOCALSTORAGE.LOCATION);
+}
+
 export function storeDistanceSettings(settings: DistanceSettings): void {
   setStoreValue(LOCALSTORAGE.DISTANCE, settings);
 }
 
 export function safeStoredDistance(): DistanceSettings | undefined {
   return getStoreValueSafe(LOCALSTORAGE.DISTANCE);
+}
+
+export function removeStoredDistanceSettings(): void {
+  localStorage.removeItem(LOCALSTORAGE.DISTANCE);
 }
 
 export function getStoreValueSafe<T>(key: LOCALSTORAGE): T | undefined {

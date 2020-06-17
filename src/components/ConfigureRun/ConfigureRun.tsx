@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { routeDataQuery } from '../../state/route';
+import { routeDataQuery, routeDistanceState, routeTypeState } from '../../state/route';
 import {
   isLoading,
   randomSeed,
@@ -62,12 +62,15 @@ const useStyles = makeStyles((theme: Theme) => ({
 const ConfigureRun: React.FC = () => {
   const route = useRecoilValueLoadable(routeDataQuery);
 
+  const currentDistance = useRecoilValue(routeDistanceState);
+  const currentRouteType = useRecoilValue(routeTypeState);
+
   const defaultDistance = useRecoilValue(defaultDistanceState);
   const minDistance = useRecoilValue(minimumDistanceState);
   const maxDistance = useRecoilValue(maximumDistanceState);
 
-  const [distance, setDistance] = useState<number>(defaultDistance);
-  const [routeType, setRouteType] = useState<RouteTypeValue['id']>(routeTypes[0].id);
+  const [distance, setDistance] = useState<number>(currentDistance || defaultDistance);
+  const [routeType, setRouteType] = useState<RouteTypeValue['id']>(currentRouteType || routeTypes[0].id);
   const [location, setLocation] = useState<string | null>(safeStoredLocation()?.key || null);
 
   const classes = useStyles();

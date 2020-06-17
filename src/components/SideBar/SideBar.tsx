@@ -14,8 +14,8 @@ import InfoIcon from '@material-ui/icons/Info';
 
 import ConfigureRun from '../ConfigureRun/ConfigureRun';
 import About from '../About/About';
-import SideBarPage from './SideBarPage';
 import Settings from '../Settings/Settings';
+import SideBarPage from './SideBarPage';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -39,7 +39,7 @@ interface SideBarProps {
 
 const SideBar: React.FC<SideBarProps> = ({ isDrawerOpen, onCloseDrawer }) => {
   const classes = useStyles();
-  const [navigationValue, setNavigationValue] = React.useState(1);
+  const [navigationValue, setNavigationValue] = React.useState(0);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number): void => {
     setNavigationValue(newValue);

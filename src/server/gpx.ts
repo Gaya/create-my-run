@@ -1,16 +1,17 @@
-import { BaseBuilder, buildGPX } from 'gpx-builder';
+import { GarminBuilder, BaseBuilder, buildGPX } from 'gpx-builder';
 
 import { LatLng } from './types';
 
-const { Point } = BaseBuilder.MODELS;
-
-function convertCoordinatesToGPX(coordinates: LatLng[]): string {
+export function convertCoordinatesToGPX(coordinates: LatLng[], Builder = BaseBuilder): string {
+  const { Point } = Builder.MODELS;
   const points = coordinates.map(([lat, lng]) => new Point(lat, lng));
 
-  const gpxData = new BaseBuilder();
+  const gpxData = new Builder();
   gpxData.setSegmentPoints(points);
 
   return buildGPX(gpxData.toObject());
 }
 
-export default convertCoordinatesToGPX;
+export function convertCoordinatesToGarmin(coordinates: LatLng[]): string {
+  return convertCoordinatesToGPX(coordinates, GarminBuilder);
+}

@@ -5,7 +5,7 @@ import serve from 'serve-static';
 import fetchRoute from './fetchRoute';
 import fetchLocations from './fetchLocations';
 import { RouteFormat } from './types';
-import convertCoordinatesToGPX from './gpx';
+import { convertCoordinatesToGPX, convertCoordinatesToGarmin } from './gpx';
 
 const app = express();
 const port = process.env.API_PORT || 4000;
@@ -40,6 +40,12 @@ app.get('/route', (req, res) => {
           );
           res.setHeader('Content-Type', 'application/gpx+xml');
           res.setHeader('Content-Length', gpx.length);
+
+          res.end(gpx);
+          break;
+        }
+        case RouteFormat.GARMIN: {
+          const gpx = Buffer.from(convertCoordinatesToGarmin(route.coordinates), 'utf8');
 
           res.end(gpx);
           break;

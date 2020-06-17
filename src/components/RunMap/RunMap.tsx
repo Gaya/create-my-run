@@ -8,16 +8,17 @@ import {
 } from 'react-leaflet';
 import { Icon } from 'leaflet';
 import { useTheme } from '@material-ui/core';
-import iconUrl from './Marker.png';
 
 import 'leaflet/dist/leaflet.css';
 
 import { routeDataQuery } from '../../state/route';
+import { safeStoredLocation, storeLocation } from '../../state/utils';
 import { locationByRouteLocation } from '../../state/location';
 import { LatLng } from '../../server/types';
 
+import iconUrl from './Marker.png';
+
 import './RunMap.css';
-import { safeStoredLocation, storeLocation } from '../../state/utils';
 
 const MarkerIcon = new Icon({
   iconUrl,

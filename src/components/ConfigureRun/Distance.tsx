@@ -8,8 +8,6 @@ function distanceValueText(value: number): string {
   return `${value} km`;
 }
 
-const marks = [10, 20, 30, 40, 50].map((v) => ({ value: v, label: v }));
-
 const useStyles = makeStyles(() => ({
   distanceIput: {
     width: 60,
@@ -32,6 +30,13 @@ const Distance: React.FC<DistanceProps> = ({
 }) => {
   const classes = useStyles();
   const theme = useTheme();
+
+  const divider = 10;
+  let marks = [];
+  for (let i = 0; i < Math.floor(max / divider); i += 1) {
+    marks.push((i + 1) * divider);
+  }
+  marks = marks.map((v) => ({ value: v, label: v }));
 
   const handleDistanceInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setDistance(parseInt(event.target.value, 10));

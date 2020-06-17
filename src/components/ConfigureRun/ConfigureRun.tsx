@@ -1,5 +1,5 @@
 import React, { FormEvent, useState } from 'react';
-import { useRecoilValueLoadable } from 'recoil';
+import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
 
 import {
   Button,
@@ -21,6 +21,7 @@ import Distance from './Distance';
 import StartingPoint from './StartingPoint';
 import RouteType from './RouteType';
 import { setQueryParameters } from '../../utils/history';
+import { defaultDistanceState, maximumDistanceState, minimumDistanceState } from '../../state/app';
 
 const routeTypes: RouteTypeValue[] = [
   {
@@ -61,7 +62,11 @@ const useStyles = makeStyles((theme: Theme) => ({
 const ConfigureRun: React.FC = () => {
   const route = useRecoilValueLoadable(routeDataQuery);
 
-  const [distance, setDistance] = useState<number>(10);
+  const defaultDistance = useRecoilValue(defaultDistanceState);
+  const minDistance = useRecoilValue(minimumDistanceState);
+  const maxDistance = useRecoilValue(maximumDistanceState);
+
+  const [distance, setDistance] = useState<number>(defaultDistance);
   const [routeType, setRouteType] = useState<RouteTypeValue['id']>(routeTypes[0].id);
   const [location, setLocation] = useState<string | null>(safeStoredLocation()?.key || null);
 
@@ -96,7 +101,12 @@ const ConfigureRun: React.FC = () => {
         </Grid>
 
         <Grid item xs={12}>
-          <Distance distance={distance} setDistance={setDistance} />
+          <Distance
+            distance={distance}
+            min={minDistance}
+            max={maxDistance}
+            setDistance={setDistance}
+          />
         </Grid>
 
         <Grid item xs={12}>

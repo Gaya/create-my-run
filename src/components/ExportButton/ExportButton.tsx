@@ -1,6 +1,12 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
-import { createStyles, Fab, Theme } from '@material-ui/core';
+import {
+  createStyles,
+  Fab,
+  Menu,
+  MenuItem,
+  Theme,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import GetAppIcon from '@material-ui/icons/GetApp';
 
@@ -25,6 +31,9 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 const ExportButton: React.FC = () => {
   const classes = useStyles();
 
+  const [isOpened, setOpened] = useState(false);
+  const menuAnchor = useRef<HTMLButtonElement | null>(null);
+
   const route = useRecoilValueLoadable(routeDataQuery);
 
   const distance = useRecoilValue(routeDistanceState);
@@ -36,14 +45,46 @@ const ExportButton: React.FC = () => {
     return null;
   }
 
+  const handleOpen = (): void => {
+    setOpened(true);
+  };
+
+  const handleClose = (): void => {
+    setOpened(false);
+  };
+
   return (
-    <Fab
-      className={classes.fab}
-      color="primary"
-      href={createRouteUrl(distance, routeType, r, location, RouteFormat.GPX)}
-    >
-      <GetAppIcon />
-    </Fab>
+    <>
+      <Fab
+        ref={menuAnchor}
+        className={classes.fab}
+        color="primary"
+        onClick={handleOpen}
+      >
+        <GetAppIcon />
+      </Fab>
+      <Menu
+        anchorEl={menuAnchor.current}
+        keepMounted
+        open={isOpened}
+        onClose={handleClose}
+      >
+        <MenuItem
+          component="a"
+          href={createRouteUrl(distance, routeType, r, location, RouteFormat.GPX)}
+          onClick={handleClose}
+        >
+          Basic GPX
+        </MenuItem>
+        <MenuItem
+          component="a"
+          href={createRouteUrl(distance, routeType, r, location, RouteFormat.GARMIN)}
+          onClick={handleClose}
+        >
+          Garmin Course GPX
+        </MenuItem>
+      </Menu>
+    </>
   );
 };
 

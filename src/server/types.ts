@@ -62,4 +62,5 @@ export interface LocationsResponse {
 export enum RouteFormat {
   JSON = 'json',
   GPX = 'gpx',
+  GARMIN = 'garmin_gpx',
 }

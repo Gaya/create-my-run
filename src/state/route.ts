@@ -33,7 +33,7 @@ export function createRouteUrl(
 ): string {
   const url = process.env.REACT_APP_API;
   return [
-    `${url}/route?&&`,
+    `${url}/route?`,
     `distance=${distance}`,
     `routeType=${routeType}`,
     `r=${r}`,

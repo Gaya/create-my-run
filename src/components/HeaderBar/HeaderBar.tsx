@@ -3,7 +3,10 @@ import { useRecoilValueLoadable } from 'recoil';
 
 import {
   AppBar,
-  Button, Theme,
+  Button,
+  Hidden,
+  IconButton,
+  Theme,
   Toolbar,
   Typography,
 } from '@material-ui/core';
@@ -39,15 +42,25 @@ const HeaderBar: React.FC<ToolBarProps> = ({ openDrawer }) => {
             km
           </Typography>
         )}
-        <Button
-          className={classes.changeButton}
-          variant="outlined"
-          onClick={openDrawer}
-          color="inherit"
-          startIcon={<ExploreIcon />}
-        >
-          Change
-        </Button>
+        <Hidden xsDown>
+          <Button
+            className={classes.changeButton}
+            variant="outlined"
+            onClick={openDrawer}
+            color="inherit"
+            startIcon={<ExploreIcon />}
+          >
+            Change
+          </Button>
+        </Hidden>
+        <Hidden smUp>
+          <IconButton
+            onClick={openDrawer}
+            color="inherit"
+          >
+            <ExploreIcon />
+          </IconButton>
+        </Hidden>
       </Toolbar>
     </AppBar>
   );

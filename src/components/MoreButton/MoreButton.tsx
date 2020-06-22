@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
 }));
 
-const ExportButton: React.FC = () => {
+const MoreButton: React.FC = () => {
   const classes = useStyles();
 
   const [isOpened, setOpened] = useState(false);
@@ -57,7 +57,7 @@ const ExportButton: React.FC = () => {
     setOpened(false);
   };
 
-  const flipDirection = (): void => {
+  const changeDirection = (): void => {
     handleClose();
   };
 
@@ -77,7 +77,7 @@ const ExportButton: React.FC = () => {
         open={isOpened}
         onClose={handleClose}
       >
-        <MenuItem onClick={flipDirection}>
+        <MenuItem onClick={changeDirection}>
           <ListItemIcon>
             <SwapHorizIcon />
           </ListItemIcon>
@@ -114,4 +114,4 @@ const ExportButton: React.FC = () => {
   );
 };
 
-export default ExportButton;
+export default MoreButton;

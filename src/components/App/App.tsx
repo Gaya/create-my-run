@@ -3,7 +3,7 @@ import { useRecoilState } from 'recoil';
 
 import RunMap from '../RunMap/RunMap';
 import HeaderBar from '../HeaderBar/HeaderBar';
-import ExportButton from '../ExportButton/ExportButton';
+import MoreButton from '../MoreButton/MoreButton';
 import SideBar from '../SideBar/SideBar';
 
 import { drawerOpenState } from '../../state/app';
@@ -31,7 +31,7 @@ const App: React.FC = () => {
       <HeaderBar openDrawer={openDrawer} />
       <SideBar isDrawerOpen={drawerOpen} onCloseDrawer={closeDrawer} />
       <RunMap />
-      <ExportButton />
+      <MoreButton />
     </div>
   );
 };

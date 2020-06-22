@@ -21,6 +21,7 @@ app.get('/route', (req, res) => {
   const routeType = (req.query.routeType as string) || '0';
   const location = (req.query.location as string) || '0';
   const randomSeed = (req.query.r as string) || '0';
+  const flipped = !!(req.query.flipped && req.query.flipped !== 'false');
   const format = (req.query.format as string) || undefined;
 
   fetchRoute(
@@ -28,6 +29,7 @@ app.get('/route', (req, res) => {
     parseInt(routeType, 10),
     location,
     parseInt(randomSeed, 10),
+    flipped,
   )
     .then((route) => {
       switch (format) {

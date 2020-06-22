@@ -70,7 +70,6 @@ const RunMap: React.FC = () => {
           smoothFactor={5}
           arrowheads={{
             size: '10px',
-            fill: true,
             frequency: '1000m',
           }}
         />

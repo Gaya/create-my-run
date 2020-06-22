@@ -2,7 +2,8 @@ import { useSetRecoilState } from 'recoil';
 import { useCallback, useEffect } from 'react';
 
 import {
-  routeDistanceState, routeFlippedState,
+  routeDistanceState,
+  routeFlippedState,
   routeLocationState,
   routeRandomSeedState,
   routeTypeState,

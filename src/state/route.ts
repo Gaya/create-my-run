@@ -19,6 +19,11 @@ export const routeTypeState = atom<RouteTypeValue['id'] | undefined>({
   default: undefined,
 });
 
+export const routeFlippedState = atom<boolean>({
+  key: 'RouteFlipped',
+  default: false,
+});
+
 export const routeLocationState = atom<string | undefined>({
   key: 'RouteLocation',
   default: safeStoredLocation()?.key,
@@ -29,6 +34,7 @@ export function createRouteUrl(
   routeType: number,
   r: number,
   location: string,
+  flipped = false,
   format?: RouteFormat,
 ): string {
   const url = process.env.REACT_APP_API;
@@ -38,6 +44,7 @@ export function createRouteUrl(
     `routeType=${routeType}`,
     `r=${r}`,
     `location=${location}`,
+    flipped ? 'flipped=true' : undefined,
     format ? `format=${format}` : undefined,
   ].join('&');
 }

@@ -40,6 +40,7 @@ function fetchRoute(
   routetype: number,
   location: string,
   randomseed = 800,
+  flipped = false,
 ): Promise<RoutesResponse> {
   const speed = 12;
   const preferences = 63;
@@ -57,13 +58,17 @@ function fetchRoute(
       const route = result._embedded.routes[0];
       const routeSegments = route.routesegments;
 
-      const coordinates = routeSegments.reduce((acc: LatLng[], segments) => [
+      let coordinates = routeSegments.reduce((acc: LatLng[], segments) => [
         ...acc,
         ...segments.segmentsections.reduce((accSegments: LatLng[], segment) => [
           ...accSegments,
           ...segment.geometry.coordinates.map(([lng, lat]): LatLng => [lat, lng]),
         ], []),
       ], []);
+
+      if (flipped) {
+        coordinates = coordinates.reverse();
+      }
 
       return {
         time: route.routetime,

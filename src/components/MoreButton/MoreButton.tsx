@@ -3,21 +3,29 @@ import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
 import {
   createStyles,
   Fab,
+  ListItemIcon,
+  ListItemText,
   Menu,
   MenuItem,
   Theme,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+
 import GetAppIcon from '@material-ui/icons/GetApp';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
 
 import {
-  createRouteUrl, routeDataQuery,
+  createRouteUrl,
+  routeDataQuery,
   routeDistanceState,
+  routeFlippedState,
   routeLocationState,
   routeRandomSeedState,
   routeTypeState,
 } from '../../state/route';
 import { RouteFormat } from '../../server/types';
+import { setQueryParameters } from '../../utils/history';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   fab: {
@@ -28,7 +36,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
 }));
 
-const ExportButton: React.FC = () => {
+const MoreButton: React.FC = () => {
   const classes = useStyles();
 
   const [isOpened, setOpened] = useState(false);
@@ -40,6 +48,7 @@ const ExportButton: React.FC = () => {
   const routeType = useRecoilValue(routeTypeState);
   const r = useRecoilValue(routeRandomSeedState);
   const location = useRecoilValue(routeLocationState);
+  const flipped = useRecoilValue(routeFlippedState);
 
   if (route.state !== 'hasValue' || !distance || !routeType || !location || !r) {
     return null;
@@ -53,6 +62,17 @@ const ExportButton: React.FC = () => {
     setOpened(false);
   };
 
+  const changeDirection = (): void => {
+    setQueryParameters({
+      distance,
+      location,
+      r,
+      routeType,
+      flipped: !flipped,
+    });
+    handleClose();
+  };
+
   return (
     <>
       <Fab
@@ -61,7 +81,7 @@ const ExportButton: React.FC = () => {
         color="primary"
         onClick={handleOpen}
       >
-        <GetAppIcon />
+        <MoreVertIcon />
       </Fab>
       <Menu
         anchorEl={menuAnchor.current}
@@ -69,23 +89,41 @@ const ExportButton: React.FC = () => {
         open={isOpened}
         onClose={handleClose}
       >
-        <MenuItem
-          component="a"
-          href={createRouteUrl(distance, routeType, r, location, RouteFormat.GPX)}
-          onClick={handleClose}
-        >
-          Basic GPX
+        <MenuItem onClick={changeDirection}>
+          <ListItemIcon>
+            <SwapHorizIcon />
+          </ListItemIcon>
+          <ListItemText>
+            Change Direction
+          </ListItemText>
         </MenuItem>
         <MenuItem
           component="a"
-          href={createRouteUrl(distance, routeType, r, location, RouteFormat.GARMIN)}
+          href={createRouteUrl(distance, routeType, r, location, flipped, RouteFormat.GPX)}
           onClick={handleClose}
         >
-          Garmin Course GPX
+          <ListItemIcon>
+            <GetAppIcon />
+          </ListItemIcon>
+          <ListItemText>
+            Basic GPX
+          </ListItemText>
+        </MenuItem>
+        <MenuItem
+          component="a"
+          href={createRouteUrl(distance, routeType, r, location, flipped, RouteFormat.GARMIN)}
+          onClick={handleClose}
+        >
+          <ListItemIcon>
+            <GetAppIcon />
+          </ListItemIcon>
+          <ListItemText>
+            Garmin Course GPX
+          </ListItemText>
         </MenuItem>
       </Menu>
     </>
   );
 };
 
-export default ExportButton;
+export default MoreButton;

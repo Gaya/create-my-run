@@ -2,6 +2,7 @@ import { atom, selector } from 'recoil';
 
 import { LocationResponse, LocationsResponse } from '../server/types';
 import { Locations } from '../types';
+import { API_URL } from '../constants';
 import { routeLocationState } from './route';
 import { safeStoredLocation } from './utils';
 
@@ -13,7 +14,6 @@ export const locationSearchState = atom<string>({
 export const locationsDataQuery = selector<Locations | null>({
   key: 'LocationsFound',
   get: ({ get }) => {
-    const url = process.env.REACT_APP_API;
     const q = get(locationSearchState);
 
     if (q === '') {
@@ -25,7 +25,7 @@ export const locationsDataQuery = selector<Locations | null>({
       return Promise.resolve(null);
     }
 
-    return fetch(`${url}/locations?q=${q}`)
+    return fetch(`${API_URL}/locations?q=${q}`)
       .then((res) => res.json() as Promise<LocationsResponse>)
       .then((res) => res.locations.reduce(
         (acc: Locations, location) => ({ ...acc, [location.key]: location }),

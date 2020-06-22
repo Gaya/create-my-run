@@ -61,8 +61,9 @@ app.get('/route', (req, res) => {
 
 app.get('/locations', (req, res) => {
   const q = (req.query.q as string) || '';
+  const latLng = (req.query.latlng as string) || '';
 
-  fetchLocations(q)
+  fetchLocations(q, latLng)
     .then((location) => res.json(location))
     .catch((err) => res.end(err.message));
 });

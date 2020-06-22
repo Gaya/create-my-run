@@ -2,11 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import { useRecoilValueLoadable, useSetRecoilState } from 'recoil';
 
-import { CircularProgress, TextField } from '@material-ui/core';
+import {
+  CircularProgress, Grid, IconButton, TextField,
+} from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+
+import LocationSearchingIcon from '@material-ui/icons/LocationSearching';
 
 import { locationsDataQuery, locationSearchState } from '../../state/location';
 import { safeStoredLocation } from '../../state/utils';
+import { API_URL } from '../../constants';
 
 interface StartingPointProps {
   location: string | null;
@@ -34,6 +39,12 @@ const StartingPoint: React.FC<StartingPointProps> = ({ location, setLocation }) 
     setLocationSearchState(debouncedLocation);
   }, [debouncedLocation, setLocationSearchState]);
 
+  const hasGPS = 'geolocation' in navigator;
+
+  const findCurrentLocation = (): void => {
+    navigator.geolocation.getCurrentPosition((position) => fetch(`${API_URL}/locations?latlng=${[position.coords.latitude, position.coords.longitude].join(',')}`).then((res) => res.json()).then((res) => console.log(res)));
+  };
+
   const noOptionsText = locationInput === '' ? 'Start typing to search...' : undefined;
 
   const locationLabelByKey = (l: string): string => (locations.state === 'hasValue' && locations.contents && locations.contents[l] ? locations.contents[l].name : '');
@@ -55,24 +66,36 @@ const StartingPoint: React.FC<StartingPointProps> = ({ location, setLocation }) 
       loadingText="Loading locations..."
       noOptionsText={noOptionsText}
       renderInput={(params): React.ReactElement => (
-        <TextField
-          {...params}
-          InputLabelProps={{
-            ...params.InputLabelProps,
-            shrink: true,
-          }}
-          InputProps={{
-            ...params.InputProps,
-            endAdornment: (
-              <>
-                {isLoading ? <CircularProgress color="inherit" size={20} /> : null}
-                {params.InputProps.endAdornment}
-              </>
-            ),
-          }}
-          margin="normal"
-          label="Starting point"
-        />
+        <Grid container spacing={1} alignItems="flex-end">
+          <Grid item xs="auto" style={{ flexGrow: 1 }}>
+            <TextField
+              {...params}
+              InputLabelProps={{
+                ...params.InputLabelProps,
+                shrink: true,
+              }}
+              InputProps={{
+                ...params.InputProps,
+                endAdornment: (
+                  <>
+                    {isLoading ? <CircularProgress color="inherit" size={20} /> : null}
+                    {params.InputProps.endAdornment}
+                  </>
+                ),
+              }}
+              fullWidth
+              margin="normal"
+              label="Starting point"
+            />
+          </Grid>
+          {hasGPS && (
+            <Grid item>
+              <IconButton>
+                <LocationSearchingIcon fontSize="small" onClick={findCurrentLocation} />
+              </IconButton>
+            </Grid>
+          )}
+        </Grid>
       )}
     />
   );

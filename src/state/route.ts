@@ -2,6 +2,7 @@ import { atom, selector } from 'recoil';
 
 import { RouteFormat, RoutesResponse } from '../server/types';
 import { RouteTypeValue } from '../types';
+import { API_URL } from '../constants';
 import { safeStoredLocation } from './utils';
 
 export const routeRandomSeedState = atom<number | undefined>({
@@ -37,9 +38,8 @@ export function createRouteUrl(
   flipped = false,
   format?: RouteFormat,
 ): string {
-  const url = process.env.REACT_APP_API;
   return [
-    `${url}/route?`,
+    `${API_URL}/route?`,
     `distance=${distance}`,
     `routeType=${routeType}`,
     `r=${r}`,

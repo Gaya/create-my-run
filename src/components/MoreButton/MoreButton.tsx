@@ -10,18 +10,22 @@ import {
   Theme,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+
 import GetAppIcon from '@material-ui/icons/GetApp';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
 
 import {
-  createRouteUrl, routeDataQuery,
+  createRouteUrl,
+  routeDataQuery,
   routeDistanceState,
+  routeFlippedState,
   routeLocationState,
   routeRandomSeedState,
   routeTypeState,
 } from '../../state/route';
 import { RouteFormat } from '../../server/types';
+import { setQueryParameters } from '../../utils/history';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   fab: {
@@ -44,6 +48,7 @@ const MoreButton: React.FC = () => {
   const routeType = useRecoilValue(routeTypeState);
   const r = useRecoilValue(routeRandomSeedState);
   const location = useRecoilValue(routeLocationState);
+  const flipped = useRecoilValue(routeFlippedState);
 
   if (route.state !== 'hasValue' || !distance || !routeType || !location || !r) {
     return null;
@@ -58,6 +63,13 @@ const MoreButton: React.FC = () => {
   };
 
   const changeDirection = (): void => {
+    setQueryParameters({
+      distance,
+      location,
+      r,
+      routeType,
+      flipped: !flipped,
+    });
     handleClose();
   };
 
@@ -87,7 +99,7 @@ const MoreButton: React.FC = () => {
         </MenuItem>
         <MenuItem
           component="a"
-          href={createRouteUrl(distance, routeType, r, location, RouteFormat.GPX)}
+          href={createRouteUrl(distance, routeType, r, location, flipped, RouteFormat.GPX)}
           onClick={handleClose}
         >
           <ListItemIcon>
@@ -99,7 +111,7 @@ const MoreButton: React.FC = () => {
         </MenuItem>
         <MenuItem
           component="a"
-          href={createRouteUrl(distance, routeType, r, location, RouteFormat.GARMIN)}
+          href={createRouteUrl(distance, routeType, r, location, flipped, RouteFormat.GARMIN)}
           onClick={handleClose}
         >
           <ListItemIcon>

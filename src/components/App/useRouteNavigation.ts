@@ -2,7 +2,7 @@ import { useSetRecoilState } from 'recoil';
 import { useCallback, useEffect } from 'react';
 
 import {
-  routeDistanceState,
+  routeDistanceState, routeFlippedState,
   routeLocationState,
   routeRandomSeedState,
   routeTypeState,
@@ -16,6 +16,7 @@ function useRouteNavigation(closeDrawer: () => void): void {
   const setRouteTypeState = useSetRecoilState(routeTypeState);
   const setRouteLocationState = useSetRecoilState(routeLocationState);
   const setRouteRandomSeedState = useSetRecoilState(routeRandomSeedState);
+  const setRouteFlippedState = useSetRecoilState(routeFlippedState);
 
   // handle route loading on route change
   const loadRouteFromQueryParameters = useCallback((search: string): boolean => {
@@ -24,18 +25,26 @@ function useRouteNavigation(closeDrawer: () => void): void {
     const routeType = params.get('routeType');
     const location = params.get('location');
     const r = params.get('r');
+    const flipped = params.get('flipped');
 
     if (distance && routeType && location) {
       setDistanceState(parseInt(distance, 10));
       setRouteTypeState(parseInt(routeType, 10));
       setRouteLocationState(location);
       setRouteRandomSeedState(r ? parseInt(r, 10) : randomSeed());
+      setRouteFlippedState(!!(flipped && flipped !== 'false'));
 
       return true;
     }
 
     return false;
-  }, [setDistanceState, setRouteLocationState, setRouteRandomSeedState, setRouteTypeState]);
+  }, [
+    setDistanceState,
+    setRouteFlippedState,
+    setRouteLocationState,
+    setRouteRandomSeedState,
+    setRouteTypeState,
+  ]);
 
   // listen to route changes
   useEffect(() => history.listen((location) => {

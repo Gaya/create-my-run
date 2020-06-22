@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useRecoilValueLoadable } from 'recoil';
+import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
 import {
   Map,
   Marker,
@@ -11,7 +11,7 @@ import Polyline from 'react-leaflet-arrowheads';
 
 import 'leaflet/dist/leaflet.css';
 
-import { routeDataQuery } from '../../state/route';
+import { routeDataQuery, routeFlippedState } from '../../state/route';
 import { safeStoredLocation, storeLocation } from '../../state/utils';
 import { locationByRouteLocation } from '../../state/location';
 import { LatLng } from '../../server/types';
@@ -29,13 +29,17 @@ const MarkerIcon = new Icon({
 const RunMap: React.FC = () => {
   const theme = useTheme();
   const route = useRecoilValueLoadable(routeDataQuery);
+  const flipped = useRecoilValue(routeFlippedState);
   const startLocation = useRecoilValueLoadable(locationByRouteLocation);
 
   const defaultCenter: LatLng = safeStoredLocation()?.coordinates || [52.132633, 5.291266];
 
-  const coordinates = route.state === 'hasValue' && route.contents
+  const stateCoordinates = route.state === 'hasValue' && route.contents
     ? route.contents.coordinates
     : [];
+  const coordinates = flipped
+    ? [...stateCoordinates].reverse()
+    : stateCoordinates;
 
   useEffect(() => {
     if (startLocation.state === 'hasValue' && startLocation.contents) {

@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
-import { useRecoilValueLoadable, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValueLoadable } from 'recoil';
 
 import {
-  CircularProgress, Grid, IconButton, Snackbar, TextField,
+  CircularProgress,
+  Grid,
+  IconButton,
+  TextField,
 } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { Alert } from '@material-ui/lab';
 
 import LocationSearchingIcon from '@material-ui/icons/LocationSearching';
 
@@ -17,6 +19,7 @@ import {
   setOnCompleteLocation,
 } from '../../state/location';
 import { safeStoredLocation } from '../../utils/localStorage';
+import { alertError } from '../Error/ErrorProvider';
 
 interface StartingPointProps {
   location: string | null;
@@ -26,11 +29,10 @@ interface StartingPointProps {
 const StartingPoint: React.FC<StartingPointProps> = ({ location, setLocation }) => {
   const [locationInput, setLocationInput] = useState<string>(safeStoredLocation()?.name || '');
   const [debouncedLocation] = useDebounce(locationInput, 500);
-  const [showAlert, setShowAlert] = useState<boolean>(false);
 
-  const setLocationSearchState = useSetRecoilState(locationSearchState);
-  const setLocationPointState = useSetRecoilState(locationPointState);
-  const locations = useRecoilValueLoadable(locationsDataQuery);
+  const [q, setLocationSearchState] = useRecoilState(locationSearchState);
+  const [latLng, setLocationPointState] = useRecoilState(locationPointState);
+  const locations = useRecoilValueLoadable(locationsDataQuery({ q, latLng }));
 
   const isLoading = locations.state === 'loading';
 
@@ -46,21 +48,13 @@ const StartingPoint: React.FC<StartingPointProps> = ({ location, setLocation }) 
     setLocationSearchState(debouncedLocation);
   }, [debouncedLocation, setLocationSearchState]);
 
-  const handleClose = (event?: React.SyntheticEvent, reason?: string): void => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setShowAlert(false);
-  };
-
   const hasGPS = 'geolocation' in navigator;
 
   const findCurrentLocation = (): void => {
     navigator.geolocation.getCurrentPosition((position) => {
       setLocationPointState([position.coords.latitude, position.coords.longitude]);
     }, () => {
-      setShowAlert(true);
+      alertError("Couldn't get your location information");
     });
   };
 
@@ -123,19 +117,6 @@ const StartingPoint: React.FC<StartingPointProps> = ({ location, setLocation }) 
               </IconButton>
             </Grid>
           )}
-          <Snackbar
-            open={showAlert}
-            autoHideDuration={4000}
-            onClose={handleClose}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'center',
-            }}
-          >
-            <Alert onClose={handleClose} severity="error">
-              Couldn&apos;t get location information
-            </Alert>
-          </Snackbar>
         </Grid>
       )}
     />

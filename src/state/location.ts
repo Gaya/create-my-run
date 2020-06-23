@@ -1,10 +1,11 @@
-import { atom, selector } from 'recoil';
+import { atom, selector, selectorFamily } from 'recoil';
 
 import { LatLng, LocationResponse, LocationsResponse } from '../server/types';
 import { Locations } from '../types';
 import { API_URL } from '../constants';
 import { routeLocationState } from './route';
 import { safeStoredLocation } from '../utils/localStorage';
+import { alertError } from '../components/Error/ErrorProvider';
 
 export const locationSearchState = atom<string>({
   key: 'LocationSearch',
@@ -24,15 +25,29 @@ export function setOnCompleteLocation(newOnCompleteLocation: onCompleteLocation)
   onCompleteLocation = newOnCompleteLocation;
 }
 
-export const locationsDataQuery = selector<Locations | null>({
-  key: 'LocationsFound',
-  get: ({ get }) => {
-    const q = get(locationSearchState);
-    const latLng = get(locationPointState);
+type LocationParameter = {
+  q: string;
+  latLng?: LatLng;
+};
 
+let cachedLocations: Locations = {};
+
+function mergeCachedLocations(locations: LocationResponse[]): Locations {
+  cachedLocations = locations.reduce(
+    (acc: Locations, location) => ({ ...acc, [location.key]: location }),
+    cachedLocations,
+  );
+
+  return cachedLocations;
+}
+
+export const locationsDataQuery = selectorFamily<Locations | null, LocationParameter>({
+  key: 'LocationsFound',
+  get: ({ q, latLng }) => (): Promise<Locations | null> => {
     if (q === '' && !latLng) {
       const location = safeStoredLocation();
       if (location) {
+        mergeCachedLocations([location]);
         return Promise.resolve({ [location.key]: location });
       }
 
@@ -52,10 +67,11 @@ export const locationsDataQuery = selector<Locations | null>({
 
         return res;
       })
-      .then((res) => res.locations.reduce(
-        (acc: Locations, location) => ({ ...acc, [location.key]: location }),
-        {},
-      ));
+      .then((res) => mergeCachedLocations(res.locations))
+      .catch(() => {
+        alertError('Something went from looking for a location.');
+        return cachedLocations;
+      });
   },
 });
 
@@ -63,7 +79,9 @@ export const locationByRouteLocation = selector<LocationResponse | null>({
   key: 'LocationByRouteLocaction',
   get: ({ get }) => {
     const selectedLocation = get(routeLocationState);
-    const locations = get(locationsDataQuery);
+    const q = get(locationSearchState);
+    const latLng = get(locationPointState);
+    const locations = get(locationsDataQuery({ q, latLng }));
 
     return locations && selectedLocation ? locations[selectedLocation] : null;
   },

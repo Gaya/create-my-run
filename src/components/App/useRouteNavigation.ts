@@ -47,8 +47,8 @@ function useRouteNavigation(closeDrawer: () => void): void {
   ]);
 
   // listen to route changes
-  useEffect(() => history.listen((location) => {
-    loadRouteFromQueryParameters(location.search);
+  useEffect(() => history.listen((action) => {
+    loadRouteFromQueryParameters(action.location.search);
   }), [loadRouteFromQueryParameters]);
 
   const hasRoute = loadRouteFromQueryParameters(window.location.search);

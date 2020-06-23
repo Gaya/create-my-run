@@ -99,18 +99,8 @@ export const routeDataQuery = selectorFamily<RoutesResponse | null, RouteParamet
 export const routeLengthState = selector<number | undefined>({
   key: 'RouteLength',
   get: ({ get }) => {
-    const distance = get(routeDistanceState);
-    const routeType = get(routeTypeState);
-    const location = get(routeLocationState);
-    const r = get(routeRandomSeedState);
-
-    if (!distance || !routeType || !location || !r) {
-      return undefined;
-    }
-
-    const routeData = get(routeDataQuery({
-      distance, routeType, location, r,
-    }));
+    const params = get(routeParams);
+    const routeData = get(routeDataQuery(params));
 
     return routeData?.length;
   },

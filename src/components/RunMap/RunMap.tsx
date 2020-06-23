@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
+import { useRecoilValue, useRecoilValueLoadable, useSetRecoilState } from 'recoil';
 import {
   Map,
   Marker,
   TileLayer,
 } from 'react-leaflet';
-import { Icon } from 'leaflet';
+import { Icon, LeafletMouseEvent } from 'leaflet';
 import { useTheme } from '@material-ui/core';
 import Polyline from 'react-leaflet-arrowheads';
 
@@ -16,7 +16,11 @@ import {
   routeFlippedState,
   routeParams,
 } from '../../state/route';
-import { locationByRouteLocation } from '../../state/location';
+import {
+  locationByRouteLocation,
+  locationPointState,
+  locationSearchState,
+} from '../../state/location';
 import { LatLng } from '../../server/types';
 import { safeStoredLocation, storeLocation } from '../../utils/localStorage';
 
@@ -35,6 +39,9 @@ const RunMap: React.FC = () => {
 
   const params = useRecoilValue(routeParams);
   const route = useRecoilValueLoadable(routeDataQuery(params));
+
+  const setLocationSearch = useSetRecoilState(locationSearchState);
+  const setLocationPoint = useSetRecoilState(locationPointState);
 
   const flipped = useRecoilValue(routeFlippedState);
   const startLocation = useRecoilValueLoadable(locationByRouteLocation);
@@ -57,8 +64,19 @@ const RunMap: React.FC = () => {
   const center = coordinates.length > 0 ? coordinates[0] : defaultCenter;
   const bounds = coordinates.length > 0 ? coordinates : undefined;
 
+  const handleClick = ({ latlng }: LeafletMouseEvent): void => {
+    setLocationSearch('');
+    setLocationPoint([latlng.lat, latlng.lng]);
+  };
+
   return (
-    <Map center={center} bounds={bounds} zoom={13} useFlyTo>
+    <Map
+      center={center}
+      bounds={bounds}
+      zoom={13}
+      useFlyTo
+      onClick={handleClick}
+    >
       <TileLayer
         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

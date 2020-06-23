@@ -18,11 +18,8 @@ import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
 import {
   createRouteUrl,
   routeDataQuery,
-  routeDistanceState,
   routeFlippedState,
-  routeLocationState, routeParams,
-  routeRandomSeedState,
-  routeTypeState,
+  routeParams,
 } from '../../state/route';
 import { RouteFormat } from '../../server/types';
 import { setQueryParameters } from '../../utils/history';
@@ -42,13 +39,19 @@ const MoreButton: React.FC = () => {
   const [isOpened, setOpened] = useState(false);
   const menuAnchor = useRef<HTMLButtonElement | null>(null);
 
-  const params = useRecoilValue(routeParams);
-  const route = useRecoilValueLoadable(routeDataQuery(params));
+  const {
+    distance,
+    routeType,
+    location,
+    r,
+  } = useRecoilValue(routeParams);
+  const route = useRecoilValueLoadable(routeDataQuery({
+    distance,
+    routeType,
+    location,
+    r,
+  }));
 
-  const distance = useRecoilValue(routeDistanceState);
-  const routeType = useRecoilValue(routeTypeState);
-  const r = useRecoilValue(routeRandomSeedState);
-  const location = useRecoilValue(routeLocationState);
   const flipped = useRecoilValue(routeFlippedState);
 
   if (route.state !== 'hasValue' || !distance || !routeType || !location || !r) {

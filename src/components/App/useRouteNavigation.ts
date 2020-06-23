@@ -11,15 +11,14 @@ import {
 import { history } from '../../utils/history';
 import { randomSeed } from '../../state/utils';
 
-function useRouteNavigation(closeDrawer: () => void): void {
+function useLoadRouteFromQueryParameters(): (search: string) => boolean {
   const setDistanceState = useSetRecoilState(routeDistanceState);
   const setRouteTypeState = useSetRecoilState(routeTypeState);
   const setRouteLocationState = useSetRecoilState(routeLocationState);
   const setRouteRandomSeedState = useSetRecoilState(routeRandomSeedState);
   const setRouteFlippedState = useSetRecoilState(routeFlippedState);
 
-  // handle route loading on route change
-  const loadRouteFromQueryParameters = useCallback((search: string): boolean => {
+  return useCallback((search: string): boolean => {
     const params = new URLSearchParams(search);
     const distance = params.get('distance');
     const routeType = params.get('routeType');
@@ -45,12 +44,17 @@ function useRouteNavigation(closeDrawer: () => void): void {
     setRouteRandomSeedState,
     setRouteTypeState,
   ]);
+}
+
+function useRouteNavigation(closeDrawer: () => void): void {
+  const loadRouteFromQueryParameters = useLoadRouteFromQueryParameters();
 
   // listen to route changes
   useEffect(() => history.listen((action) => {
     loadRouteFromQueryParameters(action.location.search);
   }), [loadRouteFromQueryParameters]);
 
+  // load initial route from query params
   const hasRoute = loadRouteFromQueryParameters(window.location.search);
 
   // initial load

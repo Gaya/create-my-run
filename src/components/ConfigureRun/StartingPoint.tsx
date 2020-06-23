@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
-import { useRecoilState, useRecoilValueLoadable, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValueLoadable } from 'recoil';
 
 import {
   CircularProgress,
@@ -16,22 +16,19 @@ import {
   locationPointState,
   locationsDataQuery,
   locationSearchState,
-  setOnCompleteLocation,
 } from '../../state/location';
 import { safeStoredLocation } from '../../utils/localStorage';
 import { alertError } from '../Error/ErrorProvider';
-import { routeLocationState } from '../../state/route';
 
 interface StartingPointProps {
   location: string | null;
-  setLocation(newLocation: string | null): void;
+  setLocation(newLocation: string | undefined): void;
 }
 
 const StartingPoint: React.FC<StartingPointProps> = ({ location, setLocation }) => {
   const [locationInput, setLocationInput] = useState<string>(safeStoredLocation()?.name || '');
   const [debouncedLocation] = useDebounce(locationInput, 500);
 
-  const setRouteLocation = useSetRecoilState(routeLocationState);
   const [q, setLocationSearchState] = useRecoilState(locationSearchState);
   const [latLng, setLocationPointState] = useRecoilState(locationPointState);
   const locations = useRecoilValueLoadable(locationsDataQuery({ q, latLng }));
@@ -60,17 +57,6 @@ const StartingPoint: React.FC<StartingPointProps> = ({ location, setLocation }) 
     });
   };
 
-  // update start location when searching with lat lng
-  useEffect(() => {
-    setOnCompleteLocation((foundLocations) => {
-      if (foundLocations.length > 0) {
-        setRouteLocation(foundLocations[0].key);
-        setLocation(foundLocations[0].key);
-        setLocationInput(foundLocations[0].name);
-      }
-    });
-  }, [setLocation, setRouteLocation]);
-
   const noOptionsText = locationInput === '' ? 'Start typing to search...' : undefined;
 
   const locationLabelByKey = (l: string): string => (locations.state === 'hasValue' && locations.contents && locations.contents[l] ? locations.contents[l].name : '');
@@ -84,7 +70,7 @@ const StartingPoint: React.FC<StartingPointProps> = ({ location, setLocation }) 
       freeSolo
       filterOptions={(opts): string[] => opts}
       placeholder="Start typing to search"
-      onChange={(_, newLocation): void => setLocation(newLocation)}
+      onChange={(_, newLocation): void => setLocation(newLocation || undefined)}
       onInputChange={(event, newInputValue): void => {
         setLocationInput(newInputValue);
       }}

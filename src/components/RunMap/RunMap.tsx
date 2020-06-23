@@ -5,7 +5,7 @@ import {
   Marker,
   TileLayer,
 } from 'react-leaflet';
-import { Icon, LeafletMouseEvent } from 'leaflet';
+import { DragEndEvent, Icon, LeafletMouseEvent } from 'leaflet';
 import { useTheme } from '@material-ui/core';
 import Polyline from 'react-leaflet-arrowheads';
 
@@ -64,9 +64,18 @@ const RunMap: React.FC = () => {
   const center = coordinates.length > 0 ? coordinates[0] : defaultCenter;
   const bounds = coordinates.length > 0 ? coordinates : undefined;
 
-  const handleClick = ({ latlng }: LeafletMouseEvent): void => {
+  const setLatLngLocation = (latLng: LatLng): void => {
     setLocationSearch('');
-    setLocationPoint([latlng.lat, latlng.lng]);
+    setLocationPoint(latLng);
+  };
+
+  const handleClick = ({ latlng }: LeafletMouseEvent): void => {
+    setLatLngLocation([latlng.lat, latlng.lng]);
+  };
+
+  const onDragend = (e: DragEndEvent): void => {
+    const latLng = e.target.getLatLng();
+    setLatLngLocation([latLng.lat, latLng.lng]);
   };
 
   return (
@@ -89,6 +98,8 @@ const RunMap: React.FC = () => {
             icon={MarkerIcon}
             title="Starting Point"
             alt="Starting Point"
+            draggable
+            onDragend={onDragend}
           />
         )}
       {route && coordinates.length > 0 && (

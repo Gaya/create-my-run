@@ -1,7 +1,12 @@
 import React, {
   FormEvent, useEffect, useRef, useState,
 } from 'react';
-import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
+import {
+  useRecoilValue,
+  useRecoilValueLoadable,
+  useResetRecoilState,
+  useSetRecoilState,
+} from 'recoil';
 
 import {
   Button,
@@ -12,7 +17,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 
 import {
-  routeDataQuery,
+  routeDataQuery, routeLocationState,
   routeParams,
 } from '../../state/route';
 import { isLoading, randomSeed } from '../../state/utils';
@@ -24,6 +29,7 @@ import RouteType from './RouteType';
 import { setQueryParameters } from '../../utils/history';
 import { defaultDistanceState, maximumDistanceState, minimumDistanceState } from '../../state/app';
 import { safeStoredLocation } from '../../utils/localStorage';
+import { setOnCompleteLocation } from '../../state/location';
 
 const routeTypes: RouteTypeValue[] = [
   {
@@ -69,13 +75,15 @@ const ConfigureRun: React.FC<ConfigureRunProps> = ({ onCompleteLoading }) => {
   const params = useRecoilValue(routeParams);
   const route = useRecoilValueLoadable(routeDataQuery(params));
 
+  const setRouteLocation = useSetRecoilState(routeLocationState);
+  const location = params.location || null;
+
   const defaultDistance = useRecoilValue(defaultDistanceState);
   const minDistance = useRecoilValue(minimumDistanceState);
   const maxDistance = useRecoilValue(maximumDistanceState);
 
   const [distance, setDistance] = useState<number>(params.distance || defaultDistance);
   const [routeType, setRouteType] = useState<RouteTypeValue['id']>(params.routeType || routeTypes[0].id);
-  const [location, setLocation] = useState<string | null>(safeStoredLocation()?.key || null);
 
   const classes = useStyles();
 
@@ -109,11 +117,20 @@ const ConfigureRun: React.FC<ConfigureRunProps> = ({ onCompleteLoading }) => {
     wasLoadingRef.current = route.state === 'loading';
   }, [onCompleteLoading, route.contents, route.state]);
 
+  // update start location when searching with lat lng
+  useEffect(() => {
+    setOnCompleteLocation((foundLocations) => {
+      if (foundLocations.length > 0) {
+        setRouteLocation(foundLocations[0].key);
+      }
+    });
+  }, [setRouteLocation]);
+
   return (
     <form onSubmit={handleSubmit}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <StartingPoint location={location} setLocation={setLocation} />
+          <StartingPoint location={location} setLocation={setRouteLocation} />
         </Grid>
 
         <Grid item xs={12}>

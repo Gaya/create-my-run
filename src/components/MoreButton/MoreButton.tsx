@@ -20,7 +20,7 @@ import {
   routeDataQuery,
   routeDistanceState,
   routeFlippedState,
-  routeLocationState,
+  routeLocationState, routeParams,
   routeRandomSeedState,
   routeTypeState,
 } from '../../state/route';
@@ -42,7 +42,8 @@ const MoreButton: React.FC = () => {
   const [isOpened, setOpened] = useState(false);
   const menuAnchor = useRef<HTMLButtonElement | null>(null);
 
-  const route = useRecoilValueLoadable(routeDataQuery);
+  const params = useRecoilValue(routeParams);
+  const route = useRecoilValueLoadable(routeDataQuery(params));
 
   const distance = useRecoilValue(routeDistanceState);
   const routeType = useRecoilValue(routeTypeState);

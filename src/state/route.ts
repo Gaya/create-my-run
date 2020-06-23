@@ -1,9 +1,14 @@
-import { atom, selector } from 'recoil';
+import {
+  atom,
+  selector,
+  selectorFamily,
+} from 'recoil';
 
 import { RouteFormat, RoutesResponse } from '../server/types';
 import { RouteTypeValue } from '../types';
 import { API_URL } from '../constants';
 import { safeStoredLocation } from '../utils/localStorage';
+import { alertError } from '../components/Error/ErrorProvider';
 
 export const routeRandomSeedState = atom<number | undefined>({
   key: 'RouteRandomSeed',
@@ -49,29 +54,44 @@ export function createRouteUrl(
   ].join('&');
 }
 
-let onCompleteRoute = (): void => undefined;
-
-export function setOnCompleteRoute(newOnCompleteRoute: () => void): void {
-  onCompleteRoute = newOnCompleteRoute;
+type RouteParameter = {
+  distance?: number;
+  routeType?: number;
+  location?: string;
+  r?: number;
 }
 
-export const routeDataQuery = selector<RoutesResponse | null>({
-  key: 'RouteData',
+export const routeParams = selector<RouteParameter>({
+  key: 'RouteParams',
   get: ({ get }) => {
     const distance = get(routeDistanceState);
     const routeType = get(routeTypeState);
     const location = get(routeLocationState);
     const r = get(routeRandomSeedState);
 
+    return {
+      distance, routeType, location, r,
+    };
+  },
+});
+
+export const routeDataQuery = selectorFamily<RoutesResponse | null, RouteParameter>({
+  key: 'RouteData',
+  get: ({
+    distance,
+    routeType,
+    location,
+    r,
+  }) => (): Promise<RoutesResponse | null> => {
     if (!distance || !routeType || !r || !location) {
       return Promise.resolve(null);
     }
 
     return fetch(createRouteUrl(distance, routeType, r, location))
       .then((res) => res.json() as Promise<RoutesResponse>)
-      .then((res) => {
-        onCompleteRoute();
-        return res;
+      .catch(() => {
+        alertError('Whoops, something went wrong with your route');
+        return null;
       });
   },
 });
@@ -79,7 +99,18 @@ export const routeDataQuery = selector<RoutesResponse | null>({
 export const routeLengthState = selector<number | undefined>({
   key: 'RouteLength',
   get: ({ get }) => {
-    const routeData = get(routeDataQuery);
+    const distance = get(routeDistanceState);
+    const routeType = get(routeTypeState);
+    const location = get(routeLocationState);
+    const r = get(routeRandomSeedState);
+
+    if (!distance || !routeType || !location || !r) {
+      return undefined;
+    }
+
+    const routeData = get(routeDataQuery({
+      distance, routeType, location, r,
+    }));
 
     return routeData?.length;
   },

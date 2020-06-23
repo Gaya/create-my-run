@@ -9,7 +9,12 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { routeDataQuery, routeDistanceState, routeTypeState } from '../../state/route';
+import {
+  routeDataQuery,
+  routeDistanceState,
+  routeParams,
+  routeTypeState,
+} from '../../state/route';
 import { isLoading, randomSeed } from '../../state/utils';
 import { RouteTypeValue } from '../../types';
 
@@ -57,7 +62,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 const ConfigureRun: React.FC = () => {
-  const route = useRecoilValueLoadable(routeDataQuery);
+  const params = useRecoilValue(routeParams);
+  const route = useRecoilValueLoadable(routeDataQuery(params));
 
   const currentDistance = useRecoilValue(routeDistanceState);
   const currentRouteType = useRecoilValue(routeTypeState);

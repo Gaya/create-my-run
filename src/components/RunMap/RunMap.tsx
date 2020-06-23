@@ -11,7 +11,11 @@ import Polyline from 'react-leaflet-arrowheads';
 
 import 'leaflet/dist/leaflet.css';
 
-import { routeDataQuery, routeFlippedState } from '../../state/route';
+import {
+  routeDataQuery,
+  routeFlippedState,
+  routeParams,
+} from '../../state/route';
 import { locationByRouteLocation } from '../../state/location';
 import { LatLng } from '../../server/types';
 import { safeStoredLocation, storeLocation } from '../../utils/localStorage';
@@ -28,7 +32,10 @@ const MarkerIcon = new Icon({
 
 const RunMap: React.FC = () => {
   const theme = useTheme();
-  const route = useRecoilValueLoadable(routeDataQuery);
+
+  const params = useRecoilValue(routeParams);
+  const route = useRecoilValueLoadable(routeDataQuery(params));
+
   const flipped = useRecoilValue(routeFlippedState);
   const startLocation = useRecoilValueLoadable(locationByRouteLocation);
 

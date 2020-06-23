@@ -7,7 +7,6 @@ import {
   routeLocationState,
   routeRandomSeedState,
   routeTypeState,
-  setOnCompleteRoute,
 } from '../../state/route';
 import { history } from '../../utils/history';
 import { randomSeed } from '../../state/utils';
@@ -61,11 +60,6 @@ function useRouteNavigation(closeDrawer: () => void): void {
       closeDrawer();
     }
   }, [closeDrawer, hasRoute]);
-
-  // register closing drawer after route is loaded
-  useEffect(() => {
-    setOnCompleteRoute(closeDrawer);
-  }, [closeDrawer]);
 }
 
 export default useRouteNavigation;

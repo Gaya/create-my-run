@@ -5,6 +5,8 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import teal from '@material-ui/core/colors/teal';
 import deepOrange from '@material-ui/core/colors/deepOrange';
 
+import ErrorProvider from '../Error/ErrorProvider';
+
 import './App.css';
 
 const theme = createMuiTheme({
@@ -17,9 +19,11 @@ const theme = createMuiTheme({
 
 const AppWrapper: React.FC = ({ children }) => (
   <ThemeProvider theme={theme}>
-    <RecoilRoot>
-      {children}
-    </RecoilRoot>
+    <ErrorProvider>
+      <RecoilRoot>
+        {children}
+      </RecoilRoot>
+    </ErrorProvider>
   </ThemeProvider>
 );
 

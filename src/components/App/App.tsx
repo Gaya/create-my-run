@@ -5,6 +5,7 @@ import RunMap from '../RunMap/RunMap';
 import HeaderBar from '../HeaderBar/HeaderBar';
 import MoreButton from '../MoreButton/MoreButton';
 import SideBar from '../SideBar/SideBar';
+import Error from '../Error/Error';
 
 import { drawerOpenState } from '../../state/app';
 
@@ -32,6 +33,7 @@ const App: React.FC = () => {
       <SideBar isDrawerOpen={drawerOpen} onCloseDrawer={closeDrawer} />
       <RunMap />
       <MoreButton />
+      <Error />
     </div>
   );
 };

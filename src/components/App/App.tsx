@@ -17,9 +17,7 @@ const App: React.FC = () => {
   const [drawerOpen, setDrawerOpen] = useRecoilState(drawerOpenState);
 
   const openDrawer = useCallback(() => setDrawerOpen(true), [setDrawerOpen]);
-  const closeDrawer = useCallback(() => {
-    setDrawerOpen(false);
-  }, [setDrawerOpen]);
+  const closeDrawer = useCallback(() => setDrawerOpen(false), [setDrawerOpen]);
 
   useRouteNavigation(closeDrawer);
 

@@ -1,8 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+
 import App from './components/App/App';
 import AppWrapper from './components/App/AppWrapper';
+
+import './index.css';
 
 ReactDOM.render(
   <AppWrapper>
@@ -10,9 +12,3 @@ ReactDOM.render(
   </AppWrapper>,
   document.getElementById('root'),
 );
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-// import * as serviceWorker from './serviceWorker';
-// serviceWorker.unregister();

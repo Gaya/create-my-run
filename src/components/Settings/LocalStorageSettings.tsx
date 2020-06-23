@@ -4,7 +4,7 @@ import { Button, Grid, Typography } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ReplayIcon from '@material-ui/icons/Replay';
 
-import { removeStoredDistanceSettings, removeStoredLocation } from '../../state/utils';
+import { removeStoredDistanceSettings, removeStoredLocation } from '../../utils/localStorage';
 
 const LocalStorageSettings: React.FC = () => {
   const onRemoveLocation = (): void => {

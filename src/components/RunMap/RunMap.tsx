@@ -12,9 +12,9 @@ import Polyline from 'react-leaflet-arrowheads';
 import 'leaflet/dist/leaflet.css';
 
 import { routeDataQuery, routeFlippedState } from '../../state/route';
-import { safeStoredLocation, storeLocation } from '../../state/utils';
 import { locationByRouteLocation } from '../../state/location';
 import { LatLng } from '../../server/types';
+import { safeStoredLocation, storeLocation } from '../../utils/localStorage';
 
 import iconUrl from './Marker.png';
 

@@ -3,7 +3,7 @@ import { atom, selector } from 'recoil';
 import { RouteFormat, RoutesResponse } from '../server/types';
 import { RouteTypeValue } from '../types';
 import { API_URL } from '../constants';
-import { safeStoredLocation } from './utils';
+import { safeStoredLocation } from '../utils/localStorage';
 
 export const routeRandomSeedState = atom<number | undefined>({
   key: 'RouteRandomSeed',

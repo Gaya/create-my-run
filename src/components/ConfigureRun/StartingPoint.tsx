@@ -16,7 +16,7 @@ import {
   locationSearchState,
   setOnCompleteLocation,
 } from '../../state/location';
-import { safeStoredLocation } from '../../state/utils';
+import { safeStoredLocation } from '../../utils/localStorage';
 
 interface StartingPointProps {
   location: string | null;

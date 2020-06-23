@@ -4,7 +4,7 @@ import { LatLng, LocationResponse, LocationsResponse } from '../server/types';
 import { Locations } from '../types';
 import { API_URL } from '../constants';
 import { routeLocationState } from './route';
-import { safeStoredLocation } from './utils';
+import { safeStoredLocation } from '../utils/localStorage';
 
 export const locationSearchState = atom<string>({
   key: 'LocationSearch',

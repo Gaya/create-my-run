@@ -10,11 +10,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 
 import { routeDataQuery, routeDistanceState, routeTypeState } from '../../state/route';
-import {
-  isLoading,
-  randomSeed,
-  safeStoredLocation,
-} from '../../state/utils';
+import { isLoading, randomSeed } from '../../state/utils';
 import { RouteTypeValue } from '../../types';
 
 import Distance from './Distance';
@@ -22,6 +18,7 @@ import StartingPoint from './StartingPoint';
 import RouteType from './RouteType';
 import { setQueryParameters } from '../../utils/history';
 import { defaultDistanceState, maximumDistanceState, minimumDistanceState } from '../../state/app';
+import { safeStoredLocation } from '../../utils/localStorage';
 
 const routeTypes: RouteTypeValue[] = [
   {

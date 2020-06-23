@@ -8,7 +8,7 @@ import {
 import { useRecoilState } from 'recoil';
 
 import { defaultDistanceState, maximumDistanceState, minimumDistanceState } from '../../state/app';
-import { storeDistanceSettings } from '../../state/utils';
+import { storeDistanceSettings } from '../../utils/localStorage';
 
 const DistanceSettings: React.FC = () => {
   const [defaultState, setDefaultState] = useRecoilState(defaultDistanceState);

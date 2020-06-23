@@ -1,6 +1,6 @@
 import { atom } from 'recoil';
 
-import { safeStoredDistance } from './utils';
+import { safeStoredDistance } from '../utils/localStorage';
 
 export const drawerOpenState = atom<boolean>({
   key: 'DrawerOpenState',

@@ -1,4 +1,6 @@
-import React, { FormEvent, useState } from 'react';
+import React, {
+  FormEvent, useEffect, useRef, useState,
+} from 'react';
 import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
 
 import {
@@ -61,7 +63,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const ConfigureRun: React.FC = () => {
+interface ConfigureRunProps {
+  onCompleteLoading(): void;
+}
+
+const ConfigureRun: React.FC<ConfigureRunProps> = ({ onCompleteLoading }) => {
   const params = useRecoilValue(routeParams);
   const route = useRecoilValueLoadable(routeDataQuery(params));
 
@@ -98,6 +104,15 @@ const ConfigureRun: React.FC = () => {
     event.preventDefault();
     onGenerateRun();
   };
+
+  const wasLoadingRef = useRef<boolean>(route.state === 'loading');
+  useEffect(() => {
+    if (route.state === 'hasValue' && route.contents !== null && wasLoadingRef.current) {
+      onCompleteLoading();
+    }
+
+    wasLoadingRef.current = route.state === 'loading';
+  }, [onCompleteLoading, route.contents, route.state]);
 
   return (
     <form onSubmit={handleSubmit}>

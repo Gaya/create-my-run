@@ -1,7 +1,8 @@
 import React, {
-  FormEvent, useEffect, useRef, useState,
+  FormEvent, useCallback, useEffect, useRef, useState,
 } from 'react';
 import {
+  useRecoilState,
   useRecoilValue,
   useRecoilValueLoadable,
   useSetRecoilState,
@@ -16,7 +17,8 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 
 import {
-  routeDataQuery, routeLocationState,
+  routeDataQuery,
+  routeLocationState,
   routeParams,
 } from '../../state/route';
 import { isLoading, randomSeed } from '../../state/utils';

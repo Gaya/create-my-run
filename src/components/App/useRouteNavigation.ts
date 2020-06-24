@@ -11,7 +11,16 @@ import {
 import { history } from '../../utils/history';
 import { randomSeed } from '../../state/utils';
 
-function useLoadRouteFromQueryParameters(): (search: string) => boolean {
+function hasRouteQueryParameters(search: string): boolean {
+  const params = new URLSearchParams(search);
+  const distance = params.get('distance');
+  const routeType = params.get('routeType');
+  const location = params.get('location');
+
+  return !!(distance && routeType && location);
+}
+
+function useLoadRouteFromQueryParameters(): (search: string) => void {
   const setDistanceState = useSetRecoilState(routeDistanceState);
   const setRouteTypeState = useSetRecoilState(routeTypeState);
   const setRouteLocationState = useSetRecoilState(routeLocationState);
@@ -55,7 +64,7 @@ function useRouteNavigation(closeDrawer: () => void): void {
   }), [loadRouteFromQueryParameters]);
 
   // load initial route from query params
-  const hasRoute = loadRouteFromQueryParameters(window.location.search);
+  const hasRoute = hasRouteQueryParameters(window.location.search);
 
   // initial load
   useEffect(() => {

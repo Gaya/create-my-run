@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 
 import { locationSearchState, locationsState } from '../../state/location';
-import { routeParams } from '../../state/route';
+import { routeParams, routeLocationState } from '../../state/route';
 
 function useRecoilStateTracker<T>(watch: T): T {
   const [value, setValue] = useState(watch);
@@ -14,6 +14,7 @@ function useRecoilStateTracker<T>(watch: T): T {
 }
 
 const Debug: React.FC = () => {
+  useRecoilStateTracker(useRecoilValue(routeLocationState));
   useRecoilStateTracker(useRecoilValue(routeParams));
   useRecoilStateTracker(useRecoilValue(locationSearchState));
   useRecoilStateTracker(useRecoilValue(locationsState));

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from 'recoil';
+import { useRecoilState, useRecoilValueLoadable } from 'recoil';
 
 import {
   locationsDataQuery,
@@ -7,13 +7,11 @@ import {
   locationsState,
   mergeCachedLocations,
 } from '../../state/location';
-import { routeLocationState } from '../../state/route';
 
 function useLocationHandler(): void {
   const [locationSearch] = useRecoilState(locationSearchState);
   const locationsSearchResults = useRecoilValueLoadable(locationsDataQuery(locationSearch));
   const [locations, setLocations] = useRecoilState(locationsState);
-  const routeLocation = useRecoilValue(routeLocationState);
 
   useEffect(() => {
     if (locationsSearchResults.state === 'hasValue') {

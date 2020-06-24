@@ -31,13 +31,9 @@ function mergeCachedLocations(locations: LocationResponse[] = []): Locations {
   return cachedLocations;
 }
 
-export const locationsDataQuery = selectorFamily<Locations | null, string | LatLng | undefined>({
+export const locationsDataQuery = selectorFamily<Locations | null, string | LatLng>({
   key: 'LocationsFound',
   get: (q) => (): Promise<Locations | null> => {
-    if (typeof q === 'undefined') {
-      return Promise.resolve(mergeCachedLocations());
-    }
-
     if (q === '') {
       const location = safeStoredLocation();
       if (location) {

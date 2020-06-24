@@ -4,7 +4,6 @@ import React, {
 import {
   useRecoilValue,
   useRecoilValueLoadable,
-  useResetRecoilState,
   useSetRecoilState,
 } from 'recoil';
 
@@ -28,7 +27,6 @@ import StartingPoint from './StartingPoint';
 import RouteType from './RouteType';
 import { setQueryParameters } from '../../utils/history';
 import { defaultDistanceState, maximumDistanceState, minimumDistanceState } from '../../state/app';
-import { safeStoredLocation } from '../../utils/localStorage';
 import { setOnCompleteLocation } from '../../state/location';
 
 const routeTypes: RouteTypeValue[] = [

@@ -7,14 +7,9 @@ import { routeLocationState } from './route';
 import { safeStoredLocation } from '../utils/localStorage';
 import { alertError } from '../components/Error/ErrorProvider';
 
-export const locationSearchState = atom<string>({
+export const locationSearchState = atom<string | LatLng>({
   key: 'LocationSearch',
   default: '',
-});
-
-export const locationPointState = atom<LatLng | undefined>({
-  key: 'LocationPoint',
-  default: undefined,
 });
 
 type onCompleteLocation = (locations: LocationResponse[]) => void;
@@ -25,14 +20,9 @@ export function setOnCompleteLocation(newOnCompleteLocation: onCompleteLocation)
   onCompleteLocation = newOnCompleteLocation;
 }
 
-type LocationParameter = {
-  q: string;
-  latLng?: LatLng;
-};
-
 let cachedLocations: Locations = {};
 
-function mergeCachedLocations(locations: LocationResponse[]): Locations {
+function mergeCachedLocations(locations: LocationResponse[] = []): Locations {
   cachedLocations = locations.reduce(
     (acc: Locations, location) => ({ ...acc, [location.key]: location }),
     cachedLocations,
@@ -41,27 +31,32 @@ function mergeCachedLocations(locations: LocationResponse[]): Locations {
   return cachedLocations;
 }
 
-export const locationsDataQuery = selectorFamily<Locations | null, LocationParameter>({
+export const locationsDataQuery = selectorFamily<Locations | null, string | LatLng | undefined>({
   key: 'LocationsFound',
-  get: ({ q, latLng }) => (): Promise<Locations | null> => {
-    if (q === '' && !latLng) {
+  get: (q) => (): Promise<Locations | null> => {
+    if (typeof q === 'undefined') {
+      return Promise.resolve(mergeCachedLocations());
+    }
+
+    if (q === '') {
       const location = safeStoredLocation();
       if (location) {
-        mergeCachedLocations([location]);
-        return Promise.resolve({ [location.key]: location });
+        return Promise.resolve(mergeCachedLocations([location]));
       }
 
       return Promise.resolve(null);
     }
 
-    const url = latLng
-      ? `${API_URL}/locations?latlng=${latLng.join(',')}`
+    const isLatLng = Array.isArray(q);
+
+    const url = Array.isArray(q)
+      ? `${API_URL}/locations?latlng=${q.join(',')}`
       : `${API_URL}/locations?q=${q}`;
 
     return fetch(url)
       .then((res) => res.json() as Promise<LocationsResponse>)
       .then((res) => {
-        if (latLng) {
+        if (isLatLng) {
           onCompleteLocation(res.locations);
         }
 
@@ -70,7 +65,7 @@ export const locationsDataQuery = selectorFamily<Locations | null, LocationParam
       .then((res) => mergeCachedLocations(res.locations))
       .catch(() => {
         alertError('Something went from looking for a location.');
-        return cachedLocations;
+        return mergeCachedLocations();
       });
   },
 });
@@ -79,9 +74,8 @@ export const locationByRouteLocation = selector<LocationResponse | null>({
   key: 'LocationByRouteLocaction',
   get: ({ get }) => {
     const selectedLocation = get(routeLocationState);
-    const q = get(locationSearchState);
-    const latLng = get(locationPointState);
-    const locations = get(locationsDataQuery({ q, latLng }));
+    const search = get(locationSearchState);
+    const locations = get(locationsDataQuery(search));
 
     return locations && selectedLocation ? locations[selectedLocation] : null;
   },

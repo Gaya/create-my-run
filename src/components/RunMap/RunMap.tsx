@@ -18,7 +18,6 @@ import {
 } from '../../state/route';
 import {
   locationByRouteLocation,
-  locationPointState,
   locationSearchState,
 } from '../../state/location';
 import { LatLng } from '../../server/types';
@@ -41,7 +40,6 @@ const RunMap: React.FC = () => {
   const route = useRecoilValueLoadable(routeDataQuery(params));
 
   const setLocationSearch = useSetRecoilState(locationSearchState);
-  const setLocationPoint = useSetRecoilState(locationPointState);
 
   const flipped = useRecoilValue(routeFlippedState);
   const startLocation = useRecoilValueLoadable(locationByRouteLocation);
@@ -64,18 +62,13 @@ const RunMap: React.FC = () => {
   const center = coordinates.length > 0 ? coordinates[0] : defaultCenter;
   const bounds = coordinates.length > 0 ? coordinates : undefined;
 
-  const setLatLngLocation = (latLng: LatLng): void => {
-    setLocationSearch('');
-    setLocationPoint(latLng);
-  };
-
   const handleClick = ({ latlng }: LeafletMouseEvent): void => {
-    setLatLngLocation([latlng.lat, latlng.lng]);
+    setLocationSearch([latlng.lat, latlng.lng]);
   };
 
   const onDragend = (e: DragEndEvent): void => {
     const latLng = e.target.getLatLng();
-    setLatLngLocation([latLng.lat, latLng.lng]);
+    setLocationSearch([latLng.lat, latLng.lng]);
   };
 
   return (

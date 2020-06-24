@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
-import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from 'recoil';
+import { useRecoilState, useRecoilValueLoadable } from 'recoil';
 
 import {
   CircularProgress,
@@ -14,7 +14,8 @@ import LocationSearchingIcon from '@material-ui/icons/LocationSearching';
 
 import {
   locationsDataQuery,
-  locationSearchState, locationsState, mergeCachedLocations,
+  locationSearchState,
+  locationsState,
 } from '../../state/location';
 import { alertError } from '../Error/ErrorProvider';
 
@@ -26,7 +27,7 @@ interface StartingPointProps {
 const StartingPoint: React.FC<StartingPointProps> = ({ location, setLocation }) => {
   const [locationSearch, setLocationSearchState] = useRecoilState(locationSearchState);
   const locationsSearchResults = useRecoilValueLoadable(locationsDataQuery(locationSearch));
-  const [locations, setLocations] = useRecoilState(locationsState);
+  const [locations] = useRecoilState(locationsState);
 
   const isLoading = locationsSearchResults.state === 'loading';
 
@@ -43,32 +44,21 @@ const StartingPoint: React.FC<StartingPointProps> = ({ location, setLocation }) 
     });
   };
 
-  useEffect(() => {
-    if (locationsSearchResults.state === 'hasValue') {
-      const newLocations = mergeCachedLocations(locationsSearchResults.contents, locations);
-
-      if (Object.keys(newLocations).sort().join('.') !== Object.keys(locations).sort().join('.')) {
-        setLocations(newLocations);
-      }
-    }
-  }, [locations, locationsSearchResults, setLocations]);
-
   const locationLabelByKey = useCallback(
     (l: string): string => (locations && locations[l] ? locations[l].name : ''),
     [locations],
   );
 
-  useEffect(() => {
-    if (!location) return;
-
-    const name = locationLabelByKey(location);
-    setLocationInput(name);
-  }, [location, locationLabelByKey]);
-
   const [locationInput, setLocationInput] = useState<string>(location ? locationLabelByKey(location) : '');
   const [debouncedLocation] = useDebounce(locationInput, 500);
 
-  const noOptionsText = locationInput === '' ? 'Start typing to search...' : undefined;
+  // fill in name of location if non is present
+  useEffect(() => {
+    if (!location || locationInput !== '') return;
+
+    const name = locationLabelByKey(location);
+    setLocationInput(name);
+  }, [location, locationInput, locationLabelByKey]);
 
   useEffect(() => {
     if (location) {
@@ -81,6 +71,8 @@ const StartingPoint: React.FC<StartingPointProps> = ({ location, setLocation }) 
 
     setLocationSearchState(debouncedLocation);
   }, [debouncedLocation, location, locationLabelByKey, setLocationSearchState]);
+
+  const noOptionsText = locationInput === '' ? 'Start typing to search...' : undefined;
 
   return (
     <Autocomplete

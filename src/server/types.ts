@@ -49,7 +49,7 @@ export interface ExternalLocationsResponse {
   };
 }
 
-export interface LocationResponse {
+export type LocationResponse = {
   name: string;
   key: string;
   coordinates: LatLng;

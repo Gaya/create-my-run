@@ -10,8 +10,12 @@ import Error from '../Error/Error';
 import { drawerOpenState } from '../../state/app';
 
 import useRouteNavigation from './useRouteNavigation';
+import useLocationHandler from './useLocationHandler';
+import Debug from './Debug';
 
 import './App.css';
+
+const debugMode = true;
 
 const App: React.FC = () => {
   const [drawerOpen, setDrawerOpen] = useRecoilState(drawerOpenState);
@@ -20,6 +24,7 @@ const App: React.FC = () => {
   const closeDrawer = useCallback(() => setDrawerOpen(false), [setDrawerOpen]);
 
   useRouteNavigation(closeDrawer);
+  useLocationHandler();
 
   // set window height for CSS
   useEffect(() => {
@@ -34,6 +39,7 @@ const App: React.FC = () => {
       <RunMap />
       <MoreButton />
       <Error />
+      {debugMode && <Debug />}
     </div>
   );
 };

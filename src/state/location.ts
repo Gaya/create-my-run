@@ -9,7 +9,7 @@ import { alertError } from '../components/Error/ErrorProvider';
 
 export const locationSearchState = atom<string | LatLng>({
   key: 'LocationSearch',
-  default: '',
+  default: safeStoredLocation()?.name || '',
 });
 
 type onCompleteLocation = (locations: LocationResponse[]) => void;

@@ -21,7 +21,7 @@ function useLocationHandler(): void {
         setLocations(newLocations);
       }
     }
-  }, [locations, locationsSearchResults, setLocations]);
+  }, [locationSearch, locations, locationsSearchResults, setLocations]);
 }
 
 export default useLocationHandler;

@@ -70,7 +70,14 @@ const StartingPoint: React.FC<StartingPointProps> = ({ location, setLocation }) 
     }
 
     setLocationSearchState(debouncedLocation);
-  }, [debouncedLocation, location, locationLabelByKey, setLocationSearchState]);
+  }, [
+    debouncedLocation,
+    location,
+    locationInput,
+    locationLabelByKey,
+    locationSearch,
+    setLocationSearchState,
+  ]);
 
   const noOptionsText = locationInput === '' ? 'Start typing to search...' : undefined;
 

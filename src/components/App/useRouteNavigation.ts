@@ -1,5 +1,5 @@
 import { useSetRecoilState } from 'recoil';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import {
   routeDistanceState,
@@ -56,6 +56,7 @@ function useLoadRouteFromQueryParameters(): (search: string) => void {
 }
 
 function useRouteNavigation(closeDrawer: () => void): void {
+  const [initialLoaded, setInitialLoaded] = useState(false);
   const loadRouteFromQueryParameters = useLoadRouteFromQueryParameters();
 
   // listen to route changes
@@ -65,6 +66,14 @@ function useRouteNavigation(closeDrawer: () => void): void {
 
   // load initial route from query params
   const hasRoute = hasRouteQueryParameters(window.location.search);
+
+  useEffect(() => {
+    if (hasRoute && !initialLoaded) {
+      loadRouteFromQueryParameters(window.location.search);
+    }
+
+    setInitialLoaded(true);
+  }, [hasRoute, initialLoaded, loadRouteFromQueryParameters]);
 
   // initial load
   useEffect(() => {

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
-import { useRecoilState, useRecoilValueLoadable } from 'recoil';
+import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from 'recoil';
 
 import {
   CircularProgress,
@@ -14,7 +14,7 @@ import LocationSearchingIcon from '@material-ui/icons/LocationSearching';
 
 import {
   locationsDataQuery,
-  locationSearchState,
+  locationSearchState, locationsState, mergeCachedLocations,
 } from '../../state/location';
 import { alertError } from '../Error/ErrorProvider';
 
@@ -25,11 +25,12 @@ interface StartingPointProps {
 
 const StartingPoint: React.FC<StartingPointProps> = ({ location, setLocation }) => {
   const [locationSearch, setLocationSearchState] = useRecoilState(locationSearchState);
-  const locations = useRecoilValueLoadable(locationsDataQuery(locationSearch));
+  const locationsSearchResults = useRecoilValueLoadable(locationsDataQuery(locationSearch));
+  const [locations, setLocations] = useRecoilState(locationsState);
 
-  const isLoading = locations.state === 'loading';
+  const isLoading = locationsSearchResults.state === 'loading';
 
-  const locationOptions = locations.state === 'hasValue' ? Object.values(locations.contents || {}) : [];
+  const locationOptions = locationsSearchResults.state === 'hasValue' ? locationsSearchResults.contents : [];
   const options = locationOptions.map((o) => o.key);
 
   const hasGPS = 'geolocation' in navigator;
@@ -42,9 +43,19 @@ const StartingPoint: React.FC<StartingPointProps> = ({ location, setLocation }) 
     });
   };
 
+  useEffect(() => {
+    if (locationsSearchResults.state === 'hasValue') {
+      const newLocations = mergeCachedLocations(locationsSearchResults.contents, locations);
+
+      if (Object.keys(newLocations).sort().join('.') !== Object.keys(locations).sort().join('.')) {
+        setLocations(newLocations);
+      }
+    }
+  }, [locations, locationsSearchResults, setLocations]);
+
   const locationLabelByKey = useCallback(
-    (l: string): string => (locations.state === 'hasValue' && locations.contents && locations.contents[l] ? locations.contents[l].name : ''),
-    [locations.contents, locations.state],
+    (l: string): string => (locations && locations[l] ? locations[l].name : ''),
+    [locations],
   );
 
   useEffect(() => {

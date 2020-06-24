@@ -20,27 +20,31 @@ export function setOnCompleteLocation(newOnCompleteLocation: onCompleteLocation)
   onCompleteLocation = newOnCompleteLocation;
 }
 
-let cachedLocations: Locations = {};
+export const locationsState = atom<Locations>({
+  key: 'Locations',
+  default: {},
+});
 
-function mergeCachedLocations(locations: LocationResponse[] = []): Locations {
-  cachedLocations = locations.reduce(
+export function mergeCachedLocations(
+  locations: LocationResponse[] = [],
+  state: Locations,
+): Locations {
+  return locations.reduce(
     (acc: Locations, location) => ({ ...acc, [location.key]: location }),
-    cachedLocations,
+    state,
   );
-
-  return cachedLocations;
 }
 
-export const locationsDataQuery = selectorFamily<Locations | null, string | LatLng>({
+export const locationsDataQuery = selectorFamily<LocationResponse[], string | LatLng>({
   key: 'LocationsFound',
-  get: (q) => (): Promise<Locations | null> => {
+  get: (q) => (): Promise<LocationResponse[]> => {
     if (q === '') {
       const location = safeStoredLocation();
       if (location) {
-        return Promise.resolve(mergeCachedLocations([location]));
+        return Promise.resolve([location]);
       }
 
-      return Promise.resolve(null);
+      return Promise.resolve([]);
     }
 
     const isLatLng = Array.isArray(q);
@@ -58,20 +62,19 @@ export const locationsDataQuery = selectorFamily<Locations | null, string | LatL
 
         return res;
       })
-      .then((res) => mergeCachedLocations(res.locations))
+      .then((res) => res.locations)
       .catch(() => {
         alertError('Something went from looking for a location.');
-        return mergeCachedLocations();
+        return [];
       });
   },
 });
 
 export const locationByRouteLocation = selector<LocationResponse | null>({
-  key: 'LocationByRouteLocaction',
+  key: 'LocationByRouteLocation',
   get: ({ get }) => {
     const selectedLocation = get(routeLocationState);
-    const search = get(locationSearchState);
-    const locations = get(locationsDataQuery(search));
+    const locations = get(locationsState);
 
     return locations && selectedLocation ? locations[selectedLocation] : null;
   },

@@ -1,34 +1,37 @@
 import React, {
   FormEvent, useCallback, useEffect, useRef, useState,
 } from 'react';
+import { useSelector } from 'react-redux';
 import {
-  useRecoilState,
   useRecoilValue,
   useRecoilValueLoadable,
   useSetRecoilState,
 } from 'recoil';
-
 import {
   Button,
   CircularProgress,
   Grid,
   Theme,
 } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 
+import { makeStyles } from '@material-ui/core/styles';
 import {
   routeDataQuery,
   routeLocationState,
   routeParams,
 } from '../../state/route';
 import { isLoading, randomSeed } from '../../state/utils';
-import { RouteTypeValue } from '../../types';
+import {
+  defaultDistanceSelector,
+  maximumDistanceSelector,
+  minimumDistanceSelector,
+} from '../../store/app/selectors';
 
+import { RouteTypeValue } from '../../types';
 import Distance from './Distance';
 import StartingPoint from './StartingPoint';
 import RouteType from './RouteType';
 import { setQueryParameters } from '../../utils/history';
-import { defaultDistanceState, maximumDistanceState, minimumDistanceState } from '../../state/app';
 import { setOnCompleteLocation } from '../../state/location';
 
 const routeTypes: RouteTypeValue[] = [
@@ -78,9 +81,9 @@ const ConfigureRun: React.FC<ConfigureRunProps> = ({ onCompleteLoading }) => {
   const setRouteLocation = useSetRecoilState(routeLocationState);
   const location = params.location || null;
 
-  const defaultDistance = useRecoilValue(defaultDistanceState);
-  const minDistance = useRecoilValue(minimumDistanceState);
-  const maxDistance = useRecoilValue(maximumDistanceState);
+  const defaultDistance = useSelector(defaultDistanceSelector);
+  const maxDistance = useSelector(maximumDistanceSelector);
+  const minDistance = useSelector(minimumDistanceSelector);
 
   const [distance, setDistance] = useState<number>(params.distance || defaultDistance);
   const [routeType, setRouteType] = useState<RouteTypeValue['id']>(params.routeType || routeTypes[0].id);

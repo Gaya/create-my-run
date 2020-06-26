@@ -19,11 +19,9 @@ import {
 
 import { makeStyles } from '@material-ui/core/styles';
 import {
-  routeDataQuery,
   routeLocationState,
-  routeParams,
 } from '../../state/route';
-import { isLoading, randomSeed } from '../../state/utils';
+import { randomSeed } from '../../state/utils';
 import {
   defaultDistanceSelector,
   maximumDistanceSelector,
@@ -36,6 +34,8 @@ import StartingPoint from './StartingPoint';
 import RouteType from './RouteType';
 import { setQueryParameters } from '../../utils/history';
 import { setOnCompleteLocation } from '../../state/location';
+
+import { isRouteLoadingSelector, routeParametersSelector } from '../../store/route/selectors';
 
 const routeTypes: RouteTypeValue[] = [
   {
@@ -78,10 +78,10 @@ interface ConfigureRunProps {
 }
 
 const ConfigureRun: React.FC<ConfigureRunProps> = ({ onCompleteLoading }) => {
-  const params = useRecoilValue(routeParams);
-  const route = useRecoilValueLoadable(routeDataQuery(params));
+  const isGenerating = useSelector(isRouteLoadingSelector);
+  const params = useSelector(routeParametersSelector);
 
-  const setRouteLocation = useSetRecoilState(routeLocationState);
+  const setRouteLocation = (location: string): void => { console.log(location); };
   const location = params.location || null;
 
   const defaultDistance = useSelector(defaultDistanceSelector);
@@ -93,7 +93,6 @@ const ConfigureRun: React.FC<ConfigureRunProps> = ({ onCompleteLoading }) => {
 
   const classes = useStyles();
 
-  const isGenerating = isLoading(route);
   const canGenerate = distance
     && routeType
     && location;
@@ -113,24 +112,6 @@ const ConfigureRun: React.FC<ConfigureRunProps> = ({ onCompleteLoading }) => {
     event.preventDefault();
     onGenerateRun();
   };
-
-  const wasLoadingRef = useRef<boolean>(route.state === 'loading');
-  useEffect(() => {
-    if (route.state === 'hasValue' && route.contents !== null && wasLoadingRef.current) {
-      onCompleteLoading();
-    }
-
-    wasLoadingRef.current = route.state === 'loading';
-  }, [onCompleteLoading, route.contents, route.state]);
-
-  // update start location when searching with lat lng
-  useEffect(() => {
-    setOnCompleteLocation((foundLocations) => {
-      if (foundLocations.length > 0) {
-        setRouteLocation(foundLocations[0].key);
-      }
-    });
-  }, [setRouteLocation]);
 
   return (
     <form onSubmit={handleSubmit}>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useRecoilValueLoadable } from 'recoil';
+import { useSelector } from 'react-redux';
 
 import {
   AppBar,
@@ -13,7 +13,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import ExploreIcon from '@material-ui/icons/Explore';
 
-import { routeLengthState } from '../../state/route';
+import { routeLengthSelector } from '../../store/route/selectors';
 
 interface ToolBarProps {
   openDrawer(): void;
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const HeaderBar: React.FC<ToolBarProps> = ({ openDrawer }) => {
   const classes = useStyles();
-  const routeLength = useRecoilValueLoadable(routeLengthState);
+  const routeLength = useSelector(routeLengthSelector);
 
   return (
     <AppBar position="static">
@@ -35,9 +35,9 @@ const HeaderBar: React.FC<ToolBarProps> = ({ openDrawer }) => {
         <Typography variant="h6" style={{ flexGrow: 1 }}>
           Create My Run
         </Typography>
-        {routeLength.state === 'hasValue' && routeLength.contents && (
+        {typeof routeLength !== 'undefined' && (
           <Typography variant="h6">
-            {(routeLength.contents / 1000).toFixed(2)}
+            {(routeLength / 1000).toFixed(2)}
             {' '}
             km
           </Typography>

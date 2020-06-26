@@ -6,7 +6,7 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import teal from '@material-ui/core/colors/teal';
 import deepOrange from '@material-ui/core/colors/deepOrange';
 
-import store from '../../store/createStore';
+import { store } from '../../store/store';
 
 import ErrorProvider from '../Error/ErrorProvider';
 

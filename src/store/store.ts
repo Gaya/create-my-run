@@ -1,5 +1,6 @@
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
+import thunk from 'redux-thunk';
 
 import { StoreState } from './types';
 
@@ -11,12 +12,10 @@ const reducers = combineReducers<StoreState>({
   route,
 });
 
-const store = createStore(
+export const store = createStore(
   reducers,
   undefined,
   composeWithDevTools(
-    applyMiddleware(),
+    applyMiddleware(thunk),
   ),
 );
-
-export default store;

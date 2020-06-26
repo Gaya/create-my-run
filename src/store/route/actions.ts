@@ -1,3 +1,5 @@
+import { Dispatch } from 'redux';
+
 interface RouteParameters {
   distance: number;
   location: string;
@@ -6,15 +8,20 @@ interface RouteParameters {
   flipped: boolean;
 }
 
-interface UpdateRouteParameters {
+export interface UpdateRouteParameters {
   type: 'ROUTE_UPDATE_PARAMETERS';
   payload: RouteParameters;
 }
 
-export function updateRouteParameters(payload: RouteParameters): UpdateRouteParameters {
-  return {
-    type: 'ROUTE_UPDATE_PARAMETERS',
-    payload,
+export function updateRouteParameters(payload: RouteParameters) {
+  return (dispatch: Dispatch<routeActions>): void => {
+    dispatch({
+      type: 'ROUTE_UPDATE_PARAMETERS',
+      payload,
+    });
+
+    // @TODO continue here
+    console.log('fetch');
   };
 }
 

@@ -95,13 +95,3 @@ export const routeDataQuery = selectorFamily<RoutesResponse | null, RouteParamet
       });
   },
 });
-
-export const routeLengthState = selector<number | undefined>({
-  key: 'RouteLength',
-  get: ({ get }) => {
-    const params = get(routeParams);
-    const routeData = get(routeDataQuery(params));
-
-    return routeData?.length;
-  },
-});

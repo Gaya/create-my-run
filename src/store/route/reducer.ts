@@ -1,7 +1,10 @@
+import { safeStoredLocation } from '../../utils/localStorage';
+
 import { RouteState } from '../types';
 import { routeActions } from './actions';
 
 const defaultRouteState: RouteState = {
+  location: safeStoredLocation()?.key,
   route: {
     state: 'initial',
   },

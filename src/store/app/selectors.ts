@@ -18,3 +18,8 @@ export const minimumDistanceSelector = createSelector(
   appState,
   (state) => state.minimumDistance,
 );
+
+export const isDrawerOpenedSelector = createSelector(
+  appState,
+  (state) => state.drawerOpened,
+);

@@ -13,6 +13,16 @@ const initialState: AppState = {
 
 function app(state = initialState, action: AppActions): AppState {
   switch (action.type) {
+    case 'APP_OPEN_DRAWER':
+      return {
+        ...state,
+        drawerOpened: true,
+      };
+    case 'APP_CLOSE_DRAWER':
+      return {
+        ...state,
+        drawerOpened: false,
+      };
     case 'APP_UPDATE_DISTANCE_SETTINGS':
       return {
         ...state,

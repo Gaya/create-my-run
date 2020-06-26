@@ -12,11 +12,8 @@ import { closeDrawer, openDrawer } from '../../store/app/actions';
 
 import useRouteNavigation from './useRouteNavigation';
 import useLocationHandler from './useLocationHandler';
-import Debug from './Debug';
 
 import './App.css';
-
-const debugMode = true;
 
 const App: React.FC = () => {
   const isDrawerOpened = useSelector(isDrawerOpenedSelector);
@@ -41,7 +38,6 @@ const App: React.FC = () => {
       <RunMap />
       <MoreButton />
       <Error />
-      {debugMode && <Debug />}
     </div>
   );
 };

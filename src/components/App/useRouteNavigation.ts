@@ -1,15 +1,9 @@
-import { useSetRecoilState } from 'recoil';
 import { useCallback, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
-import {
-  routeDistanceState,
-  routeFlippedState,
-  routeLocationState,
-  routeRandomSeedState,
-  routeTypeState,
-} from '../../state/route';
 import { history } from '../../utils/history';
 import { randomSeed } from '../../state/utils';
+import { updateRouteParameters } from '../../store/route/actions';
 
 function hasRouteQueryParameters(search: string): boolean {
   const params = new URLSearchParams(search);
@@ -21,13 +15,9 @@ function hasRouteQueryParameters(search: string): boolean {
 }
 
 function useLoadRouteFromQueryParameters(): (search: string) => void {
-  const setDistanceState = useSetRecoilState(routeDistanceState);
-  const setRouteTypeState = useSetRecoilState(routeTypeState);
-  const setRouteLocationState = useSetRecoilState(routeLocationState);
-  const setRouteRandomSeedState = useSetRecoilState(routeRandomSeedState);
-  const setRouteFlippedState = useSetRecoilState(routeFlippedState);
+  const dispatch = useDispatch();
 
-  return useCallback((search: string): boolean => {
+  return useCallback((search: string): void => {
     const params = new URLSearchParams(search);
     const distance = params.get('distance');
     const routeType = params.get('routeType');
@@ -36,23 +26,15 @@ function useLoadRouteFromQueryParameters(): (search: string) => void {
     const flipped = params.get('flipped');
 
     if (distance && routeType && location) {
-      setDistanceState(parseInt(distance, 10));
-      setRouteTypeState(parseInt(routeType, 10));
-      setRouteLocationState(location);
-      setRouteRandomSeedState(r ? parseInt(r, 10) : randomSeed());
-      setRouteFlippedState(!!(flipped && flipped !== 'false'));
-
-      return true;
+      dispatch(updateRouteParameters({
+        distance: parseInt(distance, 10),
+        routeType: parseInt(routeType, 10),
+        randomSeed: r ? parseInt(r, 10) : randomSeed(),
+        flipped: !!(flipped && flipped !== 'false'),
+        location,
+      }));
     }
-
-    return false;
-  }, [
-    setDistanceState,
-    setRouteFlippedState,
-    setRouteLocationState,
-    setRouteRandomSeedState,
-    setRouteTypeState,
-  ]);
+  }, [dispatch]);
 }
 
 function useRouteNavigation(closeDrawer: () => void): void {

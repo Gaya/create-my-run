@@ -1,4 +1,7 @@
 import { Dispatch } from 'redux';
+import { RouteResponse } from '../../server/types';
+import { alertError } from '../../components/Error/ErrorProvider';
+import { createRouteUrl } from '../../state/route';
 
 interface RouteParameters {
   distance: number;
@@ -6,6 +9,18 @@ interface RouteParameters {
   routeType: number;
   randomSeed: number;
   flipped: boolean;
+}
+
+interface ReceiveRoute {
+  type: 'ROUTE_RECEIVE';
+  data: RouteResponse;
+}
+
+function receiveRoute(route: RouteResponse): ReceiveRoute {
+  return {
+    type: 'ROUTE_RECEIVE',
+    data: route,
+  };
 }
 
 export interface UpdateRouteParameters {
@@ -20,8 +35,19 @@ export function updateRouteParameters(payload: RouteParameters) {
       payload,
     });
 
-    // @TODO continue here
-    console.log('fetch');
+    const {
+      distance,
+      routeType,
+      randomSeed,
+      location,
+    } = payload;
+
+    fetch(createRouteUrl(distance, routeType, randomSeed, location))
+      .then((res) => res.json() as Promise<RouteResponse>)
+      .then((route) => dispatch(receiveRoute(route)))
+      .catch(() => {
+        alertError('Whoops, something went wrong with your route');
+      });
   };
 }
 
@@ -29,4 +55,4 @@ interface GenerateRun {
   type: 'ROUTE_GENERATE_RUN';
 }
 
-export type routeActions = UpdateRouteParameters | GenerateRun;
+export type routeActions = UpdateRouteParameters | GenerateRun | ReceiveRoute;

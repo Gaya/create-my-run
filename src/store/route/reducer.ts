@@ -12,10 +12,21 @@ const defaultRouteState: RouteState = {
 
 function route(state: RouteState = defaultRouteState, action: routeActions): RouteState {
   switch (action.type) {
+    case 'ROUTE_RECEIVE':
+      return {
+        ...state,
+        route: {
+          state: 'hasValue',
+          data: action.data,
+        },
+      };
     case 'ROUTE_UPDATE_PARAMETERS':
       return {
         ...state,
         ...action.payload,
+        route: {
+          state: 'loading',
+        },
       };
     default:
       return state;

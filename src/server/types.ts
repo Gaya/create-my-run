@@ -30,7 +30,7 @@ export interface ExternalRoutesResponse {
   };
 }
 
-export interface RoutesResponse {
+export interface RouteResponse {
   time: number;
   length: number;
   coordinates: LatLng[];

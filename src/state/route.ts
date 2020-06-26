@@ -4,7 +4,7 @@ import {
   selectorFamily,
 } from 'recoil';
 
-import { RouteFormat, RoutesResponse } from '../server/types';
+import { RouteFormat, RouteResponse } from '../server/types';
 import { RouteTypeValue } from '../types';
 import { API_URL } from '../constants';
 import { safeStoredLocation } from '../utils/localStorage';
@@ -75,20 +75,20 @@ export const routeParams = selector<RouteParameter>({
   },
 });
 
-export const routeDataQuery = selectorFamily<RoutesResponse | null, RouteParameter>({
+export const routeDataQuery = selectorFamily<RouteResponse | null, RouteParameter>({
   key: 'RouteData',
   get: ({
     distance,
     routeType,
     location,
     r,
-  }) => (): Promise<RoutesResponse | null> => {
+  }) => (): Promise<RouteResponse | null> => {
     if (!distance || !routeType || !r || !location) {
       return Promise.resolve(null);
     }
 
     return fetch(createRouteUrl(distance, routeType, r, location))
-      .then((res) => res.json() as Promise<RoutesResponse>)
+      .then((res) => res.json() as Promise<RouteResponse>)
       .catch(() => {
         alertError('Whoops, something went wrong with your route');
         return null;

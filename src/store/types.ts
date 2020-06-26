@@ -1,6 +1,6 @@
-import { RoutesResponse } from '../server/types';
+import { RouteResponse } from '../server/types';
 
-export type Loadable<T = unknown> = {
+export type LoadableValue<T = unknown> = {
   state: 'hasValue';
   data: T;
 } | {
@@ -25,7 +25,7 @@ export type RouteState = {
   routeType?: number;
   randomSeed?: number;
   flipped?: boolean;
-  route: Loadable<RoutesResponse>;
+  route: LoadableValue<RouteResponse>;
 };
 
 export interface StoreState {

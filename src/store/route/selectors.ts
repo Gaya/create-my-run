@@ -1,18 +1,18 @@
 import { createSelector } from 'reselect';
 
-import { Loadable, RouteState, StoreState } from '../types';
+import { LoadableValue, RouteState, StoreState } from '../types';
 import { routeDataQuery, routeParams } from '../../state/route';
 
 const routeState = (state: StoreState): RouteState => state.route;
 
 const routeValueState = createSelector(routeState, (state) => state.route);
 
-const isInitial = (item: Loadable): boolean => item.state === 'initial';
-const isLoading = (item: Loadable): boolean => item.state === 'loading';
-const hasError = (item: Loadable): boolean => item.state === 'error';
-const getError = (item: Loadable): Error | undefined => (item.state === 'error' ? item.error : undefined);
-const hasValue = (item: Loadable): boolean => item.state === 'hasValue';
-const getValue = <T>(item: Loadable<T>): T | undefined => (item.state === 'hasValue' ? item.data : undefined);
+const isInitial = (item: LoadableValue): boolean => item.state === 'initial';
+const isLoading = (item: LoadableValue): boolean => item.state === 'loading';
+const hasError = (item: LoadableValue): boolean => item.state === 'error';
+const getError = (item: LoadableValue): Error | undefined => (item.state === 'error' ? item.error : undefined);
+const hasValue = (item: LoadableValue): boolean => item.state === 'hasValue';
+const getValue = <T>(item: LoadableValue<T>): T | undefined => (item.state === 'hasValue' ? item.data : undefined);
 
 const isRouteInitialSelector = createSelector(routeValueState, isInitial);
 export const isRouteLoadingSelector = createSelector(routeValueState, isLoading);

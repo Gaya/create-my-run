@@ -1,11 +1,5 @@
-import { Loadable } from 'recoil';
-
 import { LocationResponse } from '../server/types';
 import { DistanceSettings } from '../types';
-
-export function isLoading<T>(i: Loadable<T>): boolean {
-  return i.state === 'loading';
-}
 
 enum LOCALSTORAGE {
   LOCATION = 'CMRLOCATION',
@@ -62,8 +56,4 @@ export function getStoreValue<T>(key: LOCALSTORAGE): T {
 
 export function setStoreValue<T>(key: LOCALSTORAGE, value: T): void {
   localStorage.setItem(key, JSON.stringify(value));
-}
-
-export function randomSeed(): number {
-  return Math.floor(Math.random() * 1000);
 }

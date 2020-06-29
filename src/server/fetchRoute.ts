@@ -4,7 +4,7 @@ import querystring from 'querystring';
 import {
   ExternalRoutesResponse,
   LatLng,
-  RoutesResponse,
+  RouteResponse,
 } from './types';
 import createResponseCache from './responseCache';
 
@@ -41,7 +41,7 @@ function fetchRoute(
   location: string,
   randomseed = 800,
   flipped = false,
-): Promise<RoutesResponse> {
+): Promise<RouteResponse> {
   const speed = 12;
   const preferences = 63;
 

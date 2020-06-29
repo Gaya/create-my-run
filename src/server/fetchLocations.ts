@@ -1,19 +1,31 @@
 import querystring from 'querystring';
 import fetch from 'node-fetch';
 
-import { ExternalLocationsResponse, LocationsResponse } from './types';
+import { ExternalLocationsResponse, LatLng, LocationsResponse } from './types';
 import createResponseCache from './responseCache';
 
 const locationsCache = createResponseCache<ExternalLocationsResponse>();
 
-function fetchExternalOrCached(q: string): Promise<ExternalLocationsResponse> {
-  const qs = querystring.stringify({ q });
+function fetchExternalOrCached(q?: string, latLng?: LatLng): Promise<ExternalLocationsResponse> {
+  const qsObject: { q?: string; point?: string } = {};
+
+  if (q !== '') {
+    qsObject.q = q;
+  }
+
+  if (latLng) {
+    qsObject.point = [latLng[1], latLng[0]].join(',');
+  }
+
+  const qs = querystring.stringify(qsObject);
 
   if (locationsCache.has(qs)) {
     return Promise.resolve(locationsCache.get(qs));
   }
 
-  return fetch(`${process.env.LOCATIONS_API}?${qs}`)
+  const apiUrl = qsObject.q ? process.env.LOCATIONS_API : process.env.LOCATIONS_GPS_API;
+
+  return fetch(`${apiUrl}?${qs}`)
     .then((res) => res.json() as Promise<ExternalLocationsResponse>)
     .then((locations) => {
       locationsCache.set(qs, locations);
@@ -22,12 +34,14 @@ function fetchExternalOrCached(q: string): Promise<ExternalLocationsResponse> {
     });
 }
 
-function fetchLocations(search: string): Promise<LocationsResponse> {
-  if (search.trim() === '') {
+function fetchLocations(search: string, latLng: string): Promise<LocationsResponse> {
+  const latLngParsed = latLng.split(',').map((s) => parseFloat(s));
+
+  if (search.trim() === '' && latLngParsed.length !== 2) {
     return Promise.resolve({ locations: [] });
   }
 
-  return fetchExternalOrCached(search)
+  return fetchExternalOrCached(search, [latLngParsed[0], latLngParsed[1]])
     .then((result) => ({
       // eslint-disable-next-line no-underscore-dangle
       locations: result._embedded.locations.map((location) => ({

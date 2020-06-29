@@ -1,24 +1,27 @@
 import React, { useCallback, useEffect } from 'react';
-import { useRecoilState } from 'recoil';
+import { useDispatch, useSelector } from 'react-redux';
 
 import RunMap from '../RunMap/RunMap';
 import HeaderBar from '../HeaderBar/HeaderBar';
 import MoreButton from '../MoreButton/MoreButton';
 import SideBar from '../SideBar/SideBar';
+import Error from '../Error/Error';
 
-import { drawerOpenState } from '../../state/app';
+import { isDrawerOpenedSelector } from '../../store/app/selectors';
+import { closeDrawer, openDrawer } from '../../store/app/actions';
 
 import useRouteNavigation from './useRouteNavigation';
 
 import './App.css';
 
 const App: React.FC = () => {
-  const [drawerOpen, setDrawerOpen] = useRecoilState(drawerOpenState);
+  const isDrawerOpened = useSelector(isDrawerOpenedSelector);
+  const dispatch = useDispatch();
 
-  const openDrawer = useCallback(() => setDrawerOpen(true), [setDrawerOpen]);
-  const closeDrawer = useCallback(() => setDrawerOpen(false), [setDrawerOpen]);
+  const onOpenDrawer = useCallback(() => dispatch(openDrawer()), [dispatch]);
+  const onCloseDrawer = useCallback(() => dispatch(closeDrawer()), [dispatch]);
 
-  useRouteNavigation(closeDrawer);
+  useRouteNavigation(onCloseDrawer);
 
   // set window height for CSS
   useEffect(() => {
@@ -28,10 +31,11 @@ const App: React.FC = () => {
 
   return (
     <div className="App">
-      <HeaderBar openDrawer={openDrawer} />
-      <SideBar isDrawerOpen={drawerOpen} onCloseDrawer={closeDrawer} />
+      <HeaderBar openDrawer={onOpenDrawer} />
+      <SideBar isDrawerOpen={isDrawerOpened} onCloseDrawer={onCloseDrawer} />
       <RunMap />
       <MoreButton />
+      <Error />
     </div>
   );
 };

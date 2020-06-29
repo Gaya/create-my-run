@@ -30,7 +30,7 @@ export interface ExternalRoutesResponse {
   };
 }
 
-export interface RoutesResponse {
+export interface RouteResponse {
   time: number;
   length: number;
   coordinates: LatLng[];
@@ -49,7 +49,7 @@ export interface ExternalLocationsResponse {
   };
 }
 
-export interface LocationResponse {
+export type LocationResponse = {
   name: string;
   key: string;
   coordinates: LatLng;

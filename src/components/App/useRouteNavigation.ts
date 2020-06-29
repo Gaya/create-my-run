@@ -1,26 +1,23 @@
-import { useSetRecoilState } from 'recoil';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
-import {
-  routeDistanceState,
-  routeFlippedState,
-  routeLocationState,
-  routeRandomSeedState,
-  routeTypeState,
-  setOnCompleteRoute,
-} from '../../state/route';
 import { history } from '../../utils/history';
-import { randomSeed } from '../../state/utils';
+import { randomSeed } from '../../store/route/utils';
+import { updateRouteParameters } from '../../store/route/actions';
 
-function useRouteNavigation(closeDrawer: () => void): void {
-  const setDistanceState = useSetRecoilState(routeDistanceState);
-  const setRouteTypeState = useSetRecoilState(routeTypeState);
-  const setRouteLocationState = useSetRecoilState(routeLocationState);
-  const setRouteRandomSeedState = useSetRecoilState(routeRandomSeedState);
-  const setRouteFlippedState = useSetRecoilState(routeFlippedState);
+function hasRouteQueryParameters(search: string): boolean {
+  const params = new URLSearchParams(search);
+  const distance = params.get('distance');
+  const routeType = params.get('routeType');
+  const location = params.get('location');
 
-  // handle route loading on route change
-  const loadRouteFromQueryParameters = useCallback((search: string): boolean => {
+  return !!(distance && routeType && location);
+}
+
+function useLoadRouteFromQueryParameters(): (search: string) => void {
+  const dispatch = useDispatch();
+
+  return useCallback((search: string): void => {
     const params = new URLSearchParams(search);
     const distance = params.get('distance');
     const routeType = params.get('routeType');
@@ -29,30 +26,36 @@ function useRouteNavigation(closeDrawer: () => void): void {
     const flipped = params.get('flipped');
 
     if (distance && routeType && location) {
-      setDistanceState(parseInt(distance, 10));
-      setRouteTypeState(parseInt(routeType, 10));
-      setRouteLocationState(location);
-      setRouteRandomSeedState(r ? parseInt(r, 10) : randomSeed());
-      setRouteFlippedState(!!(flipped && flipped !== 'false'));
-
-      return true;
+      dispatch(updateRouteParameters({
+        distance: parseInt(distance, 10),
+        routeType: parseInt(routeType, 10),
+        randomSeed: r ? parseInt(r, 10) : randomSeed(),
+        flipped: !!(flipped && flipped !== 'false'),
+        location,
+      }));
     }
+  }, [dispatch]);
+}
 
-    return false;
-  }, [
-    setDistanceState,
-    setRouteFlippedState,
-    setRouteLocationState,
-    setRouteRandomSeedState,
-    setRouteTypeState,
-  ]);
+function useRouteNavigation(closeDrawer: () => void): void {
+  const [initialLoaded, setInitialLoaded] = useState(false);
+  const loadRouteFromQueryParameters = useLoadRouteFromQueryParameters();
 
   // listen to route changes
-  useEffect(() => history.listen((location) => {
-    loadRouteFromQueryParameters(location.search);
+  useEffect(() => history.listen((action) => {
+    loadRouteFromQueryParameters(action.location.search);
   }), [loadRouteFromQueryParameters]);
 
-  const hasRoute = loadRouteFromQueryParameters(window.location.search);
+  // load initial route from query params
+  const hasRoute = hasRouteQueryParameters(window.location.search);
+
+  useEffect(() => {
+    if (hasRoute && !initialLoaded) {
+      loadRouteFromQueryParameters(window.location.search);
+    }
+
+    setInitialLoaded(true);
+  }, [hasRoute, initialLoaded, loadRouteFromQueryParameters]);
 
   // initial load
   useEffect(() => {
@@ -61,11 +64,6 @@ function useRouteNavigation(closeDrawer: () => void): void {
       closeDrawer();
     }
   }, [closeDrawer, hasRoute]);
-
-  // register closing drawer after route is loaded
-  useEffect(() => {
-    setOnCompleteRoute(closeDrawer);
-  }, [closeDrawer]);
 }
 
 export default useRouteNavigation;

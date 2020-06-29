@@ -1,78 +1,107 @@
-import React, { useEffect, useState } from 'react';
-import { useDebounce } from 'use-debounce';
-import { useRecoilValueLoadable, useSetRecoilState } from 'recoil';
+import React, { useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  CircularProgress,
+  Grid,
+  IconButton,
+  TextField,
+} from '@material-ui/core';
 
-import { CircularProgress, TextField } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
-import { locationsDataQuery, locationSearchState } from '../../state/location';
-import { safeStoredLocation } from '../../state/utils';
+import LocationSearchingIcon from '@material-ui/icons/LocationSearching';
+
+import { alertError } from '../Error/ErrorProvider';
+
+import {
+  locationsBySearchSelector,
+  locationsSelector,
+  locationsStateSelector,
+  searchSelector,
+} from '../../store/location/selectors';
+import { findLocationByLatLng, updateSearch } from '../../store/location/actions';
 
 interface StartingPointProps {
   location: string | null;
-  setLocation(newLocation: string | null): void;
+  setLocation(newLocation: string | undefined): void;
 }
 
 const StartingPoint: React.FC<StartingPointProps> = ({ location, setLocation }) => {
-  const [locationInput, setLocationInput] = useState<string>(safeStoredLocation()?.name || '');
-  const [debouncedLocation] = useDebounce(locationInput, 500);
+  const dispatch = useDispatch();
 
-  const setLocationSearchState = useSetRecoilState(locationSearchState);
-  const locations = useRecoilValueLoadable(locationsDataQuery);
+  const searchQuery = useSelector(searchSelector);
+  const locations = useSelector(locationsSelector);
+  const locationsBySearch = useSelector(locationsBySearchSelector);
+  const locationsState = useSelector(locationsStateSelector);
 
-  const isLoading = locations.state === 'loading';
+  const isLoading = locationsState === 'loading';
 
-  const locationOptions = locations.state === 'hasValue' ? Object.values(locations.contents || {}) : [];
-  const options = locationOptions.map((o) => o.key);
+  const options = locationsBySearch[searchQuery] || [];
 
-  useEffect(() => {
-    const name = safeStoredLocation()?.name || '';
-    setLocationInput(name);
-  }, []);
+  const hasGPS = 'geolocation' in navigator;
 
-  useEffect(() => {
-    setLocationSearchState(debouncedLocation);
-  }, [debouncedLocation, setLocationSearchState]);
+  const findCurrentLocation = (): void => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      dispatch(findLocationByLatLng([position.coords.latitude, position.coords.longitude]));
+    }, () => {
+      alertError("Couldn't get your location information");
+    });
+  };
 
-  const noOptionsText = locationInput === '' ? 'Start typing to search...' : undefined;
+  const locationLabelByKey = useCallback(
+    (l: string): string => (locations && locations[l] ? locations[l].name : ''),
+    [locations],
+  );
 
-  const locationLabelByKey = (l: string): string => (locations.state === 'hasValue' && locations.contents && locations.contents[l] ? locations.contents[l].name : '');
+  const noOptionsText = searchQuery === '' ? 'Start typing to search...' : undefined;
 
   return (
     <Autocomplete
       options={options}
       getOptionLabel={locationLabelByKey}
       value={location}
-      inputValue={locationInput}
+      inputValue={searchQuery}
       freeSolo
       filterOptions={(opts): string[] => opts}
       placeholder="Start typing to search"
-      onChange={(_, newLocation): void => setLocation(newLocation)}
+      onChange={(_, newLocation): void => setLocation(newLocation || undefined)}
       onInputChange={(event, newInputValue): void => {
-        setLocationInput(newInputValue);
+        dispatch(updateSearch(newInputValue));
       }}
       loading={isLoading}
       loadingText="Loading locations..."
       noOptionsText={noOptionsText}
       renderInput={(params): React.ReactElement => (
-        <TextField
-          {...params}
-          InputLabelProps={{
-            ...params.InputLabelProps,
-            shrink: true,
-          }}
-          InputProps={{
-            ...params.InputProps,
-            endAdornment: (
-              <>
-                {isLoading ? <CircularProgress color="inherit" size={20} /> : null}
-                {params.InputProps.endAdornment}
-              </>
-            ),
-          }}
-          margin="normal"
-          label="Starting point"
-        />
+        <Grid container spacing={1} alignItems="flex-end">
+          <Grid item xs="auto" style={{ flexGrow: 1 }}>
+            <TextField
+              {...params}
+              InputLabelProps={{
+                ...params.InputLabelProps,
+                shrink: true,
+              }}
+              InputProps={{
+                ...params.InputProps,
+                endAdornment: (
+                  <>
+                    {isLoading ? <CircularProgress color="inherit" size={20} /> : null}
+                    {params.InputProps.endAdornment}
+                  </>
+                ),
+              }}
+              fullWidth
+              margin="normal"
+              label="Starting point"
+            />
+          </Grid>
+          {hasGPS && (
+            <Grid item>
+              <IconButton onClick={findCurrentLocation}>
+                <LocationSearchingIcon fontSize="small" />
+              </IconButton>
+            </Grid>
+          )}
+        </Grid>
       )}
     />
   );

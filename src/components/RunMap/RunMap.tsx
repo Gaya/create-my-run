@@ -1,24 +1,25 @@
 import React, { useEffect } from 'react';
-import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
 import {
   Map,
   Marker,
   TileLayer,
 } from 'react-leaflet';
-import { Icon } from 'leaflet';
+import { DragEndEvent, Icon, LeafletMouseEvent } from 'leaflet';
 import { useTheme } from '@material-ui/core';
 import Polyline from 'react-leaflet-arrowheads';
+import { useDispatch, useSelector } from 'react-redux';
 
 import 'leaflet/dist/leaflet.css';
 
-import { routeDataQuery, routeFlippedState } from '../../state/route';
-import { safeStoredLocation, storeLocation } from '../../state/utils';
-import { locationByRouteLocation } from '../../state/location';
 import { LatLng } from '../../server/types';
+import { safeStoredLocation, storeLocation } from '../../utils/localStorage';
+import { flippedSelector, locationSelector, routeSelector } from '../../store/route/selectors';
 
 import iconUrl from './Marker.png';
 
 import './RunMap.css';
+import { findLocationByLatLng } from '../../store/location/actions';
+import { locationByKeySelector } from '../../store/location/selectors';
 
 const MarkerIcon = new Icon({
   iconUrl,
@@ -28,42 +29,68 @@ const MarkerIcon = new Icon({
 
 const RunMap: React.FC = () => {
   const theme = useTheme();
-  const route = useRecoilValueLoadable(routeDataQuery);
-  const flipped = useRecoilValue(routeFlippedState);
-  const startLocation = useRecoilValueLoadable(locationByRouteLocation);
+  const dispatch = useDispatch();
+
+  const route = useSelector(routeSelector);
+  const location = useSelector(locationSelector);
+  const flipped = useSelector(flippedSelector);
+
+  const startLocation = useSelector(locationByKeySelector(location));
 
   const defaultCenter: LatLng = safeStoredLocation()?.coordinates || [52.132633, 5.291266];
 
-  const stateCoordinates = route.state === 'hasValue' && route.contents
-    ? route.contents.coordinates
+  const stateCoordinates = route.state === 'hasValue' ? route.data.coordinates
     : [];
   const coordinates = flipped
     ? [...stateCoordinates].reverse()
     : stateCoordinates;
 
+  // store starting location in localStorage
   useEffect(() => {
-    if (startLocation.state === 'hasValue' && startLocation.contents) {
-      storeLocation(startLocation.contents);
+    if (startLocation) {
+      storeLocation(startLocation);
     }
-  }, [startLocation.contents, startLocation.state]);
+  }, [startLocation]);
+
+  useEffect(() => {
+    if (coordinates.length > 0 && !startLocation) {
+      dispatch(findLocationByLatLng(coordinates[0]));
+    }
+  }, [coordinates, dispatch, startLocation]);
 
   const center = coordinates.length > 0 ? coordinates[0] : defaultCenter;
   const bounds = coordinates.length > 0 ? coordinates : undefined;
 
+  const handleClick = ({ latlng }: LeafletMouseEvent): void => {
+    dispatch(findLocationByLatLng([latlng.lat, latlng.lng]));
+  };
+
+  const onDragend = (e: DragEndEvent): void => {
+    const latLng = e.target.getLatLng();
+    dispatch(findLocationByLatLng([latLng.lat, latLng.lng]));
+  };
+
   return (
-    <Map center={center} bounds={bounds} zoom={13} useFlyTo>
+    <Map
+      center={center}
+      bounds={bounds}
+      zoom={13}
+      useFlyTo
+      onClick={handleClick}
+    >
       <TileLayer
         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {startLocation.state === 'hasValue'
-        && startLocation.contents?.coordinates
+      {startLocation
         && (
           <Marker
-            position={startLocation.contents?.coordinates}
+            position={startLocation.coordinates}
             icon={MarkerIcon}
             title="Starting Point"
             alt="Starting Point"
+            draggable
+            onDragend={onDragend}
           />
         )}
       {route && coordinates.length > 0 && (

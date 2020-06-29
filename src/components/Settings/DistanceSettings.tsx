@@ -5,50 +5,62 @@ import {
   InputLabel,
   Typography,
 } from '@material-ui/core';
-import { useRecoilState } from 'recoil';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { defaultDistanceState, maximumDistanceState, minimumDistanceState } from '../../state/app';
-import { storeDistanceSettings } from '../../state/utils';
+import { storeDistanceSettings } from '../../utils/localStorage';
+import { updateDistanceSettings, UpdateDistanceSettingsPayload } from '../../store/app/actions';
+import {
+  defaultDistanceSelector,
+  maximumDistanceSelector,
+  minimumDistanceSelector,
+} from '../../store/app/selectors';
 
 const DistanceSettings: React.FC = () => {
-  const [defaultState, setDefaultState] = useRecoilState(defaultDistanceState);
-  const [minState, setMinState] = useRecoilState(minimumDistanceState);
-  const [maxState, setMaxState] = useRecoilState(maximumDistanceState);
+  const dispatch = useDispatch();
 
-  const [defaultDistance, setDefaultDistance] = useState<number>(defaultState);
-  const [minDistance, setMinDistance] = useState<number>(minState);
-  const [maxDistance, setMaxDistance] = useState<number>(maxState);
+  const defaultDistanceState = useSelector(defaultDistanceSelector);
+  const minimumDistanceState = useSelector(minimumDistanceSelector);
+  const maximumDistanceState = useSelector(maximumDistanceSelector);
+
+  const [defaultDistance, setDefaultDistance] = useState<number>(defaultDistanceState);
+  const [minDistance, setMinDistance] = useState<number>(minimumDistanceState);
+  const [maxDistance, setMaxDistance] = useState<number>(maximumDistanceState);
 
   useEffect(
     () => {
-      if (defaultState !== defaultDistance) {
-        setDefaultState(defaultDistance);
+      const payload: UpdateDistanceSettingsPayload = {};
+
+      if (defaultDistanceState !== defaultDistance) {
+        payload.defaultDistance = defaultDistance;
       }
 
-      if (minState !== minDistance) {
-        setMinState(minDistance);
+      if (maximumDistanceState !== maxDistance) {
+        payload.maximumDistance = maxDistance;
       }
 
-      if (maxState !== maxDistance) {
-        setMaxState(maxDistance);
+      if (minimumDistanceState !== minDistance) {
+        payload.minimumDistance = minDistance;
       }
 
+      if (Object.keys(payload).length > 0) {
+        dispatch(updateDistanceSettings(payload));
+      }
+
+      // @todo SIDE EFFECT
       storeDistanceSettings({
         defaultDistance,
-        min: minDistance,
         max: maxDistance,
+        min: minDistance,
       });
     },
     [
       defaultDistance,
-      defaultState,
+      defaultDistanceState,
+      dispatch,
       maxDistance,
-      maxState,
+      maximumDistanceState,
       minDistance,
-      minState,
-      setDefaultState,
-      setMaxState,
-      setMinState,
+      minimumDistanceState,
     ],
   );
 

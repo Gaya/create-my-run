@@ -1,27 +1,32 @@
-import React, { FormEvent, useState } from 'react';
-import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
-
+import React, {
+  FormEvent,
+  useCallback,
+  useState,
+} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Button,
   CircularProgress,
   Grid,
   Theme,
 } from '@material-ui/core';
+
 import { makeStyles } from '@material-ui/core/styles';
-
-import { routeDataQuery, routeDistanceState, routeTypeState } from '../../state/route';
+import { randomSeed } from '../../store/route/utils';
 import {
-  isLoading,
-  randomSeed,
-  safeStoredLocation,
-} from '../../state/utils';
-import { RouteTypeValue } from '../../types';
+  defaultDistanceSelector,
+  maximumDistanceSelector,
+  minimumDistanceSelector,
+} from '../../store/app/selectors';
 
+import { RouteTypeValue } from '../../types';
 import Distance from './Distance';
 import StartingPoint from './StartingPoint';
 import RouteType from './RouteType';
 import { setQueryParameters } from '../../utils/history';
-import { defaultDistanceState, maximumDistanceState, minimumDistanceState } from '../../state/app';
+
+import { isRouteLoadingSelector, routeParametersSelector } from '../../store/route/selectors';
+import { updateRouteLocation } from '../../store/route/actions';
 
 const routeTypes: RouteTypeValue[] = [
   {
@@ -60,22 +65,28 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 const ConfigureRun: React.FC = () => {
-  const route = useRecoilValueLoadable(routeDataQuery);
+  const dispatch = useDispatch();
 
-  const currentDistance = useRecoilValue(routeDistanceState);
-  const currentRouteType = useRecoilValue(routeTypeState);
+  const isGenerating = useSelector(isRouteLoadingSelector);
+  const params = useSelector(routeParametersSelector);
 
-  const defaultDistance = useRecoilValue(defaultDistanceState);
-  const minDistance = useRecoilValue(minimumDistanceState);
-  const maxDistance = useRecoilValue(maximumDistanceState);
+  const setRouteLocation = useCallback(
+    (location: string): void => {
+      dispatch(updateRouteLocation(location));
+    },
+    [dispatch],
+  );
+  const location = params.location || null;
 
-  const [distance, setDistance] = useState<number>(currentDistance || defaultDistance);
-  const [routeType, setRouteType] = useState<RouteTypeValue['id']>(currentRouteType || routeTypes[0].id);
-  const [location, setLocation] = useState<string | null>(safeStoredLocation()?.key || null);
+  const defaultDistance = useSelector(defaultDistanceSelector);
+  const maxDistance = useSelector(maximumDistanceSelector);
+  const minDistance = useSelector(minimumDistanceSelector);
+
+  const [distance, setDistance] = useState<number>(params.distance || defaultDistance);
+  const [routeType, setRouteType] = useState<RouteTypeValue['id']>(params.routeType || routeTypes[0].id);
 
   const classes = useStyles();
 
-  const isGenerating = isLoading(route);
   const canGenerate = distance
     && routeType
     && location;
@@ -100,7 +111,7 @@ const ConfigureRun: React.FC = () => {
     <form onSubmit={handleSubmit}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <StartingPoint location={location} setLocation={setLocation} />
+          <StartingPoint location={location} setLocation={setRouteLocation} />
         </Grid>
 
         <Grid item xs={12}>

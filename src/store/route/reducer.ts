@@ -1,7 +1,7 @@
 import { safeStoredLocation } from '../../utils/localStorage';
 
 import { RouteState } from '../types';
-import { routeActions } from './actions';
+import { RouteActions } from './actions';
 
 const defaultRouteState: RouteState = {
   location: safeStoredLocation()?.key,
@@ -10,7 +10,7 @@ const defaultRouteState: RouteState = {
   },
 };
 
-function route(state: RouteState = defaultRouteState, action: routeActions): RouteState {
+function route(state: RouteState = defaultRouteState, action: RouteActions): RouteState {
   switch (action.type) {
     case 'ROUTE_RECEIVE':
       return {

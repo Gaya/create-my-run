@@ -29,7 +29,7 @@ export interface UpdateRouteParameters {
 }
 
 export function updateRouteParameters(payload: RouteParameters) {
-  return (dispatch: Dispatch<routeActions>): void => {
+  return (dispatch: Dispatch<RouteActions>): void => {
     dispatch({
       type: 'ROUTE_UPDATE_PARAMETERS',
       payload,
@@ -55,4 +55,4 @@ interface GenerateRun {
   type: 'ROUTE_GENERATE_RUN';
 }
 
-export type routeActions = UpdateRouteParameters | GenerateRun | ReceiveRoute;
+export type RouteActions = UpdateRouteParameters | GenerateRun | ReceiveRoute;

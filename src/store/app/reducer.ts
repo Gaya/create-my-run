@@ -1,6 +1,8 @@
 import { AppState } from '../types';
-import { safeStoredDistance } from '../../utils/localStorage';
 import { AppActions } from './actions';
+
+import { safeStoredDistance } from '../../utils/localStorage';
+import { RouteActions } from '../route/actions';
 
 const storedDistanceSettings = safeStoredDistance();
 
@@ -11,13 +13,14 @@ const initialState: AppState = {
   maximumDistance: storedDistanceSettings?.max || 50,
 };
 
-function app(state = initialState, action: AppActions): AppState {
+function app(state = initialState, action: AppActions | RouteActions): AppState {
   switch (action.type) {
     case 'APP_OPEN_DRAWER':
       return {
         ...state,
         drawerOpened: true,
       };
+    case 'ROUTE_RECEIVE':
     case 'APP_CLOSE_DRAWER':
       return {
         ...state,

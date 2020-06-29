@@ -58,7 +58,7 @@ const SideBar: React.FC<SideBarProps> = ({ isDrawerOpen, onCloseDrawer }) => {
               title="Create My Run"
               onClose={onCloseDrawer}
             >
-              <ConfigureRun onCompleteLoading={onCloseDrawer} />
+              <ConfigureRun />
             </SideBarPage>
           )}
           {navigationValue === 1 && (

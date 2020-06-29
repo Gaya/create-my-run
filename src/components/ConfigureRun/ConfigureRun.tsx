@@ -21,7 +21,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import {
   routeLocationState,
 } from '../../state/route';
-import { randomSeed } from '../../state/utils';
+import { randomSeed } from '../../store/route/utils';
 import {
   defaultDistanceSelector,
   maximumDistanceSelector,
@@ -73,11 +73,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-interface ConfigureRunProps {
-  onCompleteLoading(): void;
-}
-
-const ConfigureRun: React.FC<ConfigureRunProps> = ({ onCompleteLoading }) => {
+const ConfigureRun: React.FC = () => {
   const isGenerating = useSelector(isRouteLoadingSelector);
   const params = useSelector(routeParametersSelector);
 

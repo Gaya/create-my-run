@@ -19,3 +19,7 @@ export function createRouteUrl(
     format ? `format=${format}` : undefined,
   ].join('&');
 }
+
+export function randomSeed(): number {
+  return Math.floor(Math.random() * 1000);
+}

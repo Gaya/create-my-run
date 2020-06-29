@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { history } from '../../utils/history';
-import { randomSeed } from '../../state/utils';
+import { randomSeed } from '../../store/route/utils';
 import { updateRouteParameters } from '../../store/route/actions';
 
 function hasRouteQueryParameters(search: string): boolean {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Map,
   Marker,
@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import 'leaflet/dist/leaflet.css';
 
 import { LatLng } from '../../server/types';
-import { safeStoredLocation } from '../../utils/localStorage';
+import { safeStoredLocation, storeLocation } from '../../utils/localStorage';
 import { flippedSelector, locationSelector, routeSelector } from '../../store/route/selectors';
 
 import iconUrl from './Marker.png';
@@ -45,12 +45,12 @@ const RunMap: React.FC = () => {
     ? [...stateCoordinates].reverse()
     : stateCoordinates;
 
-  // @TODO side effect in middleware
-  // useEffect(() => {
-  //   if (startLocation.state === 'hasValue' && startLocation.contents) {
-  //     storeLocation(startLocation.contents);
-  //   }
-  // }, [startLocation.contents, startLocation.state]);
+  // store starting location in localStorage
+  useEffect(() => {
+    if (startLocation) {
+      storeLocation(startLocation);
+    }
+  }, [startLocation]);
 
   const center = coordinates.length > 0 ? coordinates[0] : defaultCenter;
   const bounds = coordinates.length > 0 ? coordinates : undefined;

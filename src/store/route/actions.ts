@@ -1,7 +1,9 @@
 import { Dispatch } from 'redux';
+
 import { RouteResponse } from '../../server/types';
 import { alertError } from '../../components/Error/ErrorProvider';
-import { createRouteUrl } from '../../state/route';
+
+import { createRouteUrl } from './utils';
 
 interface RouteParameters {
   distance: number;

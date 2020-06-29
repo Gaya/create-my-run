@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { useRecoilValue, useRecoilValueLoadable, useSetRecoilState } from 'recoil';
+import React from 'react';
+import { useRecoilValueLoadable } from 'recoil';
 import {
   Map,
   Marker,
@@ -8,20 +8,17 @@ import {
 import { DragEndEvent, Icon, LeafletMouseEvent } from 'leaflet';
 import { useTheme } from '@material-ui/core';
 import Polyline from 'react-leaflet-arrowheads';
+import { useSelector } from 'react-redux';
 
 import 'leaflet/dist/leaflet.css';
 
-import {
-  routeDataQuery,
-  routeFlippedState,
-  routeParams,
-} from '../../state/route';
 import {
   locationByRouteLocation,
   locationSearchState,
 } from '../../state/location';
 import { LatLng } from '../../server/types';
 import { safeStoredLocation, storeLocation } from '../../utils/localStorage';
+import { flippedSelector, routeSelector } from '../../store/route/selectors';
 
 import iconUrl from './Marker.png';
 
@@ -36,39 +33,36 @@ const MarkerIcon = new Icon({
 const RunMap: React.FC = () => {
   const theme = useTheme();
 
-  const params = useRecoilValue(routeParams);
-  const route = useRecoilValueLoadable(routeDataQuery(params));
+  const route = useSelector(routeSelector);
+  const flipped = useSelector(flippedSelector);
 
-  const setLocationSearch = useSetRecoilState(locationSearchState);
-
-  const flipped = useRecoilValue(routeFlippedState);
   const startLocation = useRecoilValueLoadable(locationByRouteLocation);
 
   const defaultCenter: LatLng = safeStoredLocation()?.coordinates || [52.132633, 5.291266];
 
-  const stateCoordinates = route.state === 'hasValue' && route.contents
-    ? route.contents.coordinates
+  const stateCoordinates = route.state === 'hasValue' ? route.data.coordinates
     : [];
   const coordinates = flipped
     ? [...stateCoordinates].reverse()
     : stateCoordinates;
 
-  useEffect(() => {
-    if (startLocation.state === 'hasValue' && startLocation.contents) {
-      storeLocation(startLocation.contents);
-    }
-  }, [startLocation.contents, startLocation.state]);
+  // @TODO side effect in middleware
+  // useEffect(() => {
+  //   if (startLocation.state === 'hasValue' && startLocation.contents) {
+  //     storeLocation(startLocation.contents);
+  //   }
+  // }, [startLocation.contents, startLocation.state]);
 
   const center = coordinates.length > 0 ? coordinates[0] : defaultCenter;
   const bounds = coordinates.length > 0 ? coordinates : undefined;
 
   const handleClick = ({ latlng }: LeafletMouseEvent): void => {
-    setLocationSearch([latlng.lat, latlng.lng]);
+    // setLocationSearch([latlng.lat, latlng.lng]);
   };
 
   const onDragend = (e: DragEndEvent): void => {
     const latLng = e.target.getLatLng();
-    setLocationSearch([latLng.lat, latLng.lng]);
+    // setLocationSearch([latLng.lat, latLng.lng]);
   };
 
   return (

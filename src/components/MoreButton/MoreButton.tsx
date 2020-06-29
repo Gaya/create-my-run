@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
+import { useSelector } from 'react-redux';
 import {
   createStyles,
   Fab,
@@ -15,14 +15,14 @@ import GetAppIcon from '@material-ui/icons/GetApp';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
 
-import {
-  createRouteUrl,
-  routeDataQuery,
-  routeFlippedState,
-  routeParams,
-} from '../../state/route';
 import { RouteFormat } from '../../server/types';
 import { setQueryParameters } from '../../utils/history';
+import {
+  flippedSelector,
+  routeParametersSelector,
+  routeSelector,
+} from '../../store/route/selectors';
+import { createRouteUrl } from '../../store/route/utils';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   fab: {
@@ -43,18 +43,12 @@ const MoreButton: React.FC = () => {
     distance,
     routeType,
     location,
-    r,
-  } = useRecoilValue(routeParams);
-  const route = useRecoilValueLoadable(routeDataQuery({
-    distance,
-    routeType,
-    location,
-    r,
-  }));
+    randomSeed,
+  } = useSelector(routeParametersSelector);
+  const route = useSelector(routeSelector);
+  const flipped = useSelector(flippedSelector);
 
-  const flipped = useRecoilValue(routeFlippedState);
-
-  if (route.state !== 'hasValue' || !distance || !routeType || !location || !r) {
+  if (route.state !== 'hasValue' || !distance || !routeType || !location || !randomSeed) {
     return null;
   }
 
@@ -70,7 +64,7 @@ const MoreButton: React.FC = () => {
     setQueryParameters({
       distance,
       location,
-      r,
+      r: randomSeed,
       routeType,
       flipped: !flipped,
     });
@@ -103,7 +97,14 @@ const MoreButton: React.FC = () => {
         </MenuItem>
         <MenuItem
           component="a"
-          href={createRouteUrl(distance, routeType, r, location, flipped, RouteFormat.GPX)}
+          href={createRouteUrl(
+            distance,
+            routeType,
+            randomSeed,
+            location,
+            flipped,
+            RouteFormat.GPX,
+          )}
           onClick={handleClose}
         >
           <ListItemIcon>
@@ -115,7 +116,14 @@ const MoreButton: React.FC = () => {
         </MenuItem>
         <MenuItem
           component="a"
-          href={createRouteUrl(distance, routeType, r, location, flipped, RouteFormat.GARMIN)}
+          href={createRouteUrl(
+            distance,
+            routeType,
+            randomSeed,
+            location,
+            flipped,
+            RouteFormat.GARMIN,
+          )}
           onClick={handleClose}
         >
           <ListItemIcon>

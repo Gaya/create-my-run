@@ -22,7 +22,7 @@ const getRouteValueSelector = createSelector(routeSelector, getValue);
 
 const distanceSelector = createSelector(routeState, (state) => state.distance);
 const routeTypeSelector = createSelector(routeState, (state) => state.routeType);
-const locationSelector = createSelector(routeState, (state) => state.location);
+export const locationSelector = createSelector(routeState, (state) => state.location);
 const randomSeedSelector = createSelector(routeState, (state) => state.randomSeed);
 export const flippedSelector = createSelector(routeState, (state) => state.flipped);
 

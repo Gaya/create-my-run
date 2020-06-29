@@ -12,14 +12,6 @@ export const locationSearchState = atom<string | LatLng>({
   default: safeStoredLocation()?.name || '',
 });
 
-type onCompleteLocation = (locations: LocationResponse[]) => void;
-
-let onCompleteLocation: onCompleteLocation = (): void => undefined;
-
-export function setOnCompleteLocation(newOnCompleteLocation: onCompleteLocation): void {
-  onCompleteLocation = newOnCompleteLocation;
-}
-
 export const locationsState = atom<Locations>({
   key: 'Locations',
   default: {},
@@ -55,13 +47,7 @@ export const locationsDataQuery = selectorFamily<LocationResponse[], string | La
 
     return fetch(url)
       .then((res) => res.json() as Promise<LocationsResponse>)
-      .then((res) => {
-        if (isLatLng) {
-          onCompleteLocation(res.locations);
-        }
-
-        return res;
-      })
+      .then((res) => res)
       .then((res) => res.locations)
       .catch(() => {
         alertError('Something went from looking for a location.');

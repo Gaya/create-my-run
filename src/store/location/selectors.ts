@@ -1,7 +1,8 @@
-import { createSelector } from 'reselect';
+import { createSelector, OutputSelector } from 'reselect';
 
 import { LocationState, StoreState } from '../types';
 import { LocationResponse } from '../../server/types';
+import { Locations } from '../../types';
 
 const locationState = (state: StoreState): LocationState => state.location;
 
@@ -10,7 +11,12 @@ export const locationsSelector = createSelector(locationState, (state) => state.
 export const locationsStateSelector = createSelector(locationState, (state) => state.state);
 export const locationsBySearchSelector = createSelector(locationState, (state) => state.bySearch);
 
-export const locationByKeySelector = (key: string | undefined) => createSelector(
+type OptionalLocationResponse = LocationResponse | undefined;
+type LocationByKeySelector = (locations: Locations) => OptionalLocationResponse;
+
+export const locationByKeySelector = (
+  key: string | undefined,
+): OutputSelector<StoreState, OptionalLocationResponse, LocationByKeySelector> => createSelector(
   locationsSelector,
-  (state): LocationResponse | undefined => (key ? state[key] : undefined),
+  (state): OptionalLocationResponse => (key ? state[key] : undefined),
 );

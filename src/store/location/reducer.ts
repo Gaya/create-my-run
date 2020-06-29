@@ -18,6 +18,33 @@ function location(
   action: LocationActions,
 ): LocationState {
   switch (action.type) {
+    case 'LOCATION_FIND_BY_LATLNG':
+    case 'LOCATION_FIND_BY_SEARCH':
+      return {
+        ...state,
+        state: 'loading',
+      };
+    case 'LOCATION_SEARCH_FAILED':
+      return {
+        ...state,
+        state: 'idle',
+      };
+    case 'LOCATION_RECEIVE_SEARCH_LOCATIONS':
+      return {
+        ...state,
+        state: 'idle',
+        bySearch: {
+          ...state.bySearch,
+          [action.payload.search]: action.payload.locations.map((item) => item.key),
+        },
+        locations: action.payload.locations.reduce(
+          (acc, item) => ({
+            ...acc,
+            [item.key]: item,
+          }),
+          state.locations,
+        ),
+      };
     case 'LOCATION_UPDATE_SEARCH':
       return {
         ...state,

@@ -52,6 +52,12 @@ const RunMap: React.FC = () => {
     }
   }, [startLocation]);
 
+  useEffect(() => {
+    if (coordinates.length > 0 && !startLocation) {
+      dispatch(findLocationByLatLng(coordinates[0]));
+    }
+  }, [coordinates, dispatch, startLocation]);
+
   const center = coordinates.length > 0 ? coordinates[0] : defaultCenter;
   const bounds = coordinates.length > 0 ? coordinates : undefined;
 
@@ -61,7 +67,7 @@ const RunMap: React.FC = () => {
 
   const onDragend = (e: DragEndEvent): void => {
     const latLng = e.target.getLatLng();
-    dispatch(findLocationByLatLng(latLng));
+    dispatch(findLocationByLatLng([latLng.lat, latLng.lng]));
   };
 
   return (

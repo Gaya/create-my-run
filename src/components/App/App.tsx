@@ -11,7 +11,6 @@ import { isDrawerOpenedSelector } from '../../store/app/selectors';
 import { closeDrawer, openDrawer } from '../../store/app/actions';
 
 import useRouteNavigation from './useRouteNavigation';
-import useLocationHandler from './useLocationHandler';
 
 import './App.css';
 
@@ -23,7 +22,6 @@ const App: React.FC = () => {
   const onCloseDrawer = useCallback(() => dispatch(closeDrawer()), [dispatch]);
 
   useRouteNavigation(onCloseDrawer);
-  useLocationHandler();
 
   // set window height for CSS
   useEffect(() => {

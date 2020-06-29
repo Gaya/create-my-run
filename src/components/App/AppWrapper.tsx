@@ -1,6 +1,5 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { RecoilRoot } from 'recoil';
 
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import teal from '@material-ui/core/colors/teal';
@@ -24,9 +23,7 @@ const AppWrapper: React.FC = ({ children }) => (
   <Provider store={store}>
     <ThemeProvider theme={theme}>
       <ErrorProvider>
-        <RecoilRoot>
-          {children}
-        </RecoilRoot>
+        {children}
       </ErrorProvider>
     </ThemeProvider>
   </Provider>

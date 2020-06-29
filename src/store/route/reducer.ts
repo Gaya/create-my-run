@@ -2,6 +2,7 @@ import { safeStoredLocation } from '../../utils/localStorage';
 
 import { RouteState } from '../types';
 import { RouteActions } from './actions';
+import { LocationActions } from '../location/actions';
 
 const defaultRouteState: RouteState = {
   location: safeStoredLocation()?.key,
@@ -10,8 +11,16 @@ const defaultRouteState: RouteState = {
   },
 };
 
-function route(state: RouteState = defaultRouteState, action: RouteActions): RouteState {
+function route(
+  state: RouteState = defaultRouteState,
+  action: RouteActions | LocationActions,
+): RouteState {
   switch (action.type) {
+    case 'LOCATION_RECEIVE_LATLNG_LOCATIONS':
+      return {
+        ...state,
+        location: action.payload.locations[0].key,
+      };
     case 'ROUTE_UPDATE_LOCATION':
       return {
         ...state,

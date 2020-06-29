@@ -1,5 +1,4 @@
 import React from 'react';
-import { useRecoilValueLoadable } from 'recoil';
 import {
   Map,
   Marker,
@@ -12,12 +11,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import 'leaflet/dist/leaflet.css';
 
-import {
-  locationByRouteLocation,
-  locationSearchState,
-} from '../../state/location';
 import { LatLng } from '../../server/types';
-import { safeStoredLocation, storeLocation } from '../../utils/localStorage';
+import { safeStoredLocation } from '../../utils/localStorage';
 import { flippedSelector, locationSelector, routeSelector } from '../../store/route/selectors';
 
 import iconUrl from './Marker.png';

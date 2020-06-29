@@ -6,18 +6,10 @@ const routeState = (state: StoreState): RouteState => state.route;
 
 export const routeSelector = createSelector(routeState, (state) => state.route);
 
-const isInitial = (item: LoadableValue): boolean => item.state === 'initial';
 const isLoading = (item: LoadableValue): boolean => item.state === 'loading';
-const hasError = (item: LoadableValue): boolean => item.state === 'error';
-const getError = (item: LoadableValue): Error | undefined => (item.state === 'error' ? item.error : undefined);
-const hasValue = (item: LoadableValue): boolean => item.state === 'hasValue';
 const getValue = <T>(item: LoadableValue<T>): T | undefined => (item.state === 'hasValue' ? item.data : undefined);
 
-const isRouteInitialSelector = createSelector(routeSelector, isInitial);
 export const isRouteLoadingSelector = createSelector(routeSelector, isLoading);
-const hasRouteErrorSelector = createSelector(routeSelector, hasError);
-const routeErrorSelector = createSelector(routeSelector, getError);
-const hasRouteValueSelector = createSelector(routeSelector, hasValue);
 const getRouteValueSelector = createSelector(routeSelector, getValue);
 
 const distanceSelector = createSelector(routeState, (state) => state.distance);

@@ -1,7 +1,6 @@
 import React, {
-  FormEvent, useCallback,
-  useEffect,
-  useRef,
+  FormEvent,
+  useCallback,
   useState,
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';

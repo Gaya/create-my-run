@@ -4,6 +4,11 @@ import { Dispatch } from 'redux';
 import { LatLng, LocationResponse, LocationsResponse } from '../../server/types';
 import { API_URL } from '../../constants';
 import { alertError } from '../../components/Error/ErrorProvider';
+import { StoreState } from '../types';
+import { routeParametersSelector, routeSelector } from '../route/selectors';
+import { randomSeed } from '../route/utils';
+import { setQueryParameters } from '../../utils/history';
+import { isDrawerOpenedSelector } from '../app/selectors';
 
 export interface ReceiveLatLngLocations {
   type: 'LOCATION_RECEIVE_LATLNG_LOCATIONS';
@@ -32,7 +37,7 @@ interface FindLocationByLatLng {
 }
 
 export function findLocationByLatLng(latLng: LatLng) {
-  return (dispatch: Dispatch): void => {
+  return (dispatch: Dispatch, getState: () => StoreState): void => {
     dispatch({
       type: 'LOCATION_FIND_BY_LATLNG',
       payload: latLng,
@@ -43,6 +48,24 @@ export function findLocationByLatLng(latLng: LatLng) {
       .then((res) => res.locations)
       .then((locations) => {
         dispatch(receiveLatLngLocations(latLng, locations));
+      })
+      .then(() => {
+        const state = getState();
+        const route = routeSelector(state);
+        const isDrawerOpened = isDrawerOpenedSelector(state);
+
+        if (!isDrawerOpened && route.state === 'hasValue') {
+          const { distance, location, routeType } = routeParametersSelector(state);
+
+          if (!distance || !location || !routeType) return;
+
+          setQueryParameters({
+            distance,
+            location,
+            r: randomSeed(),
+            routeType,
+          });
+        }
       })
       .catch(() => {
         dispatch(searchLocationsFailed());

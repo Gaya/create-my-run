@@ -42,6 +42,13 @@ function route(
           state: 'loading',
         },
       };
+    case 'ROUTE_FAILED':
+      return {
+        ...state,
+        route: {
+          state: 'initial',
+        },
+      };
     default:
       return state;
   }

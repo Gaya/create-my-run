@@ -25,6 +25,14 @@ function receiveRoute(route: RouteResponse): ReceiveRoute {
   };
 }
 
+interface RouteFailed {
+  type: 'ROUTE_FAILED';
+}
+
+function failedRoute(): RouteFailed {
+  return { type: 'ROUTE_FAILED' };
+}
+
 export interface UpdateRouteParameters {
   type: 'ROUTE_UPDATE_PARAMETERS';
   payload: RouteParameters;
@@ -48,6 +56,7 @@ export function updateRouteParameters(payload: RouteParameters) {
       .then((res) => res.json() as Promise<RouteResponse>)
       .then((route) => dispatch(receiveRoute(route)))
       .catch(() => {
+        dispatch(failedRoute());
         alertError('Whoops, something went wrong with your route');
       });
   };
@@ -65,4 +74,4 @@ export function updateRouteLocation(location: string | undefined): UpdateRouteLo
   };
 }
 
-export type RouteActions = UpdateRouteParameters | ReceiveRoute | UpdateRouteLocation;
+export type RouteActions = UpdateRouteParameters | ReceiveRoute | RouteFailed | UpdateRouteLocation;

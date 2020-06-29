@@ -6,10 +6,12 @@ import { StoreState } from './types';
 
 import app from './app/reducer';
 import route from './route/reducer';
+import location from './location/reducer';
 
 const reducers = combineReducers<StoreState>({
   app,
   route,
+  location,
 });
 
 export const store = createStore(

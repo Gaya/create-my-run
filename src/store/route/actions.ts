@@ -15,13 +15,13 @@ interface RouteParameters {
 
 interface ReceiveRoute {
   type: 'ROUTE_RECEIVE';
-  data: RouteResponse;
+  payload: RouteResponse;
 }
 
 function receiveRoute(route: RouteResponse): ReceiveRoute {
   return {
     type: 'ROUTE_RECEIVE',
-    data: route,
+    payload: route,
   };
 }
 
@@ -53,8 +53,16 @@ export function updateRouteParameters(payload: RouteParameters) {
   };
 }
 
-interface GenerateRun {
-  type: 'ROUTE_GENERATE_RUN';
+interface UpdateRouteLocation {
+  type: 'ROUTE_UPDATE_LOCATION';
+  payload: string | undefined;
 }
 
-export type RouteActions = UpdateRouteParameters | GenerateRun | ReceiveRoute;
+export function updateRouteLocation(location: string | undefined): UpdateRouteLocation {
+  return {
+    type: 'ROUTE_UPDATE_LOCATION',
+    payload: location,
+  };
+}
+
+export type RouteActions = UpdateRouteParameters | ReceiveRoute | UpdateRouteLocation;

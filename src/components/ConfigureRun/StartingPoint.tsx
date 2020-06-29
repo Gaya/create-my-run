@@ -1,23 +1,25 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useDebounce } from 'use-debounce';
-import { useRecoilState, useRecoilValueLoadable } from 'recoil';
-
+import React, { useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   CircularProgress,
   Grid,
   IconButton,
   TextField,
 } from '@material-ui/core';
+
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import LocationSearchingIcon from '@material-ui/icons/LocationSearching';
 
-import {
-  locationsDataQuery,
-  locationSearchState,
-  locationsState,
-} from '../../state/location';
 import { alertError } from '../Error/ErrorProvider';
+
+import {
+  locationsBySearchSelector,
+  locationsSelector,
+  locationsStateSelector,
+  searchSelector,
+} from '../../store/location/selectors';
+import { findLocationByLatLng, updateSearch } from '../../store/location/actions';
 
 interface StartingPointProps {
   location: string | null;
@@ -25,20 +27,22 @@ interface StartingPointProps {
 }
 
 const StartingPoint: React.FC<StartingPointProps> = ({ location, setLocation }) => {
-  const [locationSearch, setLocationSearchState] = useRecoilState(locationSearchState);
-  const locationsSearchResults = useRecoilValueLoadable(locationsDataQuery(locationSearch));
-  const [locations] = useRecoilState(locationsState);
+  const dispatch = useDispatch();
 
-  const isLoading = locationsSearchResults.state === 'loading';
+  const searchQuery = useSelector(searchSelector);
+  const locations = useSelector(locationsSelector);
+  const locationsBySearch = useSelector(locationsBySearchSelector);
+  const locationsState = useSelector(locationsStateSelector);
 
-  const locationOptions = locationsSearchResults.state === 'hasValue' ? locationsSearchResults.contents : [];
-  const options = locationOptions.map((o) => o.key);
+  const isLoading = locationsState === 'loading';
+
+  const options = locationsBySearch[searchQuery] || [];
 
   const hasGPS = 'geolocation' in navigator;
 
   const findCurrentLocation = (): void => {
     navigator.geolocation.getCurrentPosition((position) => {
-      setLocationSearchState([position.coords.latitude, position.coords.longitude]);
+      dispatch(findLocationByLatLng([position.coords.latitude, position.coords.longitude]));
     }, () => {
       alertError("Couldn't get your location information");
     });
@@ -49,50 +53,20 @@ const StartingPoint: React.FC<StartingPointProps> = ({ location, setLocation }) 
     [locations],
   );
 
-  const [locationInput, setLocationInput] = useState<string>(location ? locationLabelByKey(location) : '');
-  const [debouncedLocation] = useDebounce(locationInput, 500);
-
-  // fill in name of location if non is present
-  useEffect(() => {
-    if (!location || locationInput !== '') return;
-
-    const name = locationLabelByKey(location);
-    setLocationInput(name);
-  }, [location, locationInput, locationLabelByKey]);
-
-  useEffect(() => {
-    if (location) {
-      const name = locationLabelByKey(location);
-
-      if (name === debouncedLocation) {
-        return;
-      }
-    }
-
-    setLocationSearchState(debouncedLocation);
-  }, [
-    debouncedLocation,
-    location,
-    locationInput,
-    locationLabelByKey,
-    locationSearch,
-    setLocationSearchState,
-  ]);
-
-  const noOptionsText = locationInput === '' ? 'Start typing to search...' : undefined;
+  const noOptionsText = searchQuery === '' ? 'Start typing to search...' : undefined;
 
   return (
     <Autocomplete
       options={options}
       getOptionLabel={locationLabelByKey}
       value={location}
-      inputValue={locationInput}
+      inputValue={searchQuery}
       freeSolo
       filterOptions={(opts): string[] => opts}
       placeholder="Start typing to search"
       onChange={(_, newLocation): void => setLocation(newLocation || undefined)}
       onInputChange={(event, newInputValue): void => {
-        setLocationInput(newInputValue);
+        dispatch(updateSearch(newInputValue));
       }}
       loading={isLoading}
       loadingText="Loading locations..."

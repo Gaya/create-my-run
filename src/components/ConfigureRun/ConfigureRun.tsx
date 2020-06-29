@@ -1,15 +1,10 @@
 import React, {
-  FormEvent,
+  FormEvent, useCallback,
   useEffect,
   useRef,
   useState,
 } from 'react';
-import { useSelector } from 'react-redux';
-import {
-  useRecoilValue,
-  useRecoilValueLoadable,
-  useSetRecoilState,
-} from 'recoil';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Button,
   CircularProgress,
@@ -18,9 +13,6 @@ import {
 } from '@material-ui/core';
 
 import { makeStyles } from '@material-ui/core/styles';
-import {
-  routeLocationState,
-} from '../../state/route';
 import { randomSeed } from '../../store/route/utils';
 import {
   defaultDistanceSelector,
@@ -33,9 +25,9 @@ import Distance from './Distance';
 import StartingPoint from './StartingPoint';
 import RouteType from './RouteType';
 import { setQueryParameters } from '../../utils/history';
-import { setOnCompleteLocation } from '../../state/location';
 
 import { isRouteLoadingSelector, routeParametersSelector } from '../../store/route/selectors';
+import { updateRouteLocation } from '../../store/route/actions';
 
 const routeTypes: RouteTypeValue[] = [
   {
@@ -74,10 +66,17 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 const ConfigureRun: React.FC = () => {
+  const dispatch = useDispatch();
+
   const isGenerating = useSelector(isRouteLoadingSelector);
   const params = useSelector(routeParametersSelector);
 
-  const setRouteLocation = (location: string): void => { console.log(location); };
+  const setRouteLocation = useCallback(
+    (location: string): void => {
+      dispatch(updateRouteLocation(location));
+    },
+    [dispatch],
+  );
   const location = params.location || null;
 
   const defaultDistance = useSelector(defaultDistanceSelector);

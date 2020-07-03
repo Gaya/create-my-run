@@ -43,7 +43,7 @@ function fetchRoute(
   flipped = false,
 ): Promise<RouteResponse> {
   const speed = 12;
-  const preferences = 63;
+  const preferences = [63, 72];
 
   return fetchExternalOrCached({
     distance: distance * 1000,

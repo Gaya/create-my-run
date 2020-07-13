@@ -33,6 +33,7 @@
     "leaflet": "^1.6.0",
     "lodash.debounce": "^4.0.8",
     "node-fetch": "^2.6.0",
+    "query-overpass": "^1.5.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-leaflet": "^2.7.0",

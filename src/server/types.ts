@@ -64,3 +64,33 @@ export enum RouteFormat {
   GPX = 'gpx',
   GARMIN = 'garmin_gpx',
 }
+
+export interface Tags {
+  [key: string]: string;
+}
+
+export interface Node {
+  tags: Tags;
+  id: string;
+  lat: number;
+  lon: number;
+}
+
+export interface Way {
+  tags: Tags;
+  nodeRefs: Node['id'][];
+  id: string;
+}
+
+export interface Nodes {
+  [id: string]: Node;
+}
+
+export interface Ways {
+  [id: string]: Way;
+}
+
+export interface OSMData {
+  node: Nodes;
+  way: Ways;
+}

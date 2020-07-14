@@ -6,6 +6,7 @@ import fetchRoute from './fetchRoute';
 import fetchLocations from './fetchLocations';
 import { RouteFormat } from './types';
 import { convertCoordinatesToGPX, convertCoordinatesToGarmin } from './gpx';
+import fetchOverpass from './overpass/overpass';
 
 const app = express();
 const port = process.env.API_PORT || 4000;
@@ -65,6 +66,14 @@ app.get('/locations', (req, res) => {
 
   fetchLocations(q, latLng)
     .then((location) => res.json(location))
+    .catch((err) => res.end(err.message));
+});
+
+app.get('/overpass', (req, res) => {
+  fetchOverpass()
+    .then((response) => {
+      res.json(response);
+    })
     .catch((err) => res.end(err.message));
 });
 

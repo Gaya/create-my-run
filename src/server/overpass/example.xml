@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="Overpass API 0.7.56.3 eb200aeb">
+    <note>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</note>
+    <meta osm_base="2020-07-14T13:36:03Z"/>
+
+    <node id="42671365" lat="51.4548316" lon="5.7844328"/>
+    <node id="42673672" lat="51.4555500" lon="5.7842900"/>
+    <node id="42673715" lat="51.4556216" lon="5.7888837"/>
+    <node id="42674010" lat="51.4557207" lon="5.7881204"/>
+    <node id="42674266" lat="51.4558007" lon="5.7873695"/>
+    <node id="42674478" lat="51.4559253" lon="5.7855411"/>
+    <node id="42674748" lat="51.4559422" lon="5.7874404"/>
+    <node id="42674840" lat="51.4559789" lon="5.7847611"/>
+    <node id="42674910" lat="51.4560070" lon="5.7845890">
+        <tag k="traffic_calming" v="table"/>
+    </node>
+    <node id="42675136" lat="51.4561225" lon="5.7863914"/>
+    <node id="42676833" lat="51.4567036" lon="5.7846446"/>
+    <node id="286884371" lat="51.4563967" lon="5.7840190"/>
+    <node id="286884374" lat="51.4561527" lon="5.7839701"/>
+    <node id="286884375" lat="51.4560457" lon="5.7837765"/>
+    <node id="286884376" lat="51.4559465" lon="5.7836146"/>
+    <node id="286884377" lat="51.4550248" lon="5.7824150"/>
+    <node id="286884378" lat="51.4547927" lon="5.7823459"/>
+    <node id="286884397" lat="51.4550609" lon="5.7824667"/>
+    <node id="286884400" lat="51.4549844" lon="5.7823747"/>
+    <node id="286884408" lat="51.4561052" lon="5.7841740"/>
+    <node id="286884409" lat="51.4560196" lon="5.7845484">
+        <tag k="bicycle" v="use_sidepath"/>
+    </node>
+    <node id="1267697349" lat="51.4567801" lon="5.7847394">
+        <tag k="network" v="rwn"/>
+        <tag k="network:type" v="node_network"/>
+        <tag k="rwn_ref" v="93"/>
+    </node>
+    <node id="1267697467" lat="51.4567101" lon="5.7855005"/>
+    <node id="1267698145" lat="51.4567782" lon="5.7850910"/>
+    <node id="1267698620" lat="51.4568271" lon="5.7847887"/>
+    <node id="1267699137" lat="51.4564844" lon="5.7868016"/>
+    <node id="1267699728" lat="51.4565804" lon="5.7862437"/>
+    <node id="1330576834" lat="51.4548878" lon="5.7823417"/>
+    <node id="5284337585" lat="51.4566947" lon="5.7846329">
+        <tag k="crossing:activation" v="automatic"/>
+        <tag k="crossing:barrier" v="half"/>
+        <tag k="crossing:bell" v="yes"/>
+        <tag k="crossing:light" v="yes"/>
+        <tag k="crossing:saltire" v="yes"/>
+        <tag k="railway" v="crossing"/>
+        <tag k="supervised" v="no"/>
+    </node>
+    <node id="5284337586" lat="51.4566635" lon="5.7845923">
+        <tag k="crossing:activation" v="automatic"/>
+        <tag k="crossing:barrier" v="half"/>
+        <tag k="crossing:bell" v="yes"/>
+        <tag k="crossing:light" v="yes"/>
+        <tag k="crossing:saltire" v="yes"/>
+        <tag k="railway" v="crossing"/>
+        <tag k="supervised" v="no"/>
+    </node>
+    <node id="5284337587" lat="51.4567371" lon="5.7846826"/>
+    <node id="5284337588" lat="51.4566543" lon="5.7845804"/>
+    <node id="5284337591" lat="51.4564402" lon="5.7843008"/>
+    <node id="5284337594" lat="51.4563774" lon="5.7842682"/>
+    <node id="5284337595" lat="51.4563099" lon="5.7841752"/>
+    <node id="5284337596" lat="51.4562760" lon="5.7841826"/>
+    <node id="5529254787" lat="51.4552896" lon="5.7867656"/>
+    <node id="5529254788" lat="51.4553253" lon="5.7862590"/>
+    <node id="5529254789" lat="51.4547573" lon="5.7861558"/>
+    <node id="5529254790" lat="51.4555547" lon="5.7863006"/>
+    <node id="5529254795" lat="51.4557901" lon="5.7874683"/>
+    <node id="5529254799" lat="51.4564046" lon="5.7847502"/>
+    <node id="5529254800" lat="51.4562407" lon="5.7846777"/>
+    <node id="5529254801" lat="51.4559586" lon="5.7863188"/>
+    <node id="5529254802" lat="51.4547905" lon="5.7853428"/>
+    <node id="5529254803" lat="51.4559232" lon="5.7855719"/>
+    <node id="5529254804" lat="51.4560781" lon="5.7856240"/>
+    <node id="6462255704" lat="51.4561875" lon="5.7842596"/>
+    <node id="6462255705" lat="51.4561556" lon="5.7843171"/>
+    <node id="6462255706" lat="51.4562368" lon="5.7842083"/>
+    <node id="6462255707" lat="51.4562209" lon="5.7842216"/>
+    <node id="6462255708" lat="51.4562042" lon="5.7842398"/>
+    <node id="6462255709" lat="51.4560692" lon="5.7838605"/>
+    <node id="6462255710" lat="51.4562277" lon="5.7840654">
+        <tag k="highway" v="crossing"/>
+    </node>
+    <node id="6462255712" lat="51.4560537" lon="5.7842983"/>
+    <node id="6462255713" lat="51.4560920" lon="5.7844477"/>
+    <node id="6462255714" lat="51.4560257" lon="5.7844198"/>
+    <node id="6462255717" lat="51.4563644" lon="5.7840772">
+        <tag k="highway" v="crossing"/>
+    </node>
+    <way id="6726392">
+        <nd ref="42673715"/>
+        <nd ref="42674010"/>
+        <nd ref="5529254795"/>
+        <nd ref="42674266"/>
+        <nd ref="5529254803"/>
+        <nd ref="42674478"/>
+        <nd ref="42674840"/>
+        <nd ref="42674910"/>
+        <nd ref="286884409"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="maxspeed" v="50"/>
+        <tag k="name" v="Fabriekstraat"/>
+    </way>
+    <way id="6728689">
+        <nd ref="42671365"/>
+        <nd ref="42673672"/>
+        <nd ref="42674910"/>
+        <tag k="highway" v="residential"/>
+        <tag k="maxspeed" v="30"/>
+        <tag k="name" v="Ringoven"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="oneway:bicycle" v="no"/>
+        <tag k="oneway:moped" v="no"/>
+    </way>
+    <way id="26200134">
+        <nd ref="286884374"/>
+        <nd ref="286884408"/>
+        <nd ref="6462255712"/>
+        <nd ref="6462255714"/>
+        <nd ref="286884409"/>
+        <tag k="highway" v="cycleway"/>
+        <tag k="name" v="Fabriekstraat"/>
+        <tag k="oneway" v="yes"/>
+    </way>
+    <way id="111214447">
+        <nd ref="1267699137"/>
+        <nd ref="1267699728"/>
+        <nd ref="1267697467"/>
+        <nd ref="1267698145"/>
+        <nd ref="1267698620"/>
+        <tag k="highway" v="footway"/>
+    </way>
+    <way id="111307069">
+        <nd ref="286884409"/>
+        <nd ref="6462255713"/>
+        <nd ref="6462255705"/>
+        <nd ref="6462255704"/>
+        <nd ref="6462255708"/>
+        <nd ref="6462255707"/>
+        <nd ref="6462255706"/>
+        <nd ref="5284337596"/>
+        <nd ref="5284337595"/>
+        <tag k="highway" v="cycleway"/>
+        <tag k="name" v="Fabriekstraat"/>
+        <tag k="oneway" v="yes"/>
+    </way>
+    <way id="576483479">
+        <nd ref="5529254788"/>
+        <nd ref="5529254787"/>
+        <tag k="highway" v="residential"/>
+        <tag k="maxspeed" v="30"/>
+        <tag k="name" v="Vlamoven"/>
+    </way>
+    <way id="576483480">
+        <nd ref="5529254790"/>
+        <nd ref="5529254788"/>
+        <nd ref="5529254789"/>
+        <tag k="highway" v="residential"/>
+        <tag k="maxspeed" v="30"/>
+        <tag k="name" v="Vlamoven"/>
+    </way>
+    <way id="576483486">
+        <nd ref="5529254800"/>
+        <nd ref="42674910"/>
+        <tag k="highway" v="service"/>
+    </way>
+    <way id="576483487">
+        <nd ref="5529254802"/>
+        <nd ref="42674478"/>
+        <tag k="highway" v="residential"/>
+        <tag k="maxspeed" v="30"/>
+        <tag k="name" v="Tunneloven"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="oneway:bicycle" v="no"/>
+        <tag k="oneway:moped" v="no"/>
+    </way>
+    <way id="576483488">
+        <nd ref="5529254804"/>
+        <nd ref="5529254803"/>
+        <tag k="highway" v="footway"/>
+    </way>
+    <way id="576483489">
+        <nd ref="42675136"/>
+        <nd ref="5529254799"/>
+        <nd ref="5529254800"/>
+        <nd ref="5529254804"/>
+        <nd ref="5529254801"/>
+        <nd ref="42675136"/>
+        <nd ref="42674748"/>
+        <tag k="highway" v="service"/>
+        <tag k="service" v="parking_aisle"/>
+    </way>
+    <way id="688937594">
+        <nd ref="286884378"/>
+        <nd ref="1330576834"/>
+        <nd ref="286884400"/>
+        <nd ref="286884377"/>
+        <nd ref="286884397"/>
+        <nd ref="286884376"/>
+        <nd ref="286884375"/>
+        <nd ref="6462255709"/>
+        <nd ref="286884374"/>
+        <nd ref="6462255710"/>
+        <nd ref="5284337595"/>
+        <nd ref="5284337594"/>
+        <nd ref="5284337591"/>
+        <nd ref="5284337588"/>
+        <nd ref="5284337586"/>
+        <nd ref="5284337585"/>
+        <nd ref="42676833"/>
+        <nd ref="5284337587"/>
+        <nd ref="1267697349"/>
+        <tag k="highway" v="cycleway"/>
+        <tag k="name" v="Vlierdenseweg"/>
+        <tag k="oneway" v="yes"/>
+    </way>
+    <way id="688937596">
+        <nd ref="5284337595"/>
+        <nd ref="6462255717"/>
+        <nd ref="286884371"/>
+        <tag k="highway" v="cycleway"/>
+        <tag k="name" v="Fabriekstraat"/>
+        <tag k="oneway" v="yes"/>
+    </way>
+
+</osm>

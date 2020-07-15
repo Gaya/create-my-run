@@ -38,7 +38,7 @@ function parseOSM(buffer: Buffer): Promise<OSMData> {
     xmlDoc
       .find('node')
       .forEach((node): void => {
-        const id = node.attr('id')?.value() || '';
+        const id = parseInt(node.attr('id')?.value() || '', 10);
         const lat = parseFloat(node.attr('lat')?.value() || '0');
         const lon = parseFloat(node.attr('lon')?.value() || '0');
         const tags = findTagsInElement(node);
@@ -54,13 +54,13 @@ function parseOSM(buffer: Buffer): Promise<OSMData> {
     xmlDoc
       .find('way')
       .forEach((way): void => {
-        const id = way.attr('id')?.value() || '';
+        const id = parseInt(way.attr('id')?.value() || '', 10);
         const tags = findTagsInElement(way);
 
         const nodeRefs = way
           .find('nd')
-          .map((nd) => (nd as libxml.Element).attr('ref')?.value() || '')
-          .filter((ref) => ref !== '');
+          .map((nd) => parseInt((nd as libxml.Element).attr('ref')?.value() || '0', 10))
+          .filter((ref) => ref !== 0);
 
         data.way[id] = {
           id,
@@ -95,7 +95,7 @@ function getDistanceFromLatLon([lat1, lon1]: LatLng, [lat2, lon2]: LatLng): numb
   return R * c * 1000;
 }
 
-function getWay(data: OSMData, id: string): Way {
+function getWay(data: OSMData, id: number): Way {
   const way = data.way[id];
 
   if (!way) {
@@ -105,7 +105,7 @@ function getWay(data: OSMData, id: string): Way {
   return way;
 }
 
-function getNode(data: OSMData, id: string): Node {
+function getNode(data: OSMData, id: number): Node {
   const node = data.node[id];
 
   if (!node) {
@@ -115,7 +115,7 @@ function getNode(data: OSMData, id: string): Node {
   return node;
 }
 
-function wayDistance(data: OSMData, id: string): number {
+function wayDistance(data: OSMData, id: number): number {
   const way = getWay(data, id);
 
   return way.nodeRefs.reduce((acc, current, index, refs) => {
@@ -130,6 +130,20 @@ function wayDistance(data: OSMData, id: string): number {
 
     return acc + dist;
   }, 0);
+}
+
+function findConnectedWays(data: OSMData, id: number): Way[] {
+  const way = getWay(data, id);
+
+  if (way.nodeRefs.length < 2) {
+    return [];
+  }
+
+  return Object.values(data.way)
+    .filter(
+      (w: Way): boolean => w.id !== id
+        && (w.nodeRefs.some((n) => way.nodeRefs.includes(n))),
+    );
 }
 
 function fetchOverpass(): Promise<any> {
@@ -153,7 +167,9 @@ function fetchOverpass(): Promise<any> {
     });
   });
 
-  if (process.env.NODE_ENV === 'production') {
+  const useApi = false;
+
+  if (useApi) {
     q = fetch(
       'https://overpass-api.de/api/interpreter', {
         method: 'POST',
@@ -167,9 +183,13 @@ function fetchOverpass(): Promise<any> {
   }
 
   return q.then((buffer) => parseOSM(buffer)).then((data) => {
-    const distance = wayDistance(data, '446266327');
+    const id = 6726392;
 
-    return { distance };
+    const way = getWay(data, id);
+    const distance = wayDistance(data, id);
+    const connectedWays = findConnectedWays(data, id);
+
+    return { ...way, distance, connectedWays: connectedWays.map((c) => c.id) };
   });
 }
 

@@ -71,7 +71,7 @@ export interface Tags {
 
 export interface Node {
   tags: Tags;
-  id: string;
+  id: number;
   lat: number;
   lon: number;
 }
@@ -79,15 +79,21 @@ export interface Node {
 export interface Way {
   tags: Tags;
   nodeRefs: Node['id'][];
-  id: string;
+  id: number;
+}
+
+export interface Segment {
+  id: number;
+  way: Way['id'];
+  nodes: Node['id'][];
 }
 
 export interface Nodes {
-  [id: string]: Node;
+  [id: number]: Node;
 }
 
 export interface Ways {
-  [id: string]: Way;
+  [id: number]: Way;
 }
 
 export interface OSMData {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="Overpass API 0.7.56.3 eb200aeb">
     <note>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</note>
-    <meta osm_base="2020-07-15T06:06:03Z"/>
+    <meta osm_base="2020-07-16T08:37:04Z"/>
 
     <node id="42655183" lat="51.4491700" lon="5.7874600"/>
     <node id="42655332" lat="51.4492747" lon="5.7814938"/>
@@ -152,7 +152,6 @@
     <node id="42674913" lat="51.4560029" lon="5.7896229"/>
     <node id="42675094" lat="51.4560621" lon="5.7892820"/>
     <node id="42675095" lat="51.4560655" lon="5.7927904"/>
-    <node id="42675136" lat="51.4561225" lon="5.7863914"/>
     <node id="42675295" lat="51.4561419" lon="5.7791032"/>
     <node id="42675589" lat="51.4562583" lon="5.7793491"/>
     <node id="42675652" lat="51.4562151" lon="5.7876538"/>
@@ -200,7 +199,6 @@
     <node id="42679199" lat="51.4574900" lon="5.7814200"/>
     <node id="42679442" lat="51.4575500" lon="5.7904000"/>
     <node id="42679633" lat="51.4576128" lon="5.7891874"/>
-    <node id="42679654" lat="51.4577336" lon="5.7852271"/>
     <node id="42679719" lat="51.4576500" lon="5.7902700"/>
     <node id="42679745" lat="51.4576600" lon="5.7808200"/>
     <node id="42679876" lat="51.4577427" lon="5.7858230"/>
@@ -220,7 +218,6 @@
     <node id="42681440" lat="51.4582242" lon="5.7812976"/>
     <node id="42681478" lat="51.4582643" lon="5.7808331"/>
     <node id="42681556" lat="51.4582400" lon="5.7871600"/>
-    <node id="42681657" lat="51.4582900" lon="5.7837600"/>
     <node id="42681752" lat="51.4583100" lon="5.7807400"/>
     <node id="42681785" lat="51.4583300" lon="5.7807800"/>
     <node id="42681802" lat="51.4583383" lon="5.7808292"/>
@@ -363,9 +360,6 @@
         <tag k="supervised" v="no"/>
     </node>
     <node id="430847288" lat="51.4560776" lon="5.7830238"/>
-    <node id="430847290" lat="51.4566774" lon="5.7832363"/>
-    <node id="430847291" lat="51.4562737" lon="5.7836786"/>
-    <node id="430847292" lat="51.4563675" lon="5.7831280"/>
     <node id="1030090569" lat="51.4561741" lon="5.7878435"/>
     <node id="1135948454" lat="51.4561019" lon="5.7876039"/>
     <node id="1135948495" lat="51.4560884" lon="5.7876879"/>
@@ -437,12 +431,7 @@
     <node id="2872344904" lat="51.4547025" lon="5.7964254"/>
     <node id="2872345782" lat="51.4567360" lon="5.7844488"/>
     <node id="2872550465" lat="51.4546459" lon="5.7964303"/>
-    <node id="2872554338" lat="51.4564184" lon="5.7838583"/>
-    <node id="2872554369" lat="51.4565324" lon="5.7831857"/>
-    <node id="2872554372" lat="51.4565516" lon="5.7840237"/>
     <node id="2872554397" lat="51.4566875" lon="5.7843843"/>
-    <node id="2872554953" lat="51.4568466" lon="5.7822837"/>
-    <node id="2872555738" lat="51.4562039" lon="5.7830858"/>
     <node id="3041176111" lat="51.4550596" lon="5.7961279"/>
     <node id="3119111396" lat="51.4515835" lon="5.7824786"/>
     <node id="3119111397" lat="51.4516183" lon="5.7826598"/>
@@ -601,11 +590,6 @@
     <node id="5529254794" lat="51.4557224" lon="5.7873542"/>
     <node id="5529254795" lat="51.4557901" lon="5.7874683"/>
     <node id="5529254796" lat="51.4552831" lon="5.7889494"/>
-    <node id="5529254797" lat="51.4558185" lon="5.7881897"/>
-    <node id="5529254798" lat="51.4554683" lon="5.7903890"/>
-    <node id="5529254799" lat="51.4564046" lon="5.7847502"/>
-    <node id="5529254800" lat="51.4562407" lon="5.7846777"/>
-    <node id="5529254801" lat="51.4559586" lon="5.7863188"/>
     <node id="5529254802" lat="51.4547905" lon="5.7853428"/>
     <node id="5529254803" lat="51.4559232" lon="5.7855719"/>
     <node id="5529254804" lat="51.4560781" lon="5.7856240"/>
@@ -656,7 +640,6 @@
     <node id="6191251538" lat="51.4598537" lon="5.7862886"/>
     <node id="6316233140" lat="51.4566752" lon="5.7897547"/>
     <node id="6316233141" lat="51.4566004" lon="5.7880067"/>
-    <node id="6316233142" lat="51.4564839" lon="5.7887220"/>
     <node id="6316233143" lat="51.4577549" lon="5.7891230"/>
     <node id="6316233144" lat="51.4573137" lon="5.7891887"/>
     <node id="6319583464" lat="51.4547804" lon="5.7901572"/>
@@ -1031,12 +1014,6 @@
         <tag k="highway" v="residential"/>
         <tag k="maxspeed" v="30"/>
         <tag k="name" v="Pastoor Jacobsstraat"/>
-    </way>
-    <way id="6727558">
-        <nd ref="42679173"/>
-        <nd ref="42679654"/>
-        <nd ref="42681657"/>
-        <tag k="highway" v="service"/>
     </way>
     <way id="6727559">
         <nd ref="42679719"/>
@@ -1581,19 +1558,6 @@
         <tag k="name" v="Vlierdenseweg"/>
         <tag k="oneway" v="yes"/>
     </way>
-    <way id="37045550">
-        <nd ref="430847288"/>
-        <nd ref="2872555738"/>
-        <nd ref="430847292"/>
-        <nd ref="2872554369"/>
-        <nd ref="430847290"/>
-        <nd ref="2872554372"/>
-        <nd ref="2872554338"/>
-        <nd ref="430847291"/>
-        <nd ref="430847292"/>
-        <tag k="highway" v="service"/>
-        <tag k="service" v="parking_aisle"/>
-    </way>
     <way id="38052330">
         <nd ref="42679049"/>
         <nd ref="6793955390"/>
@@ -1842,18 +1806,6 @@
         <tag k="highway" v="residential"/>
         <tag k="name" v="Vlierdenseweg"/>
     </way>
-    <way id="283389262">
-        <nd ref="2872554369"/>
-        <nd ref="2872554338"/>
-        <tag k="highway" v="service"/>
-        <tag k="service" v="parking_aisle"/>
-    </way>
-    <way id="283389263">
-        <nd ref="430847290"/>
-        <nd ref="2872554953"/>
-        <tag k="highway" v="service"/>
-        <tag k="service" v="parking_aisle"/>
-    </way>
     <way id="306883574">
         <nd ref="3119111398"/>
         <nd ref="3119111396"/>
@@ -1974,11 +1926,6 @@
         <tag k="name" v="Vlierdenseweg"/>
         <tag k="oneway" v="yes"/>
     </way>
-    <way id="576483478">
-        <nd ref="42674266"/>
-        <nd ref="42674748"/>
-        <tag k="highway" v="service"/>
-    </way>
     <way id="576483479">
         <nd ref="5529254788"/>
         <nd ref="5529254787"/>
@@ -2013,22 +1960,6 @@
         <tag k="highway" v="cycleway"/>
         <tag k="name" v="Tasveld"/>
     </way>
-    <way id="576483484">
-        <nd ref="5529254797"/>
-        <nd ref="42674010"/>
-        <tag k="highway" v="service"/>
-    </way>
-    <way id="576483485">
-        <nd ref="5529254798"/>
-        <nd ref="5529254797"/>
-        <tag k="highway" v="service"/>
-        <tag k="service" v="parking_aisle"/>
-    </way>
-    <way id="576483486">
-        <nd ref="5529254800"/>
-        <nd ref="42674910"/>
-        <tag k="highway" v="service"/>
-    </way>
     <way id="576483487">
         <nd ref="5529254802"/>
         <nd ref="42674478"/>
@@ -2044,17 +1975,6 @@
         <nd ref="5529254803"/>
         <tag k="highway" v="footway"/>
     </way>
-    <way id="576483489">
-        <nd ref="42675136"/>
-        <nd ref="5529254799"/>
-        <nd ref="5529254800"/>
-        <nd ref="5529254804"/>
-        <nd ref="5529254801"/>
-        <nd ref="42675136"/>
-        <nd ref="42674748"/>
-        <tag k="highway" v="service"/>
-        <tag k="service" v="parking_aisle"/>
-    </way>
     <way id="576483757">
         <nd ref="42672143"/>
         <nd ref="283980471"/>
@@ -2064,12 +1984,6 @@
         <tag k="highway" v="residential"/>
         <tag k="lit" v="yes"/>
         <tag k="name" v="Industrieweg"/>
-    </way>
-    <way id="674444084">
-        <nd ref="6316233142"/>
-        <nd ref="6316233141"/>
-        <tag k="highway" v="service"/>
-        <tag k="service" v="parking_aisle"/>
     </way>
     <way id="674803596">
         <nd ref="6319583464"/>

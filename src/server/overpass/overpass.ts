@@ -227,7 +227,7 @@ function fetchOverpass(): Promise<any> {
   const center = [51.455920, 5.785393];
 
   const query = `
-  way["bicycle"!~"no"]["bicycle"!~"use_sidepath"]["highway"]["access"!~"private"]
+  way["bicycle"!~"no"]["bicycle"!~"use_sidepath"]["highway"!~"service"]["highway"]["access"!~"private"]
     (around: 500, ${center.join(',')});
   (._;>;);
   out;

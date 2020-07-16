@@ -14,12 +14,14 @@ import 'leaflet/dist/leaflet.css';
 import { LatLng } from '../../server/types';
 import { safeStoredLocation, storeLocation } from '../../utils/localStorage';
 import { flippedSelector, locationSelector, routeSelector } from '../../store/route/selectors';
+import { findLocationByLatLng } from '../../store/location/actions';
+import { locationByKeySelector } from '../../store/location/selectors';
 
 import iconUrl from './Marker.png';
 
 import './RunMap.css';
-import { findLocationByLatLng } from '../../store/location/actions';
-import { locationByKeySelector } from '../../store/location/selectors';
+
+import OverpassTest from './OverpassTest';
 
 const MarkerIcon = new Icon({
   iconUrl,
@@ -105,6 +107,7 @@ const RunMap: React.FC = () => {
           }}
         />
       )}
+      <OverpassTest />
     </Map>
   );
 };

@@ -74,6 +74,8 @@ export interface Node {
   id: number;
   lat: number;
   lon: number;
+  wayRefs: Way['id'][];
+  segmentRefs: Segment['id'][];
 }
 
 export interface Way {
@@ -85,7 +87,11 @@ export interface Way {
 export interface Segment {
   id: number;
   way: Way['id'];
-  nodes: Node['id'][];
+  nodeRefs: Node['id'][];
+}
+
+export interface Segments {
+  [id: number]: Segment;
 }
 
 export interface Nodes {
@@ -97,6 +103,8 @@ export interface Ways {
 }
 
 export interface OSMData {
-  node: Nodes;
-  way: Ways;
+  nodes: Nodes;
+  junctionRefs: Node['id'][];
+  ways: Ways;
+  segments: Segments;
 }

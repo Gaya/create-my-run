@@ -9,6 +9,7 @@ import {
   Tags,
   Node,
   LatLng,
+  Segment,
 } from '../types';
 
 function findTagsInElement(element: libxml.Element): Tags {
@@ -31,8 +32,10 @@ function parseOSM(buffer: Buffer): Promise<OSMData> {
     const xmlDoc = libxml.parseXml(document);
 
     const data: OSMData = {
-      node: {},
-      way: {},
+      nodes: {},
+      junctionRefs: [],
+      ways: {},
+      segments: {},
     };
 
     xmlDoc
@@ -43,11 +46,13 @@ function parseOSM(buffer: Buffer): Promise<OSMData> {
         const lon = parseFloat(node.attr('lon')?.value() || '0');
         const tags = findTagsInElement(node);
 
-        data.node[id] = {
+        data.nodes[id] = {
           id,
           lat,
           lon,
           tags,
+          wayRefs: [],
+          segmentRefs: [],
         };
       });
 
@@ -62,12 +67,54 @@ function parseOSM(buffer: Buffer): Promise<OSMData> {
           .map((nd) => parseInt((nd as libxml.Element).attr('ref')?.value() || '0', 10))
           .filter((ref) => ref !== 0);
 
-        data.way[id] = {
+        // add ref to way in node
+        nodeRefs.forEach((n) => data.nodes[n].wayRefs.push(id));
+
+        data.ways[id] = {
           id,
           tags,
           nodeRefs,
         };
       });
+
+    // create segments
+    let segmentId = 1;
+    Object.values(data.ways).forEach((way: Way) => {
+      let inSegment: number[] = [];
+      way.nodeRefs.forEach((n, index) => {
+        inSegment.push(n);
+
+        // first node
+        if (index === 0) {
+          return;
+        }
+
+        const node = getNode(data, n);
+        const isJunction = node.wayRefs.length > 1;
+
+        if (isJunction) {
+          data.junctionRefs.push(node.id);
+
+          data.segments[segmentId] = {
+            id: segmentId,
+            way: way.id,
+            nodeRefs: [...inSegment],
+          };
+
+          // add segment ref to nodes in segment
+          inSegment.forEach((nd) => getNode(data, nd).segmentRefs.push(segmentId));
+
+          // reset temp segment holders
+          inSegment = [n];
+          segmentId += 1;
+        }
+      });
+    });
+
+    // determine junctions
+    data.junctionRefs = Object.values(data.nodes)
+      .filter((node) => node.segmentRefs.length > 1)
+      .map((node) => node.id);
 
     resolve(data);
   });
@@ -96,7 +143,7 @@ function getDistanceFromLatLon([lat1, lon1]: LatLng, [lat2, lon2]: LatLng): numb
 }
 
 function getWay(data: OSMData, id: number): Way {
-  const way = data.way[id];
+  const way = data.ways[id];
 
   if (!way) {
     throw new Error(`Way ${id} not found`);
@@ -105,8 +152,18 @@ function getWay(data: OSMData, id: number): Way {
   return way;
 }
 
+function getSegment(data: OSMData, id: number): Segment {
+  const segment = data.segments[id];
+
+  if (!segment) {
+    throw new Error(`Segment ${id} not found`);
+  }
+
+  return segment;
+}
+
 function getNode(data: OSMData, id: number): Node {
-  const node = data.node[id];
+  const node = data.nodes[id];
 
   if (!node) {
     throw new Error(`Node ${id} not found`);
@@ -115,10 +172,8 @@ function getNode(data: OSMData, id: number): Node {
   return node;
 }
 
-function wayDistance(data: OSMData, id: number): number {
-  const way = getWay(data, id);
-
-  return way.nodeRefs.reduce((acc, current, index, refs) => {
+function distanceByNodes(data: OSMData, nodeRefs: number[]): number {
+  return nodeRefs.reduce((acc, current, index, refs) => {
     if (index === refs.length - 1) {
       return acc;
     }
@@ -132,6 +187,18 @@ function wayDistance(data: OSMData, id: number): number {
   }, 0);
 }
 
+function wayDistance(data: OSMData, id: number): number {
+  const way = getWay(data, id);
+
+  return distanceByNodes(data, way.nodeRefs);
+}
+
+function segmentDistance(data: OSMData, id: number): number {
+  const segment = getSegment(data, id);
+
+  return distanceByNodes(data, segment.nodeRefs);
+}
+
 function findConnectedWays(data: OSMData, id: number): Way[] {
   const way = getWay(data, id);
 
@@ -139,10 +206,20 @@ function findConnectedWays(data: OSMData, id: number): Way[] {
     return [];
   }
 
-  return Object.values(data.way)
+  return Object.values(data.ways)
     .filter(
       (w: Way): boolean => w.id !== id
         && (w.nodeRefs.some((n) => way.nodeRefs.includes(n))),
+    );
+}
+
+function findConnectedSegments(data: OSMData, id: number): Segment[] {
+  const segment = getSegment(data, id);
+
+  return Object.values(data.segments)
+    .filter(
+      (s: Segment): boolean => s.id !== id
+        && (s.nodeRefs.some((n) => segment.nodeRefs.includes(n))),
     );
 }
 
@@ -183,13 +260,17 @@ function fetchOverpass(): Promise<any> {
   }
 
   return q.then((buffer) => parseOSM(buffer)).then((data) => {
-    const id = 6726392;
+    return data;
 
-    const way = getWay(data, id);
-    const distance = wayDistance(data, id);
-    const connectedWays = findConnectedWays(data, id);
+    const id = 56;
 
-    return { ...way, distance, connectedWays: connectedWays.map((c) => c.id) };
+    const segment = getSegment(data, id);
+    const distance = segmentDistance(data, id);
+    const segments = findConnectedSegments(data, id);
+
+    return {
+      ...segment, distance, segmentRefs: segments.map((c) => c.id), segments,
+    };
   });
 }
 

@@ -9,7 +9,7 @@ import {
   Tags,
   Node,
   LatLng,
-  Segment,
+  Segment, Course,
 } from '../types';
 
 function findTagsInElement(element: libxml.Element): Tags {
@@ -223,6 +223,73 @@ function findConnectedSegments(data: OSMData, id: number): Segment[] {
     );
 }
 
+function findCourses(
+  data: OSMData,
+  nodeId: number,
+  distance: number,
+  deviation: number,
+  startNode = nodeId,
+  totalDistanceInPath = 0,
+  visitedNodes: number[] = [],
+  visitedSegments: number[] = [],
+): Course[] {
+  const node = getNode(data, nodeId);
+
+  const foundCourses: Course[] = [];
+  const newVisitedNodes = nodeId !== startNode ? [...visitedNodes, nodeId] : visitedNodes;
+
+  node.segmentRefs
+    // only unvisited segments
+    .filter((segmentId) => !visitedSegments.includes(segmentId))
+    .forEach((segmentId) => {
+      const segment = getSegment(data, segmentId);
+
+      const newDistance = totalDistanceInPath + distanceByNodes(data, segment.nodeRefs);
+      const newVisitedSegments = [...visitedSegments, segmentId];
+
+      // if route is too long, break cycle
+      if (newDistance > distance + deviation) {
+        return;
+      }
+
+      // if first node in segment nodeRefs is node.id, connecting node is on opposite side of array
+      const connectingNode = segment.nodeRefs[0] === node.id
+        ? segment.nodeRefs[segment.nodeRefs.length - 1]
+        : segment.nodeRefs[0];
+
+      // back at starting node, so found a closing course
+      if (connectingNode === startNode) {
+        // and length matches!
+        if (newDistance > distance - deviation && newDistance < distance + deviation) {
+          foundCourses.push({
+            id: Math.ceil((+new Date() * (Math.random() + 0.5)) / 1000),
+            distance: newDistance,
+            segments: newVisitedSegments,
+          });
+        }
+        return;
+      }
+
+      // if node already visited, break cycle
+      if (newVisitedNodes.includes(connectingNode)) {
+        return;
+      }
+
+      findCourses(
+        data,
+        connectingNode,
+        distance,
+        deviation,
+        startNode,
+        newDistance,
+        newVisitedNodes,
+        newVisitedSegments,
+      ).forEach((course) => foundCourses.push(course));
+    });
+
+  return foundCourses;
+}
+
 function fetchOverpass(): Promise<any> {
   const center = [51.455920, 5.785393];
 
@@ -260,16 +327,13 @@ function fetchOverpass(): Promise<any> {
   }
 
   return q.then((buffer) => parseOSM(buffer)).then((data) => {
-    return data;
+    const startNode = 42674478;
 
-    const id = 56;
-
-    const segment = getSegment(data, id);
-    const distance = segmentDistance(data, id);
-    const segments = findConnectedSegments(data, id);
+    const courses = findCourses(data, startNode, 1000, 50);
 
     return {
-      ...segment, distance, segmentRefs: segments.map((c) => c.id), segments,
+      data,
+      courses,
     };
   });
 }

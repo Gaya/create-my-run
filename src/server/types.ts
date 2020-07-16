@@ -65,6 +65,12 @@ export enum RouteFormat {
   GARMIN = 'garmin_gpx',
 }
 
+export interface Course {
+  id: number;
+  distance: number;
+  segments: Segment['id'][];
+}
+
 export interface Tags {
   [key: string]: string;
 }

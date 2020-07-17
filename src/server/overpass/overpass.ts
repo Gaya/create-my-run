@@ -9,7 +9,8 @@ import {
   Tags,
   Node,
   LatLng,
-  Segment, Course,
+  Segment,
+  Course,
 } from '../types';
 
 function findTagsInElement(element: libxml.Element): Tags {
@@ -252,6 +253,13 @@ function findCourses(
         return;
       }
 
+      const oneWay = getWay(data, segment.way).tags.oneway === 'yes';
+
+      // if you're at the wrong side of a one way street, break
+      if (oneWay && nodeId !== segment.nodeRefs[0]) {
+        return;
+      }
+
       // if first node in segment nodeRefs is node.id, connecting node is on opposite side of array
       const connectingNode = segment.nodeRefs[0] === node.id
         ? segment.nodeRefs[segment.nodeRefs.length - 1]
@@ -329,7 +337,7 @@ function fetchOverpass(): Promise<any> {
   return q.then((buffer) => parseOSM(buffer)).then((data) => {
     const startNode = 42674478;
 
-    const courses = findCourses(data, startNode, 1000, 50);
+    const courses = findCourses(data, startNode, 1500, 50);
 
     return {
       data,

@@ -5,8 +5,8 @@
   "private": true,
   "homepage": "https://createmy.run",
   "engines": {
-    "node": "16.14.x",
-    "npm": "8.5.x"
+    "node": "= 16.14.x",
+    "npm": "= 8.5.x"
   },
   "dependencies": {
     "@material-ui/core": "^4.10.2",

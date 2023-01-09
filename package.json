@@ -27,7 +27,7 @@
     "@types/react-leaflet": "^2.5.2",
     "@types/react-redux": "^7.1.9",
     "cors": "^2.8.5",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "gpx-builder": "^3.3.0",
     "history": "^5.0.0",
     "leaflet": "^1.6.0",

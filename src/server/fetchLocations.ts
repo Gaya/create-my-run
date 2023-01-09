@@ -41,7 +41,7 @@ function fetchLocations(search: string, latLng: string): Promise<LocationsRespon
     return Promise.resolve({ locations: [] });
   }
 
-  return fetchExternalOrCached(search, [latLngParsed[0], latLngParsed[1]])
+  return fetchExternalOrCached(search, latLng !== '' ? [latLngParsed[0], latLngParsed[1]] : undefined)
     .then((result) => ({
       // eslint-disable-next-line no-underscore-dangle
       locations: result._embedded.locations.map((location) => ({

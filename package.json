@@ -32,7 +32,7 @@
     "history": "^5.0.0",
     "leaflet": "^1.6.0",
     "lodash.debounce": "^4.0.8",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.7",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-leaflet": "^2.7.0",
